@@ -1,8 +1,12 @@
 # Missing values
-
-
 ```{r}
-cdc = read.csv("data/United_States_COVID-19_Cases_and_Deaths_by_State_over_Time.csv")
+library(readr)
+source("plot_missing.R")
+```
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+cdc = read_csv("data/United_States_COVID-19_Cases_and_Deaths_by_State_over_Time.csv")
 ```
 
 ```{r, fig.widthh = 6, fig.height = 6}

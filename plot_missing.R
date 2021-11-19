@@ -1,3 +1,6 @@
+library(tidyverse)
+library(patchwork)
+library(ggnewscale)
 plot_missing <- function(dataset, percent = FALSE) {
   
   #upper plot data
