@@ -10,4 +10,5 @@ cdc = read.csv("data/United_States_COVID-19_Cases_and_Deaths_by_State_over_Time.
 ```{r, fig.widthh = 6, fig.height = 6}
 plot_missing(cdc)
 ```
-Overall there are only 11 distinct missing pattern for nearly 40000 rows of data. In particular, less than half of the rows are complete and total confirmed death, total probable death, total probable cases and total confirmed cases have the highest numbers of missing data, where the numbers are roughly identical. Number of missing new probable cases and number of new probable deaths are also significant, but they are a lot lower than the previous four attributes, where all other attributes hardly has any missing data.
+
+Overall there are only 11 distinct missing pattern for nearly 40000 rows of data. In particular, less than half of the rows are complete cases. Total confirmed death, total probable death, total probable cases and total confirmed cases have the highest numbers of missing data, where the numbers are roughly identical. These four variables often have missing values at the same time. Number of missing new probable cases and number of new probable deaths are also significant, but they are a lot lower than the previous four attributes, where all other attributes have no missing data.
