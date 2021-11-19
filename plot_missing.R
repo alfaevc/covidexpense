@@ -36,7 +36,7 @@ plot_missing <- function(dataset, percent = FALSE) {
     right_y = 'count'
     right_title = 'row count'
   }
-  x_angle=30
+  x_angle=90
   annotate_y = which(missing_patterns$Complete == FALSE)
   annotate_x = missing_patterns %>% select(!c(count, Complete, idx, percent)) %>% ncol()/2 + 0.5
   upper = ggplot(data = upper_data, aes(x = reorder(colname, -get(upper_y)), y = get(upper_y))) + 
