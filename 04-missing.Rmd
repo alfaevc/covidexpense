@@ -5,6 +5,8 @@
 cdc = read.csv("data/United_States_COVID-19_Cases_and_Deaths_by_State_over_Time.csv")
 ```
 
+(X-X)
+
 ```{r, fig.widthh = 6, fig.height = 6}
 plot_missing(cdc)
 ```
