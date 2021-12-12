@@ -344,7 +344,7 @@ wss <- function(k) {
   kmeans(as.data.frame(Bcoef.mat), k, nstart = 10)$tot.withinss
 }
 # Compute and plot wss for k = 2 to k = 15
-k.values <- 2:15
+k.values <- 2:10
 
 # extract wss for 2-15 clusters
 wss_values <- map_dbl(k.values, wss)
@@ -421,7 +421,7 @@ for (i in 1:20) {
     
     sort.clusters = sort.state.clusters(clusters, sort.cluster.list)
 
-    states.df = data.frame(STATE = all.states, CLUSTER = sort.clusters)
+    states.df = data.frame(state = all.states, CLUSTER = sort.clusters)
     # write.csv(states.df, paste("./clusterings/cluster", i, ".csv", sep=""))
     
     state.cluster = list()
