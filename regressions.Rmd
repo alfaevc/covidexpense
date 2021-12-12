@@ -38,6 +38,7 @@ cdc = read_csv("data/United_States_COVID-19_Cases_and_Deaths_by_State_over_Time.
 cdc[,c('consent_cases')][cdc[,c('consent_cases')] == 'N/A'] = NA
 cdc[,c('consent_deaths')][cdc[,c('consent_deaths')] == 'N/A'] = NA
 ```
+
 ```{r}
 covid.age = read_csv("data/COVID-19_Vaccination_and_Case_Trends_by_Age_Group__United_States.csv")
 ```
@@ -70,7 +71,6 @@ head(cdc)
 ```{r}
 cdc.month = cdc %>% mutate(state.mon = paste(state, as.character(month), sep='') ) %>% group_by(state.mon) %>% summarize(new_case = sum(new_case, na.rm = TRUE), new_death = sum(new_death, na.rm = TRUE), month = min(month), state=min(state)) %>% rename(date = month) %>% select(-c(state.mon))
 ```
-
 
 
 ```{r}
@@ -221,6 +221,7 @@ plot.bspline <- function(data, states, feature, n.knots=6, degree=3, x=1, y=1) {
   colors = rainbow(n)
   Bcoef.mat = matrix(0,n,n.knots)
   
+
   plot(c(min(data$date), max(data$date)), c(min(data[,feature]), max(data[,feature])), xlab = "Time", ylab = feature, main = "COVID cases across states", type = "n", xaxt='n', pch = 20, cex = 0.5)
   for (i in 1:n) {
     d = data %>% filter(state == states[i]) %>% select(date, contains(feature)) %>% arrange(date)
@@ -237,13 +238,16 @@ plot.bspline <- function(data, states, feature, n.knots=6, degree=3, x=1, y=1) {
     labs <- format(dates[ix], fmt)
     axis(side = 1, at = dates[ix], labels = labs,  cex.axis = 0.8)
   }
+
   return (Bcoef.mat)
+
 }
 ```
 
 
 
 ---------Data Access and Spline plots
+
 
 ```{r}
 state.name2abb <- function(states) {
@@ -398,9 +402,6 @@ sort.state.clusters <- function(clusters, sort.cluster.list) {
 }
 ```
 
-```{r}
-state.cluster
-```
 
 ```{r}
 for (i in 1:20) {
@@ -409,6 +410,7 @@ for (i in 1:20) {
   
   # choose the number of clusters we want and assign each state its closest cluster
   set.seed(i)
+
   for (k in 6) {
     cluster.num = k
     clusters = kmeans(as.data.frame(Bcoef.mat), cluster.num, nstart = 10)$cluster
@@ -418,8 +420,8 @@ for (i in 1:20) {
     }
     
     sort.clusters = sort.state.clusters(clusters, sort.cluster.list)
-    
-    states.df = data.frame(state = all.states, CLUSTER = sort.clusters)
+
+    states.df = data.frame(STATE = all.states, CLUSTER = sort.clusters)
     # write.csv(states.df, paste("./clusterings/cluster", i, ".csv", sep=""))
     
     state.cluster = list()
@@ -462,6 +464,7 @@ us.region.map = ggplot(map.df, aes(x=long, y=lat, group=group)) +
                 guides(fill=FALSE) + 
                 geom_polygon(colour = "black", size = 0.5)
 for (r in 1:region.num) {
+
   us.region.map = us.region.map + geom_polygon(fill=region.cols[r], data = filter(map.df, state %in% region.list[[r]]))
 }
 
@@ -476,6 +479,7 @@ for (i in 1:length(state.cluster)) {
 
 
 ```{r}
+
 "
 set.seed(0)
 cluster.num = 5

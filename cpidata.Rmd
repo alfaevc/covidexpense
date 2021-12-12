@@ -7,6 +7,7 @@ output: html_document
 
 ```{r}
 library(googlesheets4)
+<<<<<<< HEAD
 #library(blsAPI)
 library(rjson) 
 library(dplyr)
@@ -45,12 +46,42 @@ data$date <- as.yearmon(data$date, "%Y-%m")
 ```
 
 ```{r}
+=======
+library(blsAPI)
+library(rjson) 
+library(dplyr)
+library(ggplot2)
+library(lubridate)
+gs4_deauth()
+data= googlesheets4::read_sheet('1fpEQ4wuuDlnfKokjKyRUrOcIwHUnIBmnBFubCUpnQ94',sheet='chained_data')
+data1= googlesheets4::read_sheet('1fpEQ4wuuDlnfKokjKyRUrOcIwHUnIBmnBFubCUpnQ94',sheet='Sheet1')
+chained= googlesheets4::read_sheet('1fpEQ4wuuDlnfKokjKyRUrOcIwHUnIBmnBFubCUpnQ94',sheet='chained')
+```
+```{r}
+test = read.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/5_OneCatSevNumOrdered.csv")
+test2 = read.csv("/Users/shuyuexu/Documents/COLUMBIA/2021fall/stat5702/finalproject/cpidata.csv")
+```
+
+```{r}
+data$value = as.numeric(data$value)
+data$date <- paste(data$year, data$period)
+head(data)
+```
+```{r}
+data$item_name <- chained$item_name[match(data$seriesID, chained$seriesid)]
+data$item_name= as.factor(data$item_name)
+>>>>>>> de7cc86ba2a18db937a2254a2852bbe00231390d
 head(data)
 ```
 
 
+<<<<<<< HEAD
 
 ```{r, fig.height = 6}
+=======
+```{r, fig.height = 6}
+
+>>>>>>> de7cc86ba2a18db937a2254a2852bbe00231390d
 data %>%
   ggplot( aes(x=date, y=value, group=item_name, color=item_name)) +
     geom_line() + theme(axis.text.x = element_text(angle = 90))
@@ -67,9 +98,24 @@ don %>%
  "SUUR0000SAC"(Commodities), "SUUR0000SETA01"(new vehicles) rises steadily 
  "SUUR0000SETG"(publictransportation) decreases ans then rise sharply during the start of 2021, then decrease sharply.
  "SUUR0000SAE2"(communication) no change
+<<<<<<< HEAD
 
 
 ```{r}
 #test = read.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/5_OneCatSevNumOrdered.csv")
 
 ```
+=======
+ 
+```{r}
+don <- data %>% 
+  filter(seriesID %in% c("SUUR0000SAF1","SUUR0000SAF1", "SUUR0000SAF11","SUUR0000SAF116")) 
+don %>%
+  ggplot( aes(x=date, y=value, group=item_name, color=item_name)) +
+    geom_line() + theme(axis.text.x = element_text(angle = 90))
+```
+```{r}
+write.csv(data,"/Users/shuyuexu/Documents/COLUMBIA/2021fall/stat5702/finalproject/cpidata.csv", row.names = FALSE)
+```
+
+>>>>>>> de7cc86ba2a18db937a2254a2852bbe00231390d
