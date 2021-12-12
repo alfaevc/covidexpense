@@ -7,6 +7,9 @@ united-states-covid-19-cases-and-deaths-by-state-overtime
 covid-19-vaccination-and-case-trends-by-age-group-in-united-states
 missing-values
 results
+cpi
+covid
+new-cases-and-deaths-by-state-from-2020-jan-to-2021-nov
+cluster
 interactive-component
 conclusion
-new-cases-and-deaths-by-state-from-2020-jan-to-2021-nov
