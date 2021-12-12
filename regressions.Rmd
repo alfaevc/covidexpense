@@ -73,6 +73,7 @@ cdc.month = cdc %>% mutate(state.mon = paste(state, as.character(month), sep='')
 ```
 
 
+
 ```{r}
 cdc.month
 ```
@@ -101,9 +102,6 @@ plot_states <- function(data, states, feature, title, x=1, y=1) {
 }
 ```
 
-```{r}
-plot_states(cdc.month, all.states, "new_case", "Covid Monthly New Cases Time Series")
-```
 
 
 ```{r}
@@ -255,9 +253,6 @@ state.name2abb <- function(states) {
 }
 ```
 
-```{r}
-head(cdc)
-```
 
 
 

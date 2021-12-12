@@ -1,8 +1,12 @@
 # Missing values
-```{r}
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
 library(readr)
 library(curl)
 source("plot_missing.R")
+```
+
+```{r, echo=FALSE}
+cpi = read.csv("data/cpidata.csv")
 ```
 
 
@@ -12,22 +16,15 @@ cdc[,c('consent_cases')][cdc[,c('consent_cases')] == 'N/A'] = NA
 cdc[,c('consent_deaths')][cdc[,c('consent_deaths')] == 'N/A'] = NA
 ```
 
-```{r}
+```{r, echo=FALSE}
 cdc$submission_date = as.Date(cdc$submission_date, '%m/%d/%Y')
 ```
 
-```{r}
-head(cdc)
-```
 
 
 
-```{r}
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
 covid.age = read_csv("data/COVID-19_Vaccination_and_Case_Trends_by_Age_Group__United_States.csv")
-```
-
-```{r}
-head(covid.age)
 ```
 
 
@@ -42,23 +39,24 @@ head(covid.age)
 ```
 
 
-
-
-
-```{r, fig.widthh = 6, fig.height = 6}
-plot_missing(cdc,percent=TRUE)
+Missing values plot for CPI data:
+```{r, fig.widthh = 6, fig.height = 6, echo=FALSE}
+plot_missing(cpi, percent=TRUE)
 ```
+There are no missing values for this data.
 
-```{r, fig.widthh = 6, fig.height = 6}
-plot_missing(covid.age, percent=TRUE)
+Missing values plot for United States COVID-19 Cases and Deaths by State overTime:
+```{r, fig.widthh = 6, fig.height = 6, echo=FALSE}
+plot_missing(cdc, percent=TRUE)
 ```
-```{r, fig.widthh = 6, fig.height = 6}
-#plot_missing(covid.vacc.county,percent=TRUE)
-```
-
-
-Overall there are only 21 distinct missing pattern for nearly 40000 rows of data. In particular, less than half of the rows are complete cases. Total confirmed death, total probable death, total probable cases and total confirmed cases have the highest numbers of missing data, where the percent of missing values are roughly identical to about 20 percent. These four variables often have missing values at the same time. Around 15 percent of total rows only have these four variables missing at the same time. Percent of missing consent cases and consent deaths are roughly identical. Pecent of missing new probable cases and new probable deaths are also roughly identical. The missing percentage for these four variables are also significant, but they are a lot lower than the previous four attributes, where all other attributes have no missing data.
+Overall, there are only 21 distinct missing pattern for nearly 40000 rows of data. In particular, less than half of the rows are complete cases. Total confirmed death, total probable death, total probable cases and total confirmed cases have the highest numbers of missing data, where the percent of missing values are roughly identical to about 20 percent. These four variables often have missing values at the same time. Around 15 percent of total rows only have these four variables missing at the same time. Percent of missing consent cases and consent deaths are roughly identical. Pecent of missing new probable cases and new probable deaths are also roughly identical. The missing percentage for these four variables are also significant, but they are a lot lower than the previous four attributes, where all other attributes have no missing data.
 
 There are also some correlations between variables. Consent cases and consent death variable indicates if the state consent to disclosure the data on cases and deaths. There are three values: 'agree', 'not agree' and NA (the missing value). After understanding the variable, we found that when consent cases is missing, total probable cases and total confirmed cases are missing as well. Same thing happen to consent deaths， total probable deaths and total confirmed deaths. Therefore, after the missing value analysis, we can conclude that missing values in consent cases and consent deaths is equivalent to 'not agree'. And now the consent cases and consent death can be translate to a logical variable having 0 and 1 as values.
 
+
+Missing values plot for COVID-19 Vaccination and Case Trends by Age Group in United States:
+```{r, fig.widthh = 6, fig.height = 6, echo=FALSE}
+plot_missing(covid.age, percent=TRUE)
+```
+There are no missing values for this data.
 

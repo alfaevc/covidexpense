@@ -1,6 +1,10 @@
 introduction
 data-sources
 data-transformation
+cpi-data
+covid-data
+united-states-covid-19-cases-and-deaths-by-state-overtime
+covid-19-vaccination-and-case-trends-by-age-group-in-united-states
 missing-values
 results
 interactive-component

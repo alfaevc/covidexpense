@@ -117,7 +117,15 @@
 <li class="divider"></li>
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
 <li class="chapter" data-level="2" data-path="data-sources.html"><a href="data-sources.html"><i class="fa fa-check"></i><b>2</b> Data sources</a></li>
-<li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a></li>
+<li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#cpi-data"><i class="fa fa-check"></i><b>3.1</b> CPI data</a></li>
+<li class="chapter" data-level="3.2" data-path="data-transformation.html"><a href="data-transformation.html#covid-data"><i class="fa fa-check"></i><b>3.2</b> Covid data</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="data-transformation.html"><a href="data-transformation.html#united-states-covid-19-cases-and-deaths-by-state-overtime"><i class="fa fa-check"></i><b>3.2.1</b> United States COVID-19 Cases and Deaths by State overTime</a></li>
+<li class="chapter" data-level="3.2.2" data-path="data-transformation.html"><a href="data-transformation.html#covid-19-vaccination-and-case-trends-by-age-group-in-united-states"><i class="fa fa-check"></i><b>3.2.2</b> COVID-19 Vaccination and Case Trends by Age Group in United States</a></li>
+</ul></li>
+</ul></li>
 <li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a></li>
 <li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a></li>
 <li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
@@ -146,6 +154,26 @@
             <section class="normal" id="section-">
 <div id="results" class="section level1" number="5">
 <h1><span class="header-section-number">Chapter 5</span> Results</h1>
+<p>##CPI</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-115-1.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-116-1.png" width="672" />
+“SUUR0000SA0E”(energy), “SUUR0000SAT1”(private transportation),“SUUR0000SAT”(transportation) decreases during the begining of covid-19 and then rises until now
+“SUUR0000SAC”(Commodities), “SUUR0000SETA01”(new vehicles) rises steadily
+“SUUR0000SETG”(publictransportation) decreases ans then rise sharply during the start of 2021, then decrease sharply.
+“SUUR0000SAE2”(communication) no change</p>
+<p>##Covid</p>
+<pre><code>##   new_case new_death     date state
+## 1      227         3 Apr 2020    AK
+## 2     4871         1 Apr 2021    AK
+## 3     2297        19 Aug 2020    AK
+## 4    12078        49 Aug 2021    AK
+## 5    13978        76 Dec 2020    AK
+## 6        0         0 Feb 2020    AK</code></pre>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-130-1.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-132-1.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-136-1.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-136-2.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-136-3.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-136-4.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-136-5.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-136-6.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-136-7.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-136-8.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-136-9.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-136-10.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-136-11.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-136-12.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-136-13.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-136-14.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-136-15.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-136-16.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-136-17.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-136-18.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-136-19.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-136-20.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-137-1.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-138-1.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-138-2.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-138-3.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-138-4.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-138-5.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-138-6.png" width="672" /></p>
 
 </div>
             </section>
