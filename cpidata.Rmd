@@ -1,0 +1,66 @@
+---
+title: "Untitled"
+author: "shuyue Xu"
+date: "11/28/2021"
+output: html_document
+---
+
+```{r}
+library(googlesheets4)
+library(blsAPI)
+library(rjson) 
+library(dplyr)
+library(ggplot2)
+library(lubridate)
+gs4_deauth()
+data= googlesheets4::read_sheet('1fpEQ4wuuDlnfKokjKyRUrOcIwHUnIBmnBFubCUpnQ94',sheet='chained_data')
+data1= googlesheets4::read_sheet('1fpEQ4wuuDlnfKokjKyRUrOcIwHUnIBmnBFubCUpnQ94',sheet='Sheet1')
+chained= googlesheets4::read_sheet('1fpEQ4wuuDlnfKokjKyRUrOcIwHUnIBmnBFubCUpnQ94',sheet='chained')
+```
+```{r}
+test = read.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/5_OneCatSevNumOrdered.csv")
+test2 = read.csv("/Users/shuyuexu/Documents/COLUMBIA/2021fall/stat5702/finalproject/cpidata.csv")
+```
+
+```{r}
+data$value = as.numeric(data$value)
+data$date <- paste(data$year, data$period)
+head(data)
+```
+```{r}
+data$item_name <- chained$item_name[match(data$seriesID, chained$seriesid)]
+data$item_name= as.factor(data$item_name)
+head(data)
+```
+
+
+```{r, fig.height = 6}
+
+data %>%
+  ggplot( aes(x=date, y=value, group=item_name, color=item_name)) +
+    geom_line() + theme(axis.text.x = element_text(angle = 90))
+```
+
+```{r}
+don <- data %>% 
+  filter(seriesID %in% c("SUUR0000SAT1","SUUR0000SAT", "SUUR0000SA0E","SUUR0000SAC","SUUR0000SETG","SUUR0000SETA01","SUUR0000SAE2")) 
+don %>%
+  ggplot( aes(x=date, y=value, group=item_name, color=item_name)) +
+    geom_line() + theme(axis.text.x = element_text(angle = 90))
+```
+ "SUUR0000SA0E"(energy), "SUUR0000SAT1"(private transportation),"SUUR0000SAT"(transportation) decreases during the begining of covid-19 and then rises until now
+ "SUUR0000SAC"(Commodities), "SUUR0000SETA01"(new vehicles) rises steadily 
+ "SUUR0000SETG"(publictransportation) decreases ans then rise sharply during the start of 2021, then decrease sharply.
+ "SUUR0000SAE2"(communication) no change
+ 
+```{r}
+don <- data %>% 
+  filter(seriesID %in% c("SUUR0000SAF1","SUUR0000SAF1", "SUUR0000SAF11","SUUR0000SAF116")) 
+don %>%
+  ggplot( aes(x=date, y=value, group=item_name, color=item_name)) +
+    geom_line() + theme(axis.text.x = element_text(angle = 90))
+```
+```{r}
+write.csv(data,"/Users/shuyuexu/Documents/COLUMBIA/2021fall/stat5702/finalproject/cpidata.csv", row.names = FALSE)
+```
+
