@@ -179,7 +179,7 @@ for (i in 1:20) {
   # choose the number of clusters we want and assign each state its closest cluster
   set.seed(i)
 
-  for (k in 5) {
+  for (k in 6) {
     cluster.num = k
     clusters = kmeans(as.data.frame(Bcoef.mat), cluster.num, nstart = 5)$cluster
     

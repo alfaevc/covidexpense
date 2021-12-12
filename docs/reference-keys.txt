@@ -5,3 +5,4 @@ missing-values
 results
 interactive-component
 conclusion
+new-cases-and-deaths-by-state-from-2020-jan-to-2021-nov
