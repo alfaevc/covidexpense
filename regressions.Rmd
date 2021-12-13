@@ -40,6 +40,25 @@ cdc[,c('consent_deaths')][cdc[,c('consent_deaths')] == 'N/A'] = NA
 ```
 
 ```{r}
+covid.age = read_csv("data/COVID-19_Vaccination_and_Case_Trends_by_Age_Group__United_States.csv")
+```
+
+```{r}
+all.states = unique(cdc$state)
+```
+
+
+```{r}
+covid.age$date = as.Date(substr(covid.age$`Date Administered`, 1, 10), '%m/%d/%Y')
+```
+
+
+```{r}
+head(cdc)
+```
+
+
+```{r}
 cdc$date = as.Date(cdc$submission_date, '%m/%d/%Y')
 cdc$month = as.yearmon(format(as.Date(cdc$date), "%Y-%m"))
 ```
@@ -52,6 +71,8 @@ head(cdc)
 ```{r}
 cdc.month = cdc %>% mutate(state.mon = paste(state, as.character(month), sep='') ) %>% group_by(state.mon) %>% summarize(new_case = sum(new_case, na.rm = TRUE), new_death = sum(new_death, na.rm = TRUE), month = min(month), state=min(state)) %>% rename(date = month) %>% select(-c(state.mon))
 ```
+
+
 
 ```{r}
 cdc.month
@@ -81,9 +102,6 @@ plot_states <- function(data, states, feature, title, x=1, y=1) {
 }
 ```
 
-```{r}
-plot_states(cdc.month, c("WA","PA","NY","CA"), "new_case", "Covid Monthly New Cases Time Series")
-```
 
 
 ```{r}
@@ -201,8 +219,9 @@ plot.bspline <- function(data, states, feature, n.knots=6, degree=3, x=1, y=1) {
   colors = rainbow(n)
   Bcoef.mat = matrix(0,n,n.knots)
   
+
+  plot(c(min(data$date), max(data$date)), c(min(data[,feature]), max(data[,feature])), xlab = "Time", ylab = feature, main = "COVID cases across states", type = "n", xaxt='n', pch = 20, cex = 0.5)
   for (i in 1:n) {
-    plot(c(min(data$date), max(data$date)), c(min(data[,feature]), max(data[,feature])), xlab = "Time", ylab = feature, main = "COVID cases across states", type = "n", xaxt='n', pch = 20, cex = 0.5)
     d = data %>% filter(state == states[i]) %>% select(date, contains(feature)) %>% arrange(date)
     dates = d$date
     d$date = as.numeric(d$date)
@@ -217,47 +236,66 @@ plot.bspline <- function(data, states, feature, n.knots=6, degree=3, x=1, y=1) {
     labs <- format(dates[ix], fmt)
     axis(side = 1, at = dates[ix], labels = labs,  cex.axis = 0.8)
   }
+
+  return (Bcoef.mat)
+
 }
 ```
 
 
 
 ---------Data Access and Spline plots
+
+
+```{r}
+state.name2abb <- function(states) {
+  return (state.abb[match(states, state.name)])
+}
+```
+
+
+
+
 ```{r}
 # 6
-Northeast = toupper(c("Connecticut", "Massachusetts", "Maine", 
-                      "New Hampshire", "Rhode Island", "Vermont"))
+Northeast = state.name2abb(c("Connecticut", "Massachusetts", "Maine", 
+              "New Hampshire", "Rhode Island", "Vermont"))
 
 # 8
-Mid.Atlantic = toupper(c("Delaware", "District of Columbia", "Maryland", 
-                         "New Jersey", "New York", "Pennsylvania",
-                         "Virginia", "West Virginia"))
+Mid.Atlantic = c(state.name2abb(c("Delaware", "Maryland", 
+                 "New Jersey", "New York", "Pennsylvania",
+                 "Virginia", "West Virginia")),"DC")
 
 # 9
-Southeast = toupper(c("Alabama", "Arkansas", "Florida",
-                      "Georgia", "Louisiana", "MISSISSIPPI",
-                      "North Carolina", "South Carolina", "Tennessee"))
+Southeast = state.name2abb(c("Alabama", "Arkansas", "Florida",
+                             "Georgia", "Louisiana", "Mississippi",
+                             "North Carolina", "South Carolina", "Tennessee"))
 
 # 13
-Midwest = toupper(c("Indiana", "Illinois", "Iowa", 
-                    "Kansas", "Kentucky", "Michigan",
-                    "Minnesota", "Missouri", "Nebraska",
-                    "North Dakota", "Ohio", "South Dakota",
-                    "Wisconsin"))
+Midwest = state.name2abb(c("Indiana", "Illinois", "Iowa", 
+                           "Kansas", "Kentucky", "Michigan",
+                           "Minnesota", "Missouri", "Nebraska",
+                           "North Dakota", "Ohio", "South Dakota",
+                           "Wisconsin"))
 # 4
-Southwest = toupper(c("Arizona", "New Mexico", "Oklahoma", "Texas"))
+Southwest = state.name2abb(c("Arizona", "New Mexico", "Oklahoma", "Texas"))
 
 # 11
-West = toupper(c("Alaska", "California", "Colorado", "Hawaii",
-                 "Idaho", "Montana", "Nevada", "Oregon",
-                 "Utah", "Washington", "Wyoming"))
+West = state.name2abb(c("Alaska", "California", "Colorado", "Hawaii",
+                        "Idaho", "Montana", "Nevada", "Oregon",
+                        "Utah", "Washington", "Wyoming"))
 
 region.list <- list(Northeast, Mid.Atlantic, Southeast, Midwest, Southwest, West)
 names(region.list) <- c('Northeast', 'Mid.Atlantic', 'Southeast', 'Midwest', 'Southwest', 'West')
 ```
 
 ```{r}
-all.states = unique(cdc$state)
+table(cdc$state)
+```
+
+
+```{r}
+region.list
 ```
 
 
@@ -291,32 +329,57 @@ mid <- function(x) {
 ```
 
 ```{r}
-Bcoef.mat = plot.bspline(cdc.month, all.states, 'new_case', n.knots=15, degree=3)
-wss <- function(k) {
-    kmeans(as.data.frame(Bcoef.mat), k, nstart = 10)$tot.withinss
-  }
-  # Compute and plot wss for k = 1 to k = 15
-  k.values <- 1:15
-  
-  # extract wss for 2-15 clusters
-  wss_values <- map_dbl(k.values, wss)
-
-  
-  # plot(k.values, wss_values, type="b", pch = 19, frame = FALSE, xlab="Number of clusters K", ylab="Total within-clusters sum of squares")
-  map.df = map_data("state")
-  map.df$STATE = toupper(map.df$region)
-  map.df$region = ifelse (map.df$state %in% Northeast, "Northeast",
-                    ifelse (map.df$state %in% Mid.Atlantic, "Mid.Atlantic",
-                    ifelse (map.df$state %in% Southeast, "Southeast",
-                    ifelse (map.df$state %in% Midwest, "Midwest",
-                    ifelse (map.df$state %in% Southwest, "Southwest",
-                    ifelse (map.df$state %in% West, "West", "Other"
-                            ))))))
-  state.centers.df = map.df %>% group_by(state) %>% summarise(long.mid = mid(long), lat.mid = mid(lat), group=mean(group))
-  
-  map.state.names = geom_text(data=state.centers.df, aes(x=long.mid, y=lat.mid, group=group, label=STATE),size=1.5, hjust=0, vjust=0, colour = state.col)
-  map.state.points = geom_point(data=state.centers.df, aes(x=long.mid, y=lat.mid, group=group), size = 0.5, alpha = 0.6, colour = state.col)
+Bcoef.mat
 ```
+
+
+```{r}
+Bcoef.mat = plot.bspline(cdc.month, all.states, 'new_case', n.knots=10, degree=3)
+wss <- function(k) {
+  kmeans(as.data.frame(Bcoef.mat), k, nstart = 10)$tot.withinss
+}
+# Compute and plot wss for k = 2 to k = 15
+k.values <- 2:10
+
+# extract wss for 2-15 clusters
+wss_values <- map_dbl(k.values, wss)
+```
+
+
+
+```{r}
+state.col = rainbow(length(all.states))
+```
+
+```{r}
+length(unique(map.df$state))
+```
+```{r}
+unique(cdc$state)
+```
+
+
+```{r}
+# plot(k.values, wss_values, type="b", pch = 19, frame = FALSE, xlab="Number of clusters K", ylab="Total within-clusters sum of squares")
+map.df = map_data("state")
+map.df$state = state.name2abb(str_to_title(map.df$region))
+map.df$region = ifelse (map.df$state %in% Northeast, "Northeast",
+                  ifelse (map.df$state %in% Mid.Atlantic, "Mid.Atlantic",
+                  ifelse (map.df$state %in% Southeast, "Southeast",
+                  ifelse (map.df$state %in% Midwest, "Midwest",
+                  ifelse (map.df$state %in% Southwest, "Southwest",
+                  ifelse (map.df$state %in% West, "West", "Other"
+                          ))))))
+state.centers.df = map.df %>% group_by(state) %>% summarise(long.mid = mid(long), lat.mid = mid(lat), group=mean(group))
+
+map.state.names = geom_text(data=state.centers.df, aes(x=long.mid, y=lat.mid, group=group, label=state),size=1.5, hjust=0, vjust=0, colour = 1)
+map.state.points = geom_point(data=state.centers.df, aes(x=long.mid, y=lat.mid, group=group), size = 0.5, alpha = 0.6, colour = 1)
+```
+
+```{r}
+state.centers.df
+```
+
 
 ```{r}
 sort.state.clusters <- function(clusters, sort.cluster.list) {
@@ -342,7 +405,8 @@ for (i in 1:20) {
   
   # choose the number of clusters we want and assign each state its closest cluster
   set.seed(i)
-  for (k in 7) {
+
+  for (k in 6) {
     cluster.num = k
     clusters = kmeans(as.data.frame(Bcoef.mat), cluster.num, nstart = 10)$cluster
     sort.cluster.list = list()
@@ -351,17 +415,17 @@ for (i in 1:20) {
     }
     
     sort.clusters = sort.state.clusters(clusters, sort.cluster.list)
-    
-    states.df = data.frame(STATE = all.states, CLUSTER = sort.clusters)
+
+    states.df = data.frame(state = all.states, CLUSTER = sort.clusters)
     # write.csv(states.df, paste("./clusterings/cluster", i, ".csv", sep=""))
     
     state.cluster = list()
     for (i in 1:cluster.num) {
-      state.cluster[[i]] = subset(states.df, CLUSTER==i)$STATE
+      state.cluster[[i]] = subset(states.df, CLUSTER==i)$state
     }
-    cs = ifelse (map.df$STATE %in% state.cluster[[cluster.num]], cluster.num, cluster.num+1)
+    cs = ifelse (map.df$state %in% state.cluster[[cluster.num]], cluster.num, cluster.num+1)
     for (i in (cluster.num-1):1) {
-      cs = ifelse (map.df$STATE %in% state.cluster[[i]], i, cs)
+      cs = ifelse (map.df$state %in% state.cluster[[i]], i, cs)
     }
     
     map.df$cluster = cs
@@ -395,13 +459,22 @@ us.region.map = ggplot(map.df, aes(x=long, y=lat, group=group)) +
                 guides(fill=FALSE) + 
                 geom_polygon(colour = "black", size = 0.5)
 for (r in 1:region.num) {
-  us.region.map = us.region.map + geom_polygon(fill=region.cols[r], data = filter(map.df, STATE %in% region.list[[r]]))
+
+  us.region.map = us.region.map + geom_polygon(fill=region.cols[r], data = filter(map.df, state %in% region.list[[r]]))
 }
 
 us.region.map + ggtitle("U.S. Map regional covid cases") + map.state.names + map.state.points
 ```
 
 ```{r}
+for (i in 1:length(state.cluster)) {
+  print(plot_states(cdc.month, state.cluster[[i]], "new_case", "Covid Monthly New Cases Time Series"))
+}
+```
+
+
+```{r}
+
 "
 set.seed(0)
 cluster.num = 5

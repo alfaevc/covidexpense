@@ -1,2 +1,3 @@
 # Data sources
 
+The covid data are collected by the centers fro Disease Control and Prevention(CDC)
