@@ -34,13 +34,10 @@ data$value = as.numeric(data$value)
 data$date <- paste(data$year, "-", substr(data$period,2,3), sep="")
 head(data)
 ```
-<<<<<<< HEAD
 
 
-```{r}
-=======
+
 ```{r, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
->>>>>>> 75661edbff3184914718344432414babdf90c998
 data = data  %>% group_by(description,date) %>% dplyr::summarise(avgvalue=mean(value))
 data$description[data$description=="0100 Northeast 0 T 5"] = "Northeast"
 data$description[data$description=="0120 Middle Atlantic 1 T 11"] = "Mid.Atlantic"
@@ -133,8 +130,9 @@ for(e in West){
 } 
 DF %>% drop_na()
 ```
+
 ```{r, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
-'
+
 DFcase = DF %>% group_by(state)%>%arrange(date)%>% 
     do(item = list(
         state = first(.$state),
@@ -161,7 +159,6 @@ highchart(type = "map") %>%
   )%>% 
   hc_legend(title = list(text = "scaledcpi"), valueDecimals = 0, valueSuffix = "%") %>%
    hc_mapNavigation(enabled = TRUE) %>% hc_exporting(enabled = TRUE)
-'
 ```
 
 

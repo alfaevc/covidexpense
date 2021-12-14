@@ -212,7 +212,6 @@ for (i in 1:length(item.cluster)) {
 }
 ```
 
-<<<<<<< HEAD
 
 ### bar plot
 ```{r}
@@ -243,10 +242,6 @@ for (i in itemname){
   DF = bind_rows(DF,temp)
 }
 ```
-=======
-```{r, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
-#test = read.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/5_OneCatSevNumOrdered.csv")
->>>>>>> 75661edbff3184914718344432414babdf90c998
 
 
 ```{r}
