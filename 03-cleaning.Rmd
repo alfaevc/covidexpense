@@ -48,6 +48,9 @@ head(cpi)
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
 cdc = read_csv("data/United_States_COVID-19_Cases_and_Deaths_by_State_over_Time.csv")
 ```
+```{r}
+cdc[cdc$new_case<0,]
+```
 
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
@@ -97,6 +100,7 @@ cdc = cdc  %>% mutate(prob_death = ifelse(is.na(prob_death), 0, prob_death)) %>%
 cdc = cdc %>% mutate(date=as.Date(date))
 write.csv(cdc,"data/cdc.csv")
 ```
+
 
 ```{r}
 #cdc = read.csv("data/cdc.csv")

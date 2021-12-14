@@ -210,7 +210,12 @@ hchart.cor(cor_matrix)
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
 cdc.month = read.csv("data/cdcmonth.csv")
 cdc.month$date <- as.yearmon(cdc.month$date, "%Y-%m")
+#cdc = read.csv("data/cdc.csv")
+#cdc$date = as.Date(cdc$date)
+
 ```
+
+
 
 ```{r}
 all.states = unique(cdc.month$state)
@@ -353,8 +358,8 @@ plot.bspline <- function(data, states, feature, n.knots=6, degree=3, x=1, y=1) {
   colors = rainbow(n)
   Bcoef.mat = matrix(0,n,n.knots)
   
-
-  plot(c(min(data$date), max(data$date)), c(min(data[,feature]), max(data[,feature])), xlab = "Time", ylab = feature, main = "COVID cases across states", type = "n", xaxt='n', pch = 20, cex = 0.5)
+  date = as.numeric(data$date, na.rm=TRUE)
+  plot(c(min(date, na.rm=TRUE), max(date, na.rm=TRUE)), c(min(data[,feature], na.rm=TRUE), max(data[,feature], na.rm=TRUE)), xlab = "Time", ylab = feature, main = "COVID cases across states", type = "n", xaxt='n', pch = 20, cex = 0.5)
   for (i in 1:n) {
     d = data %>% filter(state == states[i]) %>% select(date, contains(feature)) %>% arrange(date)
     dates = d$date
@@ -421,7 +426,7 @@ names(region.list) <- c('Northeast', 'Mid.Atlantic', 'Southeast', 'Midwest', 'So
 
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
-B.basis.plot(spline.basis(cdc.month, n.knots=10), n.knots=10)
+B.basis.plot(spline.basis(cdc, n.knots=7), n.knots=7)
 ```
 
 
@@ -430,6 +435,7 @@ mid <- function(x) {
   return ((max(x)+min(x))/2)
 }
 ```
+
 
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
@@ -444,6 +450,9 @@ k.values <- 2:10
 wss_values <- map_dbl(k.values, wss)
 ```
 
+```{r}
+plot(wss_values)
+```
 
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
