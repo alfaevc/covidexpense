@@ -118,10 +118,10 @@ cpi_monthly = cpi %>% select(date, value, item_name) %>% pivot_wider(id_cols = ,
 data_monthly = left_join(cpi_monthly, cdc_monthly_all_state, by=c("date"="month")) %>% rename(month = date)
 
 #
-write.csv(cdc,"data/cdc_all.csv")
-write.csv(cdc,"data/cdc_monthly_all_state.csv")
-write.csv(cdc,"data/cpi_monthly.csv")
-write.csv(cdc,"data/data_monthly.csv")
+write.csv(cdc_all,"data/cdc_all.csv")
+write.csv(cdc_monthly_all_state,"data/cdc_monthly_all_state.csv")
+write.csv(cpi_monthly,"data/cpi_monthly.csv")
+write.csv(data_monthly,"data/data_monthly.csv")
 ```
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
