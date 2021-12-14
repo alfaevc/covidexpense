@@ -21,16 +21,14 @@ library(highcharter)
 ```
 
 ```{r lead data, message=FALSE, warning=FALSE, echo=FALSE}
+
 cdc = read.csv("data/cdc.csv")
 cdc = cdc %>% mutate(date=as.Date(date), month=as.yearmon(format(as.Date(date), "%Y-%m")))
 cdc_all = read.csv("data/cdc_all.csv", fileEncoding="UTF-8")
 cdc_monthly_all_state = read.csv("data/cdc_monthly_all_state.csv", fileEncoding="UTF-8")
 cpi_monthly = read.csv("data/cpi_monthly.csv", fileEncoding="UTF-8")
 data_monthly = read.csv("data/data_monthly.csv", fileEncoding="UTF-8")
-cdc_all = cdc_all %>% mutate(date=as.Date(date), month=as.yearmon(format(as.Date(date), "%Y-%m")))
-cdc_monthly_all_state = cdc_monthly_all_state %>% mutate(month=as.yearmon(month))
-cpi_monthly = cpi_monthly %>% mutate(date=as.yearmon(date))
-data_monthly = data_monthly %>% mutate(month=as.yearmon(month))
+
 ```
 
 
@@ -79,8 +77,10 @@ We can see that the items can be divided into four groups from the above line ch
  
 ## Covid
 
-### new cases and deaths by State from 2020 Jan to 2021 Nov
-We compared how vote shares have shifted in elections from 1976 to 2020 Instructions to use the graph:
+### new cases and total cases change by State from 2020 Jan to 2021 Nov
+We compared how new cases and total cases change from 1976 to 2020 by state
+
+Instructions to use the graph:
 
 Play/pause clicking the play/pause button
 
@@ -97,21 +97,6 @@ cdc_monthly_by_state = cdc %>%
   select(month, state, new_death, new_case, conf_cases, tot_death) %>% 
   group_by(month, state) %>% 
   summarise(new_death=sum(new_death),new_case=sum(new_case), tot_cases=max(conf_cases), tot_death=max(tot_death))
-```
-
-
-```{r}
-cdc = read.csv("data/cdc.csv")
-cdc$month = as.yearmon(format(as.Date(cdc$date), "%Y-%m"))
-
-cdc_monthly_all_state = cdc %>% 
-  select(month, new_death, new_case, conf_cases, conf_death) %>% 
-  group_by(month) %>% 
-  summarise(new_death=sum(new_death),new_case=sum(new_case), tot_cases=sum(conf_cases), tot_death=sum(conf_death))
-
-cdc_monthly_all_state %>% pivot_longer(cols = new_death:tot_death, names_to='var',values_to='value') %>%
-  ggplot( aes(x=month, y=value, group=var, color=var)) +
-    geom_line() + ggtitle("Covid-19 Data Trend") + theme(axis.text.x = element_text(angle = 90), plot.title = element_text(size = 40, face = "bold"))
 ```
 
 
@@ -146,6 +131,7 @@ highchart(type = "map") %>%
    hc_mapNavigation(enabled = TRUE) %>% hc_exporting(enabled = TRUE)
 ```
 
+From the above motion map, we can see that the first five cases in the United States come from Illinois State, Washington State and Arizona State. At the beginning, California and New York state has the most new cases which are two of the largest States that have the most population. From Jun 2020 to Sep 2020, California, Texas and Florida States ahve the most new cases.
 ```{r}
 
 cdcmonthdeath = cdc.month %>% group_by(statefull)%>%arrange(date)%>% 
@@ -176,6 +162,22 @@ highchart(type = "map") %>%
   hc_legend(title = list(text = "new cases"), valueDecimals = 0, valueSuffix = "%") %>%
    hc_mapNavigation(enabled = TRUE) %>% hc_exporting(enabled = TRUE)
 ```
+
+
+```{r}
+cdc = read.csv("data/cdc.csv")
+cdc$month = as.yearmon(format(as.Date(cdc$date), "%Y-%m"))
+
+cdc_monthly_all_state = cdc %>% 
+  select(month, new_death, new_case, conf_cases, conf_death) %>% 
+  group_by(month) %>% 
+  summarise(new_death=sum(new_death),new_case=sum(new_case), tot_cases=sum(conf_cases), tot_death=sum(conf_death))
+
+cdc_monthly_all_state %>% pivot_longer(cols = new_death:tot_death, names_to='var',values_to='value') %>%
+  ggplot( aes(x=month, y=value, group=var, color=var)) +
+    geom_line() + ggtitle("Covid-19 Data Trend") + theme(axis.text.x = element_text(angle = 90), plot.title = element_text(size = 40, face = "bold"))
+```
+
 
 ### Correlation CPI V.S. Covid-19 Cases
 ```{r correlation}
