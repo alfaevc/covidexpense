@@ -426,7 +426,7 @@ names(region.list) <- c('Northeast', 'Mid.Atlantic', 'Southeast', 'Midwest', 'So
 
 
 ```{r basis plot, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
-B.basis.plot(spline.basis(cdc, n.knots=7), n.knots=7)
+B.basis.plot(spline.basis(cdc, n.knots=10), n.knots=10)
 ```
 
 
@@ -570,4 +570,6 @@ for (i in 1:length(state.cluster)) {
   print(plot_states(cdc.month, state.cluster[[i]], "new_case", "Covid Monthly New Cases Time Series"))
 }
 ```
+To identify difference and similarities between covid case curves, we estimated a basis spline (B-spline) model for every state. Each estimated B-spline is a weighted piecewise combination of 10 polynomials, connected at “knots”. Estimated splines and weight coefficients are closely related in states with similar underlying case curves. We compared the estimated state splines by using the K-means algorithm to cluster similar sets of weight coefficients, identifying groups of states with similar covid case trajectories. In general, we can observe that the coefficients for two states in the same cluster are more similar than those in a different cluster(e.g. Florida and Texas).
+
 
