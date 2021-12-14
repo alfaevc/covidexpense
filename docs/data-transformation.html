@@ -24,7 +24,7 @@
 <meta name="author" content="Alvin Pan, Shuyue Xu, Hang Xu" />
 
 
-<meta name="date" content="2021-12-12" />
+<meta name="date" content="2021-12-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -128,7 +128,8 @@
 <li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#cpi"><i class="fa fa-check"></i><b>5.1</b> CPI</a></li>
 <li class="chapter" data-level="5.2" data-path="results.html"><a href="results.html#covid"><i class="fa fa-check"></i><b>5.2</b> Covid</a><ul>
 <li class="chapter" data-level="5.2.1" data-path="results.html"><a href="results.html#new-cases-and-deaths-by-state-from-2020-jan-to-2021-nov"><i class="fa fa-check"></i><b>5.2.1</b> new cases and deaths by State from 2020 Jan to 2021 Nov</a></li>
-<li class="chapter" data-level="5.2.2" data-path="results.html"><a href="results.html#cluster"><i class="fa fa-check"></i><b>5.2.2</b> cluster</a></li>
+<li class="chapter" data-level="5.2.2" data-path="results.html"><a href="results.html#correlation-cpi-v.s.-covid-19-cases"><i class="fa fa-check"></i><b>5.2.2</b> Correlation CPI V.S. Covid-19 Cases</a></li>
+<li class="chapter" data-level="5.2.3" data-path="results.html"><a href="results.html#cluster"><i class="fa fa-check"></i><b>5.2.3</b> cluster</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
@@ -192,267 +193,217 @@
 ## 6 05/03/2020      NH         2518         NA         NA       89         0        86
 ## # … with 7 more variables: conf_death &lt;dbl&gt;, prob_death &lt;dbl&gt;, new_death &lt;dbl&gt;,
 ## #   pnew_death &lt;dbl&gt;, created_at &lt;chr&gt;, consent_cases &lt;chr&gt;, consent_deaths &lt;chr&gt;</code></pre>
-<pre><code>## # A tibble: 6 × 4
-##   new_case new_death date    state
-##      &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;
-## 1      227         3 2020-4  AK   
-## 2     4871         1 2021-4  AK   
-## 3     2297        19 2020-8  AK   
-## 4    12078        49 2021-8  AK   
-## 5    13978        76 2020-12 AK   
-## 6        0         0 2020-2  AK</code></pre>
-<pre><code>##     new_case new_death     date state
-## 1        227         3 Apr 2020    AK
-## 2       4871         1 Apr 2021    AK
-## 3       2297        19 Aug 2020    AK
-## 4      12078        49 Aug 2021    AK
-## 5      13978        76 Dec 2020    AK
-## 6          0         0 Feb 2020    AK
-## 7       3569        15 Feb 2021    AK
-## 8          0         0 Jan 2020    AK
-## 9       6991        27 Jan 2021    AK
-## 10      2049        16 Jul 2020    AK
-## 11      4140        12 Jul 2021    AK
-## 12       481         4 Jun 2020    AK
-## 13       898         8 Jun 2021    AK
-## 14       128         6 Mar 2020    AK
-## 15      4207        17 Mar 2021    AK
-## 16       108         4 May 2020    AK
-## 17      2072        21 May 2021    AK
-## 18     16395        89 Nov 2020    AK
-## 19      8604       111 Nov 2021    AK
-## 20      7507        47 Oct 2020    AK
-## 21     22800       143 Oct 2021    AK
-## 22      2601        17 Sep 2020    AK
-## 23     25248       125 Sep 2021    AK
-## 24      6117       337 Apr 2020    AL
-## 25     12849       213 Apr 2021    AL
-## 26     38010      1058 Aug 2020    AL
-## 27    116708      1547 Aug 2021    AL
-## 28    111970      1806 Dec 2020    AL
-## 29         0         1 Feb 2020    AL
-## 30     33900       970 Feb 2021    AL
-## 31         0         0 Jan 2020    AL
-## 32     97187      2398 Jan 2021    AL
-## 33     49585       962 Jul 2020    AL
-## 34     35500       248 Jul 2021    AL
-## 35     20250       478 Jun 2020    AL
-## 36      5598       126 Jun 2021    AL
-## 37      1057        48 Mar 2020    AL
-## 38     22512       387 Mar 2021    AL
-## 39     11006       480 May 2020    AL
-## 40     15769       208 May 2021    AL
-## 41     58297       805 Nov 2020    AL
-## 42      9366       456 Nov 2021    AL
-## 43     38091       595 Oct 2020    AL
-## 44     35332       499 Oct 2021    AL
-## 45     27937       617 Sep 2020    AL
-## 46     93952      1790 Sep 2021    AL
-## 47      2695        53 Apr 2020    AR
-## 48      5327       113 Apr 2021    AR
-## 49     18713       344 Aug 2020    AR
-## 50     66439       793 Aug 2021    AR
-## 51     67779      1174 Dec 2020    AR
-## 52         0         0 Feb 2020    AR
-## 53     27147       375 Feb 2021    AR
-## 54         0         0 Jan 2020    AR
-## 55     70130      1192 Jan 2021    AR
-## 56     21734       183 Jul 2020    AR
-## 57     37067       232 Jul 2021    AR
-## 58     13524       137 Jun 2020    AR
-## 59      8004        76 Jun 2021    AR
-## 60       560         8 Mar 2020    AR
-## 61      7983       383 Mar 2021    AR
-## 62      3998        72 May 2020    AR
-## 63      5656        94 May 2021    AR
-## 64     45169       577 Nov 2020    AR
-## 65      7510       216 Nov 2021    AR
-## 66     28493       556 Oct 2020    AR
-## 67     17138       405 Oct 2021    AR
-## 68     22473       572 Sep 2020    AR
-## 69     43186       757 Sep 2021    AR
-## 70         0         0 Apr 2020    AS
-## 71         0         0 Apr 2021    AS
-## 72         0         0 Aug 2020    AS
-## 73         0         0 Aug 2021    AS
-## 74         0         0 Dec 2020    AS
-## 75         0         0 Feb 2020    AS
-## 76         1         0 Feb 2021    AS
-## 77         0         0 Jan 2020    AS
-## 78         0         0 Jan 2021    AS
-## 79         0         0 Jul 2020    AS
-## 80         0         0 Jul 2021    AS
-## 81         0         0 Jun 2020    AS
-## 82         0         0 Jun 2021    AS
-## 83         0         0 Mar 2020    AS
-## 84        -4         0 Mar 2021    AS
-## 85         0         0 May 2020    AS
-## 86         0         0 May 2021    AS
-## 87         3         0 Nov 2020    AS
-## 88         1         0 Nov 2021    AS
-## 89         0         0 Oct 2020    AS
-## 90         3         0 Oct 2021    AS
-## 91         0         0 Sep 2020    AS
-## 92         1         0 Sep 2021    AS
-## 93      6359       296 Apr 2020    AZ
-## 94     20061       357 Apr 2021    AZ
-## 95     27856      1335 Aug 2020    AZ
-## 96     84688       540 Aug 2021    AZ
-## 97    193483      2225 Dec 2020    AZ
-## 98         0         0 Feb 2020    AZ
-## 99     58558      2860 Feb 2021    AZ
-## 100        1         0 Jan 2020    AZ
-## 101   238290      4256 Jan 2021    AZ
-## 102    94826      2062 Jul 2020    AZ
-## 103    32360       310 Jul 2021    AZ
-## 104    59300       726 Jun 2020    AZ
-## 105    13425       308 Jun 2021    AZ
-## 106     1288        24 Mar 2020    AZ
-## 107    25029       987 Mar 2021    AZ
-## 108    12288       586 May 2020    AZ
-## 109    18953       304 May 2021    AZ
-## 110    80961       660 Nov 2020    AZ
-## 111    51533       582 Nov 2021    AZ
-## 112    27495       329 Oct 2020    AZ
-## 113    75317      1170 Oct 2021    AZ
-## 114    16702       621 Sep 2020    AZ
-## 115    81660      1198 Sep 2021    AZ
-## 116    41985      1740 Apr 2020    CA
-## 117    69706      2531 Apr 2021    CA
-## 118   210497      3818 Aug 2020    CA
-## 119   401722      1352 Aug 2021    CA
-## 120  1018584      6154 Dec 2020    CA
-## 121       34         0 Feb 2020    CA
-## 122   232214     11881 Feb 2021    CA
-## 123        0         0 Jan 2020    CA
-## 124  1011796     14539 Jan 2021    CA
-## 125   270671      3062 Jul 2020    CA
-## 126   138616       912 Jul 2021    CA
-## 127   112334      1834 Jun 2020    CA
-## 128    25422      1012 Jun 2021    CA
-## 129     6898       150 Mar 2020    CA
-## 130    92864      6142 Mar 2021    CA
-## 131    61666      2153 May 2020    CA
-## 132    46900      1544 May 2021    CA
-## 133   290963      1615 Nov 2020    CA
-## 134   105003      1071 Nov 2021    CA
-## 135   111380      1948 Oct 2020    CA
-## 136   172876      2849 Oct 2021    CA
-## 137   106540      2900 Sep 2020    CA
-## 138   291469      3383 Sep 2021    CA
-## 139    12900       708 Apr 2020    CO
-## 140    48533       188 Apr 2021    CO
-## 141    10638       107 Aug 2020    CO
-## 142    40653       194 Aug 2021    CO
-## 143   100744      1777 Dec 2020    CO
-## 144        0         0 Feb 2020    CO
-## 145    31561       357 Feb 2021    CO
-## 146        0         0 Jan 2020    CO
-## 147    59309       780 Jan 2021    CO
-## 148    14610       148 Jul 2020    CO
-## 149    16893       154 Jul 2021    CO
-## 150     6416       245 Jun 2020    CO
-## 151    11133       214 Jun 2021    CO
-## 152     2937        69 Mar 2020    CO
-## 153    32085       156 Mar 2021    CO
-## 154    10924       668 May 2020    CO
-## 155    30505       285 May 2021    CO
-## 156   135529       752 Nov 2020    CO
-## 157    51707       571 Nov 2021    CO
-## 158    38758       234 Oct 2020    CO
-## 159    68364       643 Oct 2021    CO
-## 160    13742       106 Sep 2020    CO
-## 161    50798       401 Sep 2021    CO
-## 162    24572      2188 Apr 2020    CT
-## 163    28345       211 Apr 2021    CT
-## 164     3069        33 Aug 2020    CT
-## 165    18171        65 Aug 2021    CT
-## 166    68413       975 Dec 2020    CT
-## 167        0         0 Feb 2020    CT
-## 168    29923       576 Feb 2021    CT
-## 169        0         0 Jan 2020    CT
-## 170    64315      1051 Jan 2021    CT
-## 171     3296       110 Jul 2020    CT
-## 172     5397        15 Jul 2021    CT
-## 173     4313       378 Jun 2020    CT
-## 174     1846        40 Jun 2021    CT
-## 175     3128        69 Mar 2020    CT
-## 176    30942       264 Mar 2021    CT
-## 177    14501      1687 May 2020    CT
-## 178     8273       141 May 2021    CT
-## 179    46088       404 Nov 2020    CT
-## 180     7890        62 Nov 2021    CT
-## 181    13657       108 Oct 2020    CT
-## 182    12238       135 Oct 2021    CT
-## 183     4671        43 Sep 2020    CT
-## 184    17273       271 Sep 2021    CT
-## 185     3828       215 Apr 2020    DC
-## 186     3184        41 Apr 2021    DC
-## 187     1866        22 Aug 2020    DC
-## 188     4708        11 Aug 2021    DC
-## 189     7431       106 Dec 2020    DC
-## 190        0         0 Feb 2020    DC
-## 191     3726       104 Feb 2021    DC
-## 192        0         0 Jan 2020    DC
-## 193     7889       127 Jan 2021    DC
-## 194     1799        34 Jul 2020    DC
-## 195     1147         8 Jul 2021    DC
-## 196     1526        85 Jun 2020    DC
-## 197      382         9 Jun 2021    DC
-## 198      495         9 Mar 2020    DC
-## 199     3915        47 Mar 2021    DC
-## 200     4478       242 May 2020    DC
-## 201     1234        27 May 2021    DC
-## 202     4286        34 Nov 2020    DC
-## 203     1467         5 Nov 2021    DC
-## 204     1940        19 Oct 2020    DC
-## 205     3087        16 Oct 2021    DC
-## 206     1334        20 Sep 2020    DC
-## 207     5347        14 Sep 2021    DC
-## 208     4632       142 Apr 2020    DE
-## 209     9353        66 Apr 2021    DE
-## 210     2439        20 Aug 2020    DE
-## 211     8445        47 Aug 2021    DE
-## 212    22329       153 Dec 2020    DE
-## 213        0         0 Feb 2020    DE
-## 214     8888       332 Feb 2021    DE
-## 215        0         0 Jan 2020    DE
-## 216    20976       160 Jan 2021    DE
-## 217     3598        76 Jul 2020    DE
-## 218     1663         9 Jul 2021    DE
-## 219     1977       140 Jun 2020    DE
-## 220      868        25 Jun 2021    DE
-## 221      414        10 Mar 2020    DE
-## 222     7193       137 Mar 2021    DE
-## 223     4705       217 May 2020    DE
-## 224     3619        36 May 2021    DE
-## 225    11232        67 Nov 2020    DE
-## 226     4095        52 Nov 2021    DE
-## 227     4380        74 Oct 2020    DE
-## 228    11235       137 Oct 2021    DE
-## 229     3141        31 Sep 2020    DE
-## 230    13111        74 Sep 2021    DE
-## 231    26982      1301 Apr 2020    FL
-## 232   170873      1579 Apr 2021    FL
-## 233   148790      5185 Aug 2020    FL
-## 234   639642      9846 Aug 2021    FL
-## 235   328608      3488 Dec 2020    FL
-## 236        0         0 Feb 2020    FL
-## 237   179441      3452 Feb 2021    FL
-## 238        0         0 Jan 2020    FL
-## 239   374382      5473 Jan 2021    FL
-## 240   315375      5239 Jul 2020    FL
-## 241   291260      2071 Jul 2021    FL
-## 242   101033      1158 Jun 2020    FL
-## 243    52526       899 Jun 2021    FL
-## 244     6515       177 Mar 2020    FL
-## 245   151481      1946 Mar 2021    FL
-## 246    21688      1204 May 2020    FL
-## 247    87130      1426 May 2021    FL
-## 248   193287      1955 Nov 2020    FL
-## 249    25191       172 Nov 2021    FL
-## 250    98404      1572 Oct 2020    FL
-##  [ reached &#39;max&#39; / getOption(&quot;max.print&quot;) -- omitted 1130 rows ]</code></pre>
+<pre><code>## # A tibble: 6 × 5
+##   new_case new_death date    state statefull
+##      &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;    
+## 1      227         3 2020-4  AK    Alaska   
+## 2     4871         1 2021-4  AK    Alaska   
+## 3     2297        19 2020-8  AK    Alaska   
+## 4    12078        49 2021-8  AK    Alaska   
+## 5    13978        76 2020-12 AK    Alaska   
+## 6        0         0 2020-2  AK    Alaska</code></pre>
+<pre><code>##     new_case new_death     date state   statefull
+## 1        227         3 Apr 2020    AK      Alaska
+## 2       4871         1 Apr 2021    AK      Alaska
+## 3       2297        19 Aug 2020    AK      Alaska
+## 4      12078        49 Aug 2021    AK      Alaska
+## 5      13978        76 Dec 2020    AK      Alaska
+## 6          0         0 Feb 2020    AK      Alaska
+## 7       3569        15 Feb 2021    AK      Alaska
+## 8          0         0 Jan 2020    AK      Alaska
+## 9       6991        27 Jan 2021    AK      Alaska
+## 10      2049        16 Jul 2020    AK      Alaska
+## 11      4140        12 Jul 2021    AK      Alaska
+## 12       481         4 Jun 2020    AK      Alaska
+## 13       898         8 Jun 2021    AK      Alaska
+## 14       128         6 Mar 2020    AK      Alaska
+## 15      4207        17 Mar 2021    AK      Alaska
+## 16       108         4 May 2020    AK      Alaska
+## 17      2072        21 May 2021    AK      Alaska
+## 18     16395        89 Nov 2020    AK      Alaska
+## 19      8604       111 Nov 2021    AK      Alaska
+## 20      7507        47 Oct 2020    AK      Alaska
+## 21     22800       143 Oct 2021    AK      Alaska
+## 22      2601        17 Sep 2020    AK      Alaska
+## 23     25248       125 Sep 2021    AK      Alaska
+## 24      6117       337 Apr 2020    AL     Alabama
+## 25     12849       213 Apr 2021    AL     Alabama
+## 26     38010      1058 Aug 2020    AL     Alabama
+## 27    116708      1547 Aug 2021    AL     Alabama
+## 28    111970      1806 Dec 2020    AL     Alabama
+## 29         0         1 Feb 2020    AL     Alabama
+## 30     33900       970 Feb 2021    AL     Alabama
+## 31         0         0 Jan 2020    AL     Alabama
+## 32     97187      2398 Jan 2021    AL     Alabama
+## 33     49585       962 Jul 2020    AL     Alabama
+## 34     35500       248 Jul 2021    AL     Alabama
+## 35     20250       478 Jun 2020    AL     Alabama
+## 36      5598       126 Jun 2021    AL     Alabama
+## 37      1057        48 Mar 2020    AL     Alabama
+## 38     22512       387 Mar 2021    AL     Alabama
+## 39     11006       480 May 2020    AL     Alabama
+## 40     15769       208 May 2021    AL     Alabama
+## 41     58297       805 Nov 2020    AL     Alabama
+## 42      9366       456 Nov 2021    AL     Alabama
+## 43     38091       595 Oct 2020    AL     Alabama
+## 44     35332       499 Oct 2021    AL     Alabama
+## 45     27937       617 Sep 2020    AL     Alabama
+## 46     93952      1790 Sep 2021    AL     Alabama
+## 47      2695        53 Apr 2020    AR    Arkansas
+## 48      5327       113 Apr 2021    AR    Arkansas
+## 49     18713       344 Aug 2020    AR    Arkansas
+## 50     66439       793 Aug 2021    AR    Arkansas
+## 51     67779      1174 Dec 2020    AR    Arkansas
+## 52         0         0 Feb 2020    AR    Arkansas
+## 53     27147       375 Feb 2021    AR    Arkansas
+## 54         0         0 Jan 2020    AR    Arkansas
+## 55     70130      1192 Jan 2021    AR    Arkansas
+## 56     21734       183 Jul 2020    AR    Arkansas
+## 57     37067       232 Jul 2021    AR    Arkansas
+## 58     13524       137 Jun 2020    AR    Arkansas
+## 59      8004        76 Jun 2021    AR    Arkansas
+## 60       560         8 Mar 2020    AR    Arkansas
+## 61      7983       383 Mar 2021    AR    Arkansas
+## 62      3998        72 May 2020    AR    Arkansas
+## 63      5656        94 May 2021    AR    Arkansas
+## 64     45169       577 Nov 2020    AR    Arkansas
+## 65      7510       216 Nov 2021    AR    Arkansas
+## 66     28493       556 Oct 2020    AR    Arkansas
+## 67     17138       405 Oct 2021    AR    Arkansas
+## 68     22473       572 Sep 2020    AR    Arkansas
+## 69     43186       757 Sep 2021    AR    Arkansas
+## 70         0         0 Apr 2020    AS        &lt;NA&gt;
+## 71         0         0 Apr 2021    AS        &lt;NA&gt;
+## 72         0         0 Aug 2020    AS        &lt;NA&gt;
+## 73         0         0 Aug 2021    AS        &lt;NA&gt;
+## 74         0         0 Dec 2020    AS        &lt;NA&gt;
+## 75         0         0 Feb 2020    AS        &lt;NA&gt;
+## 76         1         0 Feb 2021    AS        &lt;NA&gt;
+## 77         0         0 Jan 2020    AS        &lt;NA&gt;
+## 78         0         0 Jan 2021    AS        &lt;NA&gt;
+## 79         0         0 Jul 2020    AS        &lt;NA&gt;
+## 80         0         0 Jul 2021    AS        &lt;NA&gt;
+## 81         0         0 Jun 2020    AS        &lt;NA&gt;
+## 82         0         0 Jun 2021    AS        &lt;NA&gt;
+## 83         0         0 Mar 2020    AS        &lt;NA&gt;
+## 84        -4         0 Mar 2021    AS        &lt;NA&gt;
+## 85         0         0 May 2020    AS        &lt;NA&gt;
+## 86         0         0 May 2021    AS        &lt;NA&gt;
+## 87         3         0 Nov 2020    AS        &lt;NA&gt;
+## 88         1         0 Nov 2021    AS        &lt;NA&gt;
+## 89         0         0 Oct 2020    AS        &lt;NA&gt;
+## 90         3         0 Oct 2021    AS        &lt;NA&gt;
+## 91         0         0 Sep 2020    AS        &lt;NA&gt;
+## 92         1         0 Sep 2021    AS        &lt;NA&gt;
+## 93      6359       296 Apr 2020    AZ     Arizona
+## 94     20061       357 Apr 2021    AZ     Arizona
+## 95     27856      1335 Aug 2020    AZ     Arizona
+## 96     84688       540 Aug 2021    AZ     Arizona
+## 97    193483      2225 Dec 2020    AZ     Arizona
+## 98         0         0 Feb 2020    AZ     Arizona
+## 99     58558      2860 Feb 2021    AZ     Arizona
+## 100        1         0 Jan 2020    AZ     Arizona
+## 101   238290      4256 Jan 2021    AZ     Arizona
+## 102    94826      2062 Jul 2020    AZ     Arizona
+## 103    32360       310 Jul 2021    AZ     Arizona
+## 104    59300       726 Jun 2020    AZ     Arizona
+## 105    13425       308 Jun 2021    AZ     Arizona
+## 106     1288        24 Mar 2020    AZ     Arizona
+## 107    25029       987 Mar 2021    AZ     Arizona
+## 108    12288       586 May 2020    AZ     Arizona
+## 109    18953       304 May 2021    AZ     Arizona
+## 110    80961       660 Nov 2020    AZ     Arizona
+## 111    51533       582 Nov 2021    AZ     Arizona
+## 112    27495       329 Oct 2020    AZ     Arizona
+## 113    75317      1170 Oct 2021    AZ     Arizona
+## 114    16702       621 Sep 2020    AZ     Arizona
+## 115    81660      1198 Sep 2021    AZ     Arizona
+## 116    41985      1740 Apr 2020    CA  California
+## 117    69706      2531 Apr 2021    CA  California
+## 118   210497      3818 Aug 2020    CA  California
+## 119   401722      1352 Aug 2021    CA  California
+## 120  1018584      6154 Dec 2020    CA  California
+## 121       34         0 Feb 2020    CA  California
+## 122   232214     11881 Feb 2021    CA  California
+## 123        0         0 Jan 2020    CA  California
+## 124  1011796     14539 Jan 2021    CA  California
+## 125   270671      3062 Jul 2020    CA  California
+## 126   138616       912 Jul 2021    CA  California
+## 127   112334      1834 Jun 2020    CA  California
+## 128    25422      1012 Jun 2021    CA  California
+## 129     6898       150 Mar 2020    CA  California
+## 130    92864      6142 Mar 2021    CA  California
+## 131    61666      2153 May 2020    CA  California
+## 132    46900      1544 May 2021    CA  California
+## 133   290963      1615 Nov 2020    CA  California
+## 134   105003      1071 Nov 2021    CA  California
+## 135   111380      1948 Oct 2020    CA  California
+## 136   172876      2849 Oct 2021    CA  California
+## 137   106540      2900 Sep 2020    CA  California
+## 138   291469      3383 Sep 2021    CA  California
+## 139    12900       708 Apr 2020    CO    Colorado
+## 140    48533       188 Apr 2021    CO    Colorado
+## 141    10638       107 Aug 2020    CO    Colorado
+## 142    40653       194 Aug 2021    CO    Colorado
+## 143   100744      1777 Dec 2020    CO    Colorado
+## 144        0         0 Feb 2020    CO    Colorado
+## 145    31561       357 Feb 2021    CO    Colorado
+## 146        0         0 Jan 2020    CO    Colorado
+## 147    59309       780 Jan 2021    CO    Colorado
+## 148    14610       148 Jul 2020    CO    Colorado
+## 149    16893       154 Jul 2021    CO    Colorado
+## 150     6416       245 Jun 2020    CO    Colorado
+## 151    11133       214 Jun 2021    CO    Colorado
+## 152     2937        69 Mar 2020    CO    Colorado
+## 153    32085       156 Mar 2021    CO    Colorado
+## 154    10924       668 May 2020    CO    Colorado
+## 155    30505       285 May 2021    CO    Colorado
+## 156   135529       752 Nov 2020    CO    Colorado
+## 157    51707       571 Nov 2021    CO    Colorado
+## 158    38758       234 Oct 2020    CO    Colorado
+## 159    68364       643 Oct 2021    CO    Colorado
+## 160    13742       106 Sep 2020    CO    Colorado
+## 161    50798       401 Sep 2021    CO    Colorado
+## 162    24572      2188 Apr 2020    CT Connecticut
+## 163    28345       211 Apr 2021    CT Connecticut
+## 164     3069        33 Aug 2020    CT Connecticut
+## 165    18171        65 Aug 2021    CT Connecticut
+## 166    68413       975 Dec 2020    CT Connecticut
+## 167        0         0 Feb 2020    CT Connecticut
+## 168    29923       576 Feb 2021    CT Connecticut
+## 169        0         0 Jan 2020    CT Connecticut
+## 170    64315      1051 Jan 2021    CT Connecticut
+## 171     3296       110 Jul 2020    CT Connecticut
+## 172     5397        15 Jul 2021    CT Connecticut
+## 173     4313       378 Jun 2020    CT Connecticut
+## 174     1846        40 Jun 2021    CT Connecticut
+## 175     3128        69 Mar 2020    CT Connecticut
+## 176    30942       264 Mar 2021    CT Connecticut
+## 177    14501      1687 May 2020    CT Connecticut
+## 178     8273       141 May 2021    CT Connecticut
+## 179    46088       404 Nov 2020    CT Connecticut
+## 180     7890        62 Nov 2021    CT Connecticut
+## 181    13657       108 Oct 2020    CT Connecticut
+## 182    12238       135 Oct 2021    CT Connecticut
+## 183     4671        43 Sep 2020    CT Connecticut
+## 184    17273       271 Sep 2021    CT Connecticut
+## 185     3828       215 Apr 2020    DC    Maryland
+## 186     3184        41 Apr 2021    DC    Maryland
+## 187     1866        22 Aug 2020    DC    Maryland
+## 188     4708        11 Aug 2021    DC    Maryland
+## 189     7431       106 Dec 2020    DC    Maryland
+## 190        0         0 Feb 2020    DC    Maryland
+## 191     3726       104 Feb 2021    DC    Maryland
+## 192        0         0 Jan 2020    DC    Maryland
+## 193     7889       127 Jan 2021    DC    Maryland
+## 194     1799        34 Jul 2020    DC    Maryland
+## 195     1147         8 Jul 2021    DC    Maryland
+## 196     1526        85 Jun 2020    DC    Maryland
+## 197      382         9 Jun 2021    DC    Maryland
+## 198      495         9 Mar 2020    DC    Maryland
+## 199     3915        47 Mar 2021    DC    Maryland
+## 200     4478       242 May 2020    DC    Maryland
+##  [ reached &#39;max&#39; / getOption(&quot;max.print&quot;) -- omitted 1180 rows ]</code></pre>
 </div>
 <div id="covid-19-vaccination-and-case-trends-by-age-group-in-united-states" class="section level3">
 <h3><span class="header-section-number">3.2.2</span> COVID-19 Vaccination and Case Trends by Age Group in United States</h3>
