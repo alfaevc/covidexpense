@@ -9,8 +9,9 @@ missing-values
 results
 cpi
 covid
-new-cases-and-deaths-by-state-from-2020-jan-to-2021-nov
+new-cases-and-total-cases-change-by-state-from-2020-jan-to-2021-nov
 correlation-cpi-v.s.-covid-19-cases
 cluster
 interactive-component
 conclusion
+bar-plot

@@ -34,6 +34,8 @@ data$value = as.numeric(data$value)
 data$date <- paste(data$year, "-", substr(data$period,2,3), sep="")
 head(data)
 ```
+
+
 ```{r}
 data = data  %>% group_by(description,date) %>% dplyr::summarise(avgvalue=mean(value))
 data$description[data$description=="0100 Northeast 0 T 5"] = "Northeast"
@@ -78,6 +80,13 @@ region.list <- list(Northeast, Mid.Atlantic, Southeast, Midwest, Southwest, West
 names(region.list) <- c('Northeast', 'Mid.Atlantic', 'Southeast', 'Midwest', 'Southwest', 'West')
 ```
 
+```{r}
+for (i in c('Northeast', 'Mid.Atlantic', 'Southeast', 'Midwest', 'Southwest', 'West')){
+  value = data %>% filter(description == i,date == "2019-01")
+  value = value$avgvalue
+  data$scaled[data$description == i] = (data$avgvalue[data$description == i] - value)/value
+}
+```
 
 
 ```{r}
@@ -85,44 +94,47 @@ names(region.list) <- c('Northeast', 'Mid.Atlantic', 'Southeast', 'Midwest', 'So
 DF <- data.frame(description = character(),
                  state=character(), 
                  avgvalue=numeric(),
-                 date=character()) 
-temp = data %>% select(date,avgvalue) %>% filter(description=="Northeast")
+                 date=character(),
+                 scaled = numeric())
+
+temp = data %>% select(date,avgvalue,scaled) %>% filter(description=="Northeast")
 for(e in Northeast){
   temp$state = e
   DF = bind_rows(DF,temp)
 } 
-temp = data %>% select(date,avgvalue) %>% filter(description=="Mid.Atlantic")
+temp = data %>% select(date,avgvalue,scaled) %>% filter(description=="Mid.Atlantic")
 for(e in Mid.Atlantic){
   temp$state = e
   DF = bind_rows(DF,temp)
 } 
-temp = data %>% select(date,avgvalue) %>% filter(description=="Southeast")
+temp = data %>% select(date,avgvalue,scaled) %>% filter(description=="Southeast")
 for(e in Southeast){
   temp$state = e
   DF = bind_rows(DF,temp)
 } 
-temp = data %>% select(date,avgvalue) %>% filter(description=="Midwest")
+temp = data %>% select(date,avgvalue,scaled) %>% filter(description=="Midwest")
 for(e in Midwest){
   temp$state = e
   DF = bind_rows(DF,temp)
 } 
-temp = data %>% select(date,avgvalue) %>% filter(description=="Southwest")
+temp = data %>% select(date,avgvalue,scaled) %>% filter(description=="Southwest")
 for(e in Southwest){
   temp$state = e
   DF = bind_rows(DF,temp)
 } 
-temp = data %>% select(date,avgvalue) %>% filter(description=="West")
+temp = data %>% select(date,avgvalue,scaled) %>% filter(description=="West")
 for(e in West){
   temp$state = e
   DF = bind_rows(DF,temp)
 } 
+DF %>% drop_na()
 ```
 ```{r}
 DFcase = DF %>% group_by(state)%>%arrange(date)%>% 
     do(item = list(
         state = first(.$state),
-        sequence = .$avgvalue,
-        value = first(.$avgvalue)
+        sequence = .$scaled,
+        value = first(.$scaled)
     ))%>%
     .$item
 ```
@@ -132,18 +144,22 @@ highchart(type = "map") %>%
                 name = "Dem. Margin",
                 mapData = usgeojson,
                 joinBy = c("name","state"),
-                borderWidth = 0.05,
+                borderColor = "black",
+                borderWidth = 0.1,
                 dataLabels = list(enabled = TRUE, format = "{point.properties.postalcode}")
                 ) %>% 
   hc_colorAxis(minColor = "white", maxColor = "orange") %>%
-  hc_title(text = "CPI change from 2019 Jan to 2021 Nov by region") %>%
+  hc_title(text = "scaled CPI change from 2019 Jan to 2021 Nov by region") %>%
   hc_add_theme(hc_theme_smpl()) %>%
   hc_motion(
     enabled = TRUE,
     axisLabel = "yearmonth",
-    labels = as.character(sort(unique(cdc.month$date),decreasing = FALSE))
+    labels = as.character(sort(unique(DF$date),decreasing = FALSE))
   )%>% 
-  hc_legend(title = list(text = "cpi"), valueDecimals = 0, valueSuffix = "%") %>%
+  hc_legend(title = list(text = "scaledcpi"), valueDecimals = 0, valueSuffix = "%") %>%
    hc_mapNavigation(enabled = TRUE) %>% hc_exporting(enabled = TRUE)
 ```
+
+
+
 
