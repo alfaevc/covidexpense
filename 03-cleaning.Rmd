@@ -92,6 +92,9 @@ write.csv(cdc.month,"data/cdcmonth.csv", row.names = FALSE)
 
 ```
 ```{r}
+cdc = cdc  %>% mutate(prob_cases = ifelse(is.na(prob_cases), 0, prob_cases)) %>% mutate(conf_cases = tot_cases - prob_cases)
+cdc = cdc  %>% mutate(prob_death = ifelse(is.na(prob_death), 0, prob_death)) %>% mutate(conf_death = tot_death - prob_death)
+cdc = cdc %>% mutate(date=as.Date(date))
 write.csv(cdc,"data/cdc.csv")
 ```
 
