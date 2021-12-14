@@ -34,6 +34,14 @@ cpi %>%
     geom_line() + ggtitle("CPI Time Series for All Items") + theme(axis.text.x = element_text(angle = 90), plot.title = element_text(size = 40, face = "bold"))
 ```
 
+Heatmap
+```{r}
+# hchart.cor(cor_matrix)
+test
+```
+
+
+
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
 cpi.sub <- cpi %>% 
   filter(seriesID %in% c("SUUR0000SAT1","SUUR0000SAT", "SUUR0000SA0E","SUUR0000SAC","SUUR0000SETG","SUUR0000SETA01","SUUR0000SAE2")) 
