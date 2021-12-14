@@ -212,8 +212,45 @@ for (i in 1:length(item.cluster)) {
 }
 ```
 
-```{r, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
-#test = read.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/5_OneCatSevNumOrdered.csv")
 
+### bar plot
+```{r}
+cpi = read.csv("data/cpidata.csv")
+cpi$date = as.character(cpi$date)
+```
+```{r}
+itemname = levels(cpi$item_name)
+```
+
+```{r}
+DF <- data.frame(item_name = character(),
+                 date =character() ,
+                 value = numeric(), 
+                 ratebefore = numeric(), 
+                 rateafter=numeric())
+
+for (i in itemname){
+  v = cpi %>% select(item_name,date,value) %>% filter(item_name == i,date == "2020-01")
+  v = v$value
+  b = cpi %>% select(item_name,date,value) %>% filter(item_name == i,date == "2019-01")
+  b = b$value
+  temp = cpi %>% select(item_name,date,value) %>% filter(item_name == i,date == "2021-10")
+  t =  cpi %>% select(item_name,date,value) %>% filter(item_name == i,date == "2019-12")
+  t = (t$value - b)/b
+  temp$rateafter = (temp$value - v)/v
+  temp$ratebefore = t
+  DF = bind_rows(DF,temp)
+}
+```
+
+
+```{r}
+c = select(DF,c("item_name","ratebefore","rateafter"))
+c =c %>% gather("type", "value", -item_name)
+```
+
+```{r}
+ggplot(c, aes(x=item_name,y = value,fill = type))+
+  geom_bar(stat="identity", position = position_dodge())+theme(axis.text.x = element_text(angle = 90))
 ```
 
