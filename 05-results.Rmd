@@ -120,7 +120,7 @@ highchart(type = "map") %>%
 ### Correlation CPI V.S. Covid-19 Cases
 ```{r correlation}
 cdc = read.csv("data/cdc.csv")
-cdc$month <- as.yearmon(cdc$month, "%Y-%m")
+cdc$month = as.yearmon(format(as.Date(cdc$date), "%Y-%m"))
 cpi_monthly = cpi %>% select(date, value, item_name) %>% pivot_wider(id_cols = , names_from = item_name, values_from = value)
 #colnames(cpi_monthly)
 cdc_monthly_all_state = cdc %>% 
@@ -132,13 +132,6 @@ cor_matrix = inner_join(cpi_monthly, cdc_monthly_all_state, by=c("date"="month")
 
 source('hchart _corr.R')
 hchart.cor(cor_matrix)
-
-#cor_matrix %>% select("All items", )
-#cor_matrix = inner_join(cpi_monthly, cdc_monthly_all_state, by=c("date"="month")) %>% 
-#  select("tot_death", "tot_cases", "Apparel", "Communication" , "Public transportation", "Education") %>% 
-#  cor()
-#hchart.cor(cor_matrix)
-
 ```
 
 ### cluster
