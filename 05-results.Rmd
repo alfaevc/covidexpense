@@ -30,8 +30,10 @@ cpi$date <- as.yearmon(cpi$date, "%Y-%m")
 ```{r, fig.height = 6, message=FALSE, warning=FALSE, echo=FALSE}
 cpi %>%
   ggplot( aes(x=date, y=value, group=item_name, color=item_name)) +
-    geom_line() + ggtitle("CPI Time Series for All Items") + theme(axis.text.x = element_text(angle = 90), plot.title = element_text(size = 40, face = "bold"))
+    geom_line() + ggtitle("CPI Time Series for All Items") + theme(axis.text.x = element_text(angle = 90),legend.text = element_text(size=5),legend.position = 'bottom', plot.title = element_text(size = 30, face = "bold"))
 ```
+
+The above line chart shows the change of CPI for different items by time. Since there are so many items, we choose the ones we are most interested in to look more closely. We choose "energy","private transportation", "private transportation", "Commodities", "new vehicles", "public transportation", and "communication" for futher discuss.
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
 cpi.sub <- cpi %>% 
@@ -40,15 +42,27 @@ cpi.sub %>%
   ggplot( aes(x=date, y=value, group=item_name, color=item_name)) +
     geom_line() + theme(axis.text.x = element_text(angle = 90))
 ```
- "SUUR0000SA0E"(energy), "SUUR0000SAT1"(private transportation),"SUUR0000SAT"(transportation) decreases during the begining of covid-19 and then rises until now
- "SUUR0000SAC"(Commodities), "SUUR0000SETA01"(new vehicles) rises steadily 
- "SUUR0000SETG"(publictransportation) decreases ans then rise sharply during the start of 2021, then decrease sharply.
- "SUUR0000SAE2"(communication) no change
+ 
+We can see that the items can be divided into four groups from the above line chart. 
+"energy","private transportation" and "transportation" decreases during the begining of covid-19 and then rises until now. 
+
+"commodities" and "new vehicles" rises steadily. 
+
+"public transportation" decreases slowly and then rise sharply during the start of 2021, then decrease sharply. 
+
+"communication" almost no change. 
  
 ## Covid
 
+### new cases and deaths by State from 2020 Jan to 2021 Nov
+We compared how vote shares have shifted in elections from 1976 to 2020 Instructions to use the graph:
 
-### new cases and deaths by State from 2020 Jan to 2021 Nov 
+Play/pause clicking the play/pause button
+
+Navigate the motion slider by dragging the slider thumb
+
+Navigate the motion slider by hitting the left and right arrow keys.
+
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
 cdc.month = read.csv("data/cdcmonth.csv")
 cdc.month$date <- as.yearmon(cdc.month$date, "%Y-%m")

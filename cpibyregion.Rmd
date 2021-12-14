@@ -143,7 +143,7 @@ highchart(type = "map") %>%
     axisLabel = "yearmonth",
     labels = as.character(sort(unique(cdc.month$date),decreasing = FALSE))
   )%>% 
-  hc_legend(title = list(text = "new cases"), valueDecimals = 0, valueSuffix = "%") %>%
+  hc_legend(title = list(text = "cpi"), valueDecimals = 0, valueSuffix = "%") %>%
    hc_mapNavigation(enabled = TRUE) %>% hc_exporting(enabled = TRUE)
 ```
 
