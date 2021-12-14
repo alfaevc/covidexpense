@@ -38,6 +38,7 @@ cpi = read.csv("data/cpidata.csv")
 cpi$date <- as.yearmon(cpi$date, "%Y-%m")
 ```
 
+CDC trend
 
 ```{r, fig.height = 6, message=FALSE, warning=FALSE, echo=FALSE}
 cpi %>%
@@ -45,10 +46,9 @@ cpi %>%
     geom_line() + ggtitle("CPI Time Series for All Items") + theme(axis.text.x = element_text(angle = 90),legend.text = element_text(size=5),legend.position = 'bottom', plot.title = element_text(size = 30, face = "bold"))
 ```
 
+
 The above line chart shows the change of CPI for different items by time. Since there are so many items, we choose the ones we are most interested in to look more closely. We choose "energy","private transportation", "private transportation", "Commodities", "new vehicles", "public transportation", and "communication" for futher discuss.
 
-<<<<<<< HEAD
-=======
 
 Heatmap
 ```{r}
@@ -58,7 +58,6 @@ Heatmap
 
 
 
->>>>>>> 7d7820038be7eb7c9436801c392be567e6c2b744
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
 cpi.sub <- cpi %>% 
   filter(seriesID %in% c("SUUR0000SAT1","SUUR0000SAT", "SUUR0000SA0E","SUUR0000SAC","SUUR0000SETG","SUUR0000SETA01","SUUR0000SAE2")) 
@@ -78,10 +77,8 @@ We can see that the items can be divided into four groups from the above line ch
  
 ## Covid
 
-### new cases and total cases by State from 2020 Jan to 2021 Nov
-We compared how new cases changed by states from 2020 Jan to 2021 Nov 
-
-Instructions to use the graph:
+### new cases and deaths by State from 2020 Jan to 2021 Nov
+We compared how vote shares have shifted in elections from 1976 to 2020 Instructions to use the graph:
 
 Play/pause clicking the play/pause button
 
@@ -99,8 +96,6 @@ cdc_monthly_by_state = cdc_all %>%
   group_by(month, state) %>% 
   summarise(new_death=sum(new_death),new_case=sum(new_case), tot_cases=max(conf_cases), tot_death=max(tot_death))
 ```
-<<<<<<< HEAD
-=======
 
 
 ```{r}
@@ -117,7 +112,6 @@ cdc_monthly_all_state %>% pivot_longer(cols = new_death:tot_death, names_to='var
     geom_line() + ggtitle("Covid-19 Data Trend") + theme(axis.text.x = element_text(angle = 90), plot.title = element_text(size = 40, face = "bold"))
 ```
 
->>>>>>> 7d7820038be7eb7c9436801c392be567e6c2b744
 
 ```{r}
 cdcmonthcase = cdc.month %>% group_by(statefull)%>%arrange(date)%>% 
@@ -150,7 +144,6 @@ highchart(type = "map") %>%
    hc_mapNavigation(enabled = TRUE) %>% hc_exporting(enabled = TRUE)
 ```
 
-The above motion map shows that the first five cases in the United States are in the Illinois, Arizona and Washington state. 
 ```{r}
 
 cdcmonthdeath = cdc.month %>% group_by(statefull)%>%arrange(date)%>% 
@@ -184,8 +177,7 @@ highchart(type = "map") %>%
 
 ### Correlation CPI V.S. Covid-19 Cases
 ```{r correlation}
-cdc = read.csv("data/cdc.csv")
-cdc$month = as.yearmon(format(as.Date(cdc$date), "%Y-%m"))
+
 cpi_monthly = cpi %>% select(date, value, item_name) %>% pivot_wider(id_cols = , names_from = item_name, values_from = value)
 #colnames(cpi_monthly)
 cdc_monthly_all_state = cdc %>% 
@@ -193,11 +185,14 @@ cdc_monthly_all_state = cdc %>%
   group_by(month) %>% 
   summarise(new_death=sum(new_death),new_case=sum(new_case), tot_cases=sum(tot_cases), tot_death=sum(tot_death))
 #colnames(cdc_monthly_all_state)
-cor_matrix = inner_join(cpi_monthly, cdc_monthly_all_state, by=c("date"="month")) %>% select(-date, -new_case, -new_death) %>% cor() %>% as.data.frame()
+cor_matrix = inner_join(cpi_monthly, cdc_monthly_all_state, by=c("date"="month")) %>% select(-date) %>% cor() %>% as.data.frame()
 
 source('hchart _corr.R')
 hchart.cor(cor_matrix)
 ```
+
+* By looking at the pair-wise correlation between our variables(Covid data and CPI data), I am trying to use a quantitative method to find similar curves. Especially the curves that have similar trend as the total covid-19 cases. The results 
+
 
 ### cluster
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}

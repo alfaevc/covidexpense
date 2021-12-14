@@ -91,8 +91,37 @@ head(cdc.month)
 write.csv(cdc.month,"data/cdcmonth.csv", row.names = FALSE)
 
 ```
+
 ```{r}
+cdc = cdc  %>% mutate(prob_cases = ifelse(is.na(prob_cases), 0, prob_cases)) %>% mutate(conf_cases = tot_cases - prob_cases)
+cdc = cdc  %>% mutate(prob_death = ifelse(is.na(prob_death), 0, prob_death)) %>% mutate(conf_death = tot_death - prob_death)
+cdc = cdc %>% mutate(date=as.Date(date))
 write.csv(cdc,"data/cdc.csv")
+```
+
+```{r}
+#cdc = read.csv("data/cdc.csv")
+cdc = cdc %>% mutate(date=as.Date(date), month=as.yearmon(format(as.Date(date), "%Y-%m")))
+
+### total death working
+cdc_all = cdc %>% select(date, month, new_death, new_case, conf_cases, conf_death) %>% 
+    group_by(date) %>% 
+    summarise(month=max(month), new_death=sum(new_death),new_case=sum(new_case), conf_cases=sum(conf_cases), tot_death=sum(conf_death))
+# calculate monthly data
+cdc_monthly_all_state = cdc_all %>% 
+  select(month, new_death, new_case, conf_cases, tot_death) %>% 
+  group_by(month) %>% 
+  summarise(new_death=sum(new_death),new_case=sum(new_case), tot_cases=max(conf_cases), tot_death=max(tot_death))
+
+# combine cpi and cdc
+cpi_monthly = cpi %>% select(date, value, item_name) %>% pivot_wider(id_cols = , names_from = item_name, values_from = value)
+data_monthly = left_join(cpi_monthly, cdc_monthly_all_state, by=c("date"="month")) %>% rename(month = date)
+
+#
+write.csv(cdc_all,"data/cdc_all.csv")
+write.csv(cdc_monthly_all_state,"data/cdc_monthly_all_state.csv")
+write.csv(cpi_monthly,"data/cpi_monthly.csv")
+write.csv(data_monthly,"data/data_monthly.csv")
 ```
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
