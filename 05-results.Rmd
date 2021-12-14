@@ -450,7 +450,7 @@ k.values <- 2:10
 wss_values <- map_dbl(k.values, wss)
 ```
 
-```{r}
+```{r, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
 plot(wss_values)
 ```
 

@@ -48,9 +48,6 @@ head(cpi)
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
 cdc = read_csv("data/United_States_COVID-19_Cases_and_Deaths_by_State_over_Time.csv")
 ```
-```{r}
-cdc[cdc$new_case<0,]
-```
 
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
