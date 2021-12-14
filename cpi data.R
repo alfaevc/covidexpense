@@ -1,0 +1,50 @@
+library(googlesheets4)
+library(blsAPI)
+library(rjson) 
+library(dplyr)
+
+gs4_deauth()
+item_code = googlesheets4::read_sheet('1fpEQ4wuuDlnfKokjKyRUrOcIwHUnIBmnBFubCUpnQ94',sheet='Sheet3')
+head(item_code)
+
+seriesid = data.frame(item_code$seriesid)
+payload <- list('seriesid'=as.vector(item_code$seriesid)) 
+response <- blsAPI(payload,return_data_frame =T) 
+head(response)
+
+gs4_auth('xuhang2005@gmail.com')
+write_sheet(response, '1fpEQ4wuuDlnfKokjKyRUrOcIwHUnIBmnBFubCUpnQ94',sheet='data')
+gs4_deauth()
+
+gs4_deauth()
+item_code = googlesheets4::read_sheet('1fpEQ4wuuDlnfKokjKyRUrOcIwHUnIBmnBFubCUpnQ94',sheet='chained')
+head(item_code)
+seriesid = data.frame(item_code$seriesid)
+payload <- list('seriesid'=as.vector(item_code$seriesid[26:29])) 
+response <- blsAPI(list('seriesid'=as.vector(item_code$seriesid)) ,return_data_frame =T) 
+chained_add <- blsAPI(payload,return_data_frame =T) 
+gs4_auth('xuhang2005@gmail.com')
+write_sheet(rbind(response,chained_add), '1fpEQ4wuuDlnfKokjKyRUrOcIwHUnIBmnBFubCUpnQ94',sheet='chained_data')
+
+response %>% select(seriesID) %>% dplyr::distinct()
+response_test %>% select(seriesID) %>% dplyr::distinct()
+
+#
+gs4_deauth()
+energy_area = googlesheets4::read_sheet('1fpEQ4wuuDlnfKokjKyRUrOcIwHUnIBmnBFubCUpnQ94',sheet='energy area')
+payload <- list('seriesid'=as.vector(energy_area$seriesid)) 
+response <- blsAPI(payload,return_data_frame =T) 
+output = left_join(response, energy_area %>% select(seriesid, description), by=c('seriesID'='seriesid'))
+head(response)
+gs4_auth('xuhang2005@gmail.com')
+write_sheet(output, '1fpEQ4wuuDlnfKokjKyRUrOcIwHUnIBmnBFubCUpnQ94',sheet='energy_area_data')
+
+# CPI-All Urban Consumers by area
+gs4_deauth()
+CPI_area = googlesheets4::read_sheet('1fpEQ4wuuDlnfKokjKyRUrOcIwHUnIBmnBFubCUpnQ94',sheet='CPI by area')
+payload <- list('seriesid'=as.vector(CPI_area$seriesid)) 
+response <- blsAPI(payload,return_data_frame =T) 
+output = left_join(response, CPI_area %>% select(seriesid, description), by=c('seriesID'='seriesid'))
+head(response)
+gs4_auth('xuhang2005@gmail.com')
+write_sheet(output, '1fpEQ4wuuDlnfKokjKyRUrOcIwHUnIBmnBFubCUpnQ94',sheet='CPI_area_data')
