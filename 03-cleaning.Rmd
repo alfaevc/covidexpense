@@ -5,8 +5,7 @@ library(googlesheets4)
 library(readr)
 #library(blsAPI)
 library(rjson) 
-library(dplyr)
-library(ggplot2)
+library(tidyverse)
 library(zoo)
 # library(lubridate)
 ```
@@ -98,6 +97,7 @@ cdc = cdc  %>% mutate(prob_death = ifelse(is.na(prob_death), 0, prob_death)) %>%
 cdc = cdc %>% mutate(date=as.Date(date))
 write.csv(cdc,"data/cdc.csv")
 ```
+
 
 ```{r}
 #cdc = read.csv("data/cdc.csv")

@@ -13,8 +13,6 @@ output:
 Andrew IDs: qpan
 ---
 
----------import library packages and datasets
-
 ```{r}
 library(graphics)
 library("readxl")
