@@ -422,7 +422,7 @@ names(region.list) <- c('Northeast', 'Mid.Atlantic', 'Southeast', 'Midwest', 'So
 
 
 
-```{r, message=FALSE, warning=FALSE, echo=FALSE}
+```{r, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
 B.basis.plot(spline.basis(cdc.month, n.knots=10), n.knots=10)
 ```
 
@@ -434,7 +434,7 @@ mid <- function(x) {
 ```
 
 
-```{r, message=FALSE, warning=FALSE, echo=FALSE}
+```{r, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
 Bcoef.mat = plot.bspline(cdc.month, all.states, 'new_case', n.knots=10, degree=3)
 wss <- function(k) {
   kmeans(as.data.frame(Bcoef.mat), k, nstart = 10)$tot.withinss
@@ -491,7 +491,7 @@ sort.state.clusters <- function(clusters, sort.cluster.list) {
 
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
-for (i in 1:20) {
+for (i in 9) {
 # Run K-means to cluster the knots of the states
   # Bcoef.mat = plot.bspline(covid.com, all.states, 'NEWCD_NORM_500', n.knots=15, degree=3)
   

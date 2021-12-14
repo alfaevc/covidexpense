@@ -26,7 +26,7 @@ library(highcharter)
 ```
 
 
-```{r, message=FALSE, warning=FALSE, echo=FALSE}
+```{r, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
 gs4_deauth()
 data= googlesheets4::read_sheet('1fpEQ4wuuDlnfKokjKyRUrOcIwHUnIBmnBFubCUpnQ94',sheet='CPI_area_data')
 
@@ -34,7 +34,7 @@ data$value = as.numeric(data$value)
 data$date <- paste(data$year, "-", substr(data$period,2,3), sep="")
 head(data)
 ```
-```{r}
+```{r, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
 data = data  %>% group_by(description,date) %>% dplyr::summarise(avgvalue=mean(value))
 data$description[data$description=="0100 Northeast 0 T 5"] = "Northeast"
 data$description[data$description=="0120 Middle Atlantic 1 T 11"] = "Mid.Atlantic"
@@ -45,7 +45,7 @@ data$description[data$description=="0400 West 0 T 43"] = "West"
 ```
 
 
-```{r, message=FALSE, warning=FALSE, echo=FALSE}
+```{r, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
 # 6
 Northeast = c("Connecticut", "Massachusetts", "Maine", 
               "New Hampshire", "Rhode Island", "Vermont")
@@ -80,7 +80,7 @@ names(region.list) <- c('Northeast', 'Mid.Atlantic', 'Southeast', 'Midwest', 'So
 
 
 
-```{r}
+```{r, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
 ##create new dataframe
 DF <- data.frame(description = character(),
                  state=character(), 
@@ -117,7 +117,8 @@ for(e in West){
   DF = bind_rows(DF,temp)
 } 
 ```
-```{r}
+```{r, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
+'
 DFcase = DF %>% group_by(state)%>%arrange(date)%>% 
     do(item = list(
         state = first(.$state),
@@ -125,8 +126,6 @@ DFcase = DF %>% group_by(state)%>%arrange(date)%>%
         value = first(.$avgvalue)
     ))%>%
     .$item
-```
-```{r}
 highchart(type = "map") %>% 
   hc_add_series(data = DFcase,
                 name = "Dem. Margin",
@@ -145,5 +144,6 @@ highchart(type = "map") %>%
   )%>% 
   hc_legend(title = list(text = "cpi"), valueDecimals = 0, valueSuffix = "%") %>%
    hc_mapNavigation(enabled = TRUE) %>% hc_exporting(enabled = TRUE)
+'
 ```
 
