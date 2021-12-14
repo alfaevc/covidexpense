@@ -52,9 +52,6 @@ cpi.sub %>%
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
 cdc.month = read.csv("data/cdcmonth.csv")
 cdc.month$date <- as.yearmon(cdc.month$date, "%Y-%m")
-cdc.month$statefull = state.name[match(cdc.month$state,state.abb)]
-cdc.month$statefull[cdc.month$state=="DC"] = "Maryland"
-cdc.month$statefull[cdc.month$state=="NYC"] = "New York"
 cdc.month = cdc.month  %>% group_by(statefull,date) %>% dplyr::summarise(new_case=sum(new_case),new_death=sum(new_death))
 ```
 
@@ -120,8 +117,10 @@ highchart(type = "map") %>%
    hc_mapNavigation(enabled = TRUE) %>% hc_exporting(enabled = TRUE)
 ```
 
-### correlation between CPI and COVID cases data
-```{r}
+### Correlation CPI V.S. Covid-19 Cases
+```{r correlation}
+cdc = read.csv("data/cdc.csv")
+cdc$month <- as.yearmon(cdc$month, "%Y-%m")
 cpi_monthly = cpi %>% select(date, value, item_name) %>% pivot_wider(id_cols = , names_from = item_name, values_from = value)
 #colnames(cpi_monthly)
 cdc_monthly_all_state = cdc %>% 
