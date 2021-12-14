@@ -102,6 +102,7 @@ cdc_monthly_by_state = cdc %>%
   group_by(month, state) %>% 
   summarise(new_death=sum(new_death),new_case=sum(new_case), tot_cases=max(conf_cases), tot_death=max(tot_death))
 cdc_monthly_by_state$statefull = state.name[match(cdc_monthly_by_state$state,state.abb)]
+cdc_monthly_by_state = cdc_monthly_by_state %>% drop_na()
 ```
 
 
@@ -144,7 +145,7 @@ cdcmonthtotal = cdc_monthly_by_state %>% group_by(statefull)%>%arrange(month)%>%
     do(item = list(
         state = first(.$statefull),
         sequence = .$tot_cases,
-        value = first(.$new_death)
+        value = first(.$tot_cases)
     ))%>%
     .$item
 ```
@@ -163,12 +164,13 @@ highchart(type = "map") %>%
   hc_motion(
     enabled = TRUE,
     axisLabel = "yearmonth",
-    labels = as.character(sort(unique(cdc_monthly_by_state$month),decreasing = FALSE))
+    labels = as.character(sort(unique(cdc.month$date),decreasing = FALSE))
   )%>% 
   hc_legend(title = list(text = "total cases"), valueDecimals = 0, valueSuffix = "%") %>%
    hc_mapNavigation(enabled = TRUE) %>% hc_exporting(enabled = TRUE)
 ```
 
+From the motion map, we can find that at first, New York is the state with the largest total cases and then from Jul 2020 until Nov 2021, California, Texas and Flora are the three States that have the largest total cases which compatible with the trend of new cases from the previous motion map. These three States have large populations and warm weather which provides with enough condition for Coronavirus to live and spread.
 
 ```{r}
 cdc = read.csv("data/cdc.csv")
