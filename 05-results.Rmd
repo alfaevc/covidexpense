@@ -54,10 +54,12 @@ The above line chart shows the change of CPI for different items by time. Since 
 
 Heatmap
 ```{r}
-
+cor_matrix = cpi_monthly %>%  select(-date) %>% cor() %>% as.data.frame()
+source('hchart _corr.R')
+hchart.cor(cor_matrix)
 ```
 
-
+According to the heat map, we can easily tell that many of the CPI items are highly and positively correlated with each other. However, `Public Transportation`, `Medical Care Services`, `Communication`, and `Apparel` showed white and red color in the heat map. This indicates that they are not or negatively correlated with other items. Combining with the trend graph, I know that their prices did not increase much. It is also reasonable because some of them have pricing mechanism that is not determined by the market. For instance, `Public Transportation`, `Medical Care Services` and `Communication` 
 
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
