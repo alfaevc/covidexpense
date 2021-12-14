@@ -98,6 +98,7 @@ cdc = cdc %>% mutate(date=as.Date(date))
 write.csv(cdc,"data/cdc.csv")
 ```
 
+
 ```{r}
 #cdc = read.csv("data/cdc.csv")
 cdc = cdc %>% mutate(date=as.Date(date), month=as.yearmon(format(as.Date(date), "%Y-%m")))
