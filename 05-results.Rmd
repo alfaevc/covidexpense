@@ -134,11 +134,11 @@ cor_matrix = inner_join(cpi_monthly, cdc_monthly_all_state, by=c("date"="month")
 source('hchart _corr.R')
 hchart.cor(cor_matrix)
 
-cor_matrix %>% select("All items", )
-cor_matrix = inner_join(cpi_monthly, cdc_monthly_all_state, by=c("date"="month")) %>% 
-  select("tot_death", "tot_cases", "Apparel", "Communication" , "Public transportation", "Education") %>% 
-  cor()
-hchart.cor(cor_matrix)
+#cor_matrix %>% select("All items", )
+#cor_matrix = inner_join(cpi_monthly, cdc_monthly_all_state, by=c("date"="month")) %>% 
+#  select("tot_death", "tot_cases", "Apparel", "Communication" , "Public transportation", "Education") %>% 
+#  cor()
+#hchart.cor(cor_matrix)
 
 ```
 
