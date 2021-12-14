@@ -54,8 +54,10 @@ We can see that the items can be divided into four groups from the above line ch
  
 ## Covid
 
-### new cases and deaths by State from 2020 Jan to 2021 Nov
-We compared how vote shares have shifted in elections from 1976 to 2020 Instructions to use the graph:
+### new cases and total cases by State from 2020 Jan to 2021 Nov
+We compared how new cases changed by states from 2020 Jan to 2021 Nov 
+
+Instructions to use the graph:
 
 Play/pause clicking the play/pause button
 
@@ -68,7 +70,6 @@ cdc.month = read.csv("data/cdcmonth.csv")
 cdc.month$date <- as.yearmon(cdc.month$date, "%Y-%m")
 cdc.month = cdc.month  %>% group_by(statefull,date) %>% dplyr::summarise(new_case=sum(new_case),new_death=sum(new_death))
 ```
-
 
 ```{r}
 cdcmonthcase = cdc.month %>% group_by(statefull)%>%arrange(date)%>% 
@@ -100,6 +101,7 @@ highchart(type = "map") %>%
    hc_mapNavigation(enabled = TRUE) %>% hc_exporting(enabled = TRUE)
 ```
 
+The above motion map shows that the first five cases in the United States are in the Illinois, Arizona and Washington state. 
 ```{r}
 
 cdcmonthdeath = cdc.month %>% group_by(statefull)%>%arrange(date)%>% 
