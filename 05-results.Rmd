@@ -20,6 +20,18 @@ library(zoo)
 library(highcharter)
 ```
 
+```{r lead data, message=FALSE, warning=FALSE, echo=FALSE}
+cdc_all = read.csv("data/cdc_all.csv")
+cdc_monthly_all_state = read.csv("data/cdc_monthly_all_state.csv")
+cpi_monthly = read.csv("data/cpi_monthly.csv")
+data_monthly = read.csv("data/data_monthly.csv")
+cdc_all = cdc_all %>% mutate(date=as.Date(date), month=as.yearmon(format(as.Date(date), "%Y-%m")))
+cdc_monthly_all_state = cdc_monthly_all_state %>% mutate(month=as.yearmon(month))
+cpi_monthly = cpi_monthly %>% mutate(date=as.yearmon(date))
+data_monthly = data_monthly %>% mutate(month=as.yearmon(month))
+```
+
+
 ## CPI
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
 cpi = read.csv("data/cpidata.csv")
@@ -35,6 +47,18 @@ cpi %>%
 
 The above line chart shows the change of CPI for different items by time. Since there are so many items, we choose the ones we are most interested in to look more closely. We choose "energy","private transportation", "private transportation", "Commodities", "new vehicles", "public transportation", and "communication" for futher discuss.
 
+<<<<<<< HEAD
+=======
+
+Heatmap
+```{r}
+
+```
+
+
+
+
+>>>>>>> 7d7820038be7eb7c9436801c392be567e6c2b744
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
 cpi.sub <- cpi %>% 
   filter(seriesID %in% c("SUUR0000SAT1","SUUR0000SAT", "SUUR0000SA0E","SUUR0000SAC","SUUR0000SETG","SUUR0000SETA01","SUUR0000SAE2")) 
@@ -69,7 +93,31 @@ Navigate the motion slider by hitting the left and right arrow keys.
 cdc.month = read.csv("data/cdcmonth.csv")
 cdc.month$date <- as.yearmon(cdc.month$date, "%Y-%m")
 cdc.month = cdc.month  %>% group_by(statefull,date) %>% dplyr::summarise(new_case=sum(new_case),new_death=sum(new_death))
+
+cdc_monthly_by_state = cdc_all %>% 
+  select(month, state, new_death, new_case, conf_cases, tot_death) %>% 
+  group_by(month, state) %>% 
+  summarise(new_death=sum(new_death),new_case=sum(new_case), tot_cases=max(conf_cases), tot_death=max(tot_death))
 ```
+<<<<<<< HEAD
+=======
+
+
+```{r}
+cdc = read.csv("data/cdc.csv")
+cdc$month = as.yearmon(format(as.Date(cdc$date), "%Y-%m"))
+
+cdc_monthly_all_state = cdc %>% 
+  select(month, new_death, new_case, conf_cases, conf_death) %>% 
+  group_by(month) %>% 
+  summarise(new_death=sum(new_death),new_case=sum(new_case), tot_cases=sum(conf_cases), tot_death=sum(conf_death))
+
+cdc_monthly_all_state %>% pivot_longer(cols = new_death:tot_death, names_to='var',values_to='value') %>%
+  ggplot( aes(x=month, y=value, group=var, color=var)) +
+    geom_line() + ggtitle("Covid-19 Data Trend") + theme(axis.text.x = element_text(angle = 90), plot.title = element_text(size = 40, face = "bold"))
+```
+
+>>>>>>> 7d7820038be7eb7c9436801c392be567e6c2b744
 
 ```{r}
 cdcmonthcase = cdc.month %>% group_by(statefull)%>%arrange(date)%>% 
@@ -80,6 +128,7 @@ cdcmonthcase = cdc.month %>% group_by(statefull)%>%arrange(date)%>%
     ))%>%
     .$item
 ```
+
 ```{r}
 highchart(type = "map") %>% 
   hc_add_series(data = cdcmonthcase,
