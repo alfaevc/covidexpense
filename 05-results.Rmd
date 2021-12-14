@@ -20,6 +20,18 @@ library(zoo)
 library(highcharter)
 ```
 
+```{r lead data, message=FALSE, warning=FALSE, echo=FALSE}
+cdc_all = read.csv("data/cdc_all.csv")
+cdc_monthly_all_state = read.csv("data/cdc_monthly_all_state.csv")
+cpi_monthly = read.csv("data/cpi_monthly.csv")
+data_monthly = read.csv("data/data_monthly.csv")
+cdc_all = cdc_all %>% mutate(date=as.Date(date), month=as.yearmon(format(as.Date(date), "%Y-%m")))
+cdc_monthly_all_state = cdc_monthly_all_state %>% mutate(month=as.yearmon(month))
+cpi_monthly = cpi_monthly %>% mutate(date=as.yearmon(date))
+data_monthly = data_monthly %>% mutate(month=as.yearmon(month))
+```
+
+
 ## CPI
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
 cpi = read.csv("data/cpidata.csv")
@@ -40,8 +52,7 @@ The above line chart shows the change of CPI for different items by time. Since 
 
 Heatmap
 ```{r}
-# hchart.cor(cor_matrix)
-test
+
 ```
 
 
@@ -79,7 +90,14 @@ Navigate the motion slider by hitting the left and right arrow keys.
 cdc.month = read.csv("data/cdcmonth.csv")
 cdc.month$date <- as.yearmon(cdc.month$date, "%Y-%m")
 cdc.month = cdc.month  %>% group_by(statefull,date) %>% dplyr::summarise(new_case=sum(new_case),new_death=sum(new_death))
+
+cdc_monthly_by_state = cdc_all %>% 
+  select(month, state, new_death, new_case, conf_cases, tot_death) %>% 
+  group_by(month, state) %>% 
+  summarise(new_death=sum(new_death),new_case=sum(new_case), tot_cases=max(conf_cases), tot_death=max(tot_death))
 ```
+
+
 ```{r}
 cdc = read.csv("data/cdc.csv")
 cdc$month = as.yearmon(format(as.Date(cdc$date), "%Y-%m"))
@@ -104,6 +122,7 @@ cdcmonthcase = cdc.month %>% group_by(statefull)%>%arrange(date)%>%
     ))%>%
     .$item
 ```
+
 ```{r}
 highchart(type = "map") %>% 
   hc_add_series(data = cdcmonthcase,
