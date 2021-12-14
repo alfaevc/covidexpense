@@ -1,3 +1,5 @@
 # Data sources
 
-The covid data are collected by the centers fro Disease Control and Prevention(CDC)
+The covid data are collected by the centers for Disease Control and Prevention(CDC)
+
+The CPI data is collected from BLS using API. 

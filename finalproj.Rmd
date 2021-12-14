@@ -1,0 +1,616 @@
+--- 
+title: "Covid & Expense"
+author: "Alvin Pan, Shuyue Xu, Hang Xu"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+---
+--- 
+title: "Covid & Expense"
+author: "Alvin Pan, Shuyue Xu, Hang Xu"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+---
+```{r include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+# Introduction
+
+
+<!--chapter:end:index.Rmd-->
+
+```{r include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+# Data sources
+
+The covid data are collected by the centers for Disease Control and Prevention(CDC)
+
+The CPI data is collected from BLS using API. 
+
+<!--chapter:end:02-data.Rmd-->
+
+
+# Data transformation
+
+Placeholder
+
+
+## CPI data
+## Covid data
+### United States COVID-19 Cases and Deaths by State overTime
+### COVID-19 Vaccination and Case Trends by Age Group in United States
+
+<!--chapter:end:03-cleaning.Rmd-->
+
+
+# Missing values
+
+Placeholder
+
+
+
+<!--chapter:end:04-missing.Rmd-->
+
+```{r include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+# Results
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+library(googlesheets4)
+#library(blsAPI)
+library(rjson) 
+library(dplyr)
+library(ggplot2)
+library(graphics)
+library("readxl")
+library(tidyverse)
+library("lhs")
+library(splines)
+library(maps)
+library(mapdata)
+library("viridis")
+library(RColorBrewer)
+library(zoo)
+# library(lubridate)
+library(highcharter)
+```
+
+## CPI
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+cpi = read.csv("data/cpidata.csv")
+cpi$date <- as.yearmon(cpi$date, "%Y-%m")
+```
+
+
+```{r, fig.height = 6, message=FALSE, warning=FALSE, echo=FALSE}
+cpi %>%
+  ggplot( aes(x=date, y=value, group=item_name, color=item_name)) +
+    geom_line() + ggtitle("CPI Time Series for All Items") + theme(axis.text.x = element_text(angle = 90), plot.title = element_text(size = 40, face = "bold"))
+```
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+cpi.sub <- cpi %>% 
+  filter(seriesID %in% c("SUUR0000SAT1","SUUR0000SAT", "SUUR0000SA0E","SUUR0000SAC","SUUR0000SETG","SUUR0000SETA01","SUUR0000SAE2")) 
+cpi.sub %>%
+  ggplot( aes(x=date, y=value, group=item_name, color=item_name)) +
+    geom_line() + theme(axis.text.x = element_text(angle = 90))
+```
+ "SUUR0000SA0E"(energy), "SUUR0000SAT1"(private transportation),"SUUR0000SAT"(transportation) decreases during the begining of covid-19 and then rises until now
+ "SUUR0000SAC"(Commodities), "SUUR0000SETA01"(new vehicles) rises steadily 
+ "SUUR0000SETG"(publictransportation) decreases ans then rise sharply during the start of 2021, then decrease sharply.
+ "SUUR0000SAE2"(communication) no change
+ 
+## Covid
+
+
+### new cases and deaths by State from 2020 Jan to 2021 Nov 
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+cdc.month = read.csv("data/cdcmonth.csv")
+cdc.month$date <- as.yearmon(cdc.month$date, "%Y-%m")
+cdc.month$statefull = state.name[match(cdc.month$state,state.abb)]
+cdc.month$statefull[cdc.month$state=="DC"] = "Maryland"
+cdc.month$statefull[cdc.month$state=="NYC"] = "New York"
+cdc.month = cdc.month  %>% group_by(statefull,date) %>% dplyr::summarise(new_case=sum(new_case),new_death=sum(new_death))
+```
+
+
+```{r}
+cdcmonthcase = cdc.month %>% group_by(statefull)%>%arrange(date)%>% 
+    do(item = list(
+        state = first(.$statefull),
+        sequence = .$new_case,
+        value = first(.$new_case)
+    ))%>%
+    .$item
+```
+```{r}
+highchart(type = "map") %>% 
+  hc_add_series(data = cdcmonthcase,
+                name = "Dem. Margin",
+                mapData = usgeojson,
+                joinBy = c("name","state"),
+                borderWidth = 0.05,
+                dataLabels = list(enabled = TRUE, format = "{point.properties.postalcode}")
+                ) %>% 
+  hc_colorAxis(minColor = "white", maxColor = "orange") %>%
+  hc_title(text = "new cases from 2020 Apirl to 2021 Nov by state") %>%
+  hc_add_theme(hc_theme_smpl()) %>%
+  hc_motion(
+    enabled = TRUE,
+    axisLabel = "yearmonth",
+    labels = as.character(sort(unique(cdc.month$date),decreasing = FALSE))
+  )%>% 
+  hc_legend(title = list(text = "new cases"), valueDecimals = 0, valueSuffix = "%") %>%
+   hc_mapNavigation(enabled = TRUE) %>% hc_exporting(enabled = TRUE)
+```
+
+```{r}
+
+cdcmonthdeath = cdc.month %>% group_by(statefull)%>%arrange(date)%>% 
+    do(item = list(
+        state = first(.$statefull),
+        sequence = .$new_death,
+        value = first(.$new_death)
+    ))%>%
+    .$item
+```
+```{r}
+highchart(type = "map") %>% 
+  hc_add_series(data = cdcmonthdeath,
+                name = "Dem. Margin",
+                mapData = usgeojson,
+                joinBy = c("name","state"),
+                borderWidth = 0.05,
+                dataLabels = list(enabled = TRUE, format = "{point.properties.postalcode}")
+                ) %>% 
+  hc_colorAxis(minColor = "white", maxColor = "orange") %>%
+  hc_title(text = "new deaths from 2020 Jan to 2021 Nov by state") %>%
+  hc_add_theme(hc_theme_smpl()) %>%
+  hc_motion(
+    enabled = TRUE,
+    axisLabel = "year",
+    labels = as.character(sort(unique(cdc.month$date),decreasing = FALSE))
+  )%>% 
+  hc_legend(title = list(text = "new cases"), valueDecimals = 0, valueSuffix = "%") %>%
+   hc_mapNavigation(enabled = TRUE) %>% hc_exporting(enabled = TRUE)
+```
+
+### Correlation CPI V.S. Covid-19 Cases
+```{r correlation}
+cdc = read.csv("data/cdc.csv")
+cdc$month <- as.yearmon(cdc$month, "%Y-%m")
+cpi_monthly = cpi %>% select(date, value, item_name) %>% pivot_wider(id_cols = , names_from = item_name, values_from = value)
+#colnames(cpi_monthly)
+cdc_monthly_all_state = cdc %>% 
+  select(month, new_death, new_case, tot_cases, tot_death) %>% 
+  group_by(month) %>% 
+  summarise(new_death=sum(new_death),new_case=sum(new_case), tot_cases=sum(tot_cases), tot_death=sum(tot_death))
+#colnames(cdc_monthly_all_state)
+cor_matrix = inner_join(cpi_monthly, cdc_monthly_all_state, by=c("date"="month")) %>% select(-date, -new_case, -new_death) %>% cor() %>% as.data.frame()
+
+source('hchart _corr.R')
+hchart.cor(cor_matrix)
+
+#cor_matrix %>% select("All items", )
+#cor_matrix = inner_join(cpi_monthly, cdc_monthly_all_state, by=c("date"="month")) %>% 
+#  select("tot_death", "tot_cases", "Apparel", "Communication" , "Public transportation", "Education") %>% 
+#  cor()
+#hchart.cor(cor_matrix)
+
+```
+
+### cluster
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+cdc.month = read.csv("data/cdcmonth.csv")
+cdc.month$date <- as.yearmon(cdc.month$date, "%Y-%m")
+```
+
+```{r}
+all.states = unique(cdc.month$state)
+```
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+head(cdc.month)
+```
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+# extract top n states with the most people
+top_pop_states <- function(data, n=5) {
+  d = data %>% group_by(state) %>% summarize(tot_case = sum(new_case, na.rm = TRUE))
+  return (top_n(d, n=n, wt=tot_case)[[1]])                          
+}
+```
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+# plot covid cases for top population states
+plot_states <- function(data, states, feature, title, x=1, y=1) {
+  # top_states = top_pop_states(covid, n)
+  par(mfrow=c(x,y), mar=c(4,4,2,0.5)) # Setup grid, margins
+  d = data %>% filter(state %in% states)
+  ggplot(d, aes(x=date, y=new_case, group = state, color=state)) + geom_line() + theme(axis.text.x = element_text(angle=90)) + ggtitle(title)
+    # plot(d$date, d[,feature], xlab = "Time", ylab = feature, main = paste("COVID cases in", state), pch = 20, cex = 0.5)
+}
+```
+
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+# returns basis of the spline to be modelled
+spline.basis <- function(data, n.knots=15, degree=3) {
+  X <- as.matrix(data)
+  x=seq(0,1,length.out=nrow(X))
+  knots = seq(0,1,length.out = n.knots-2)
+  return (bs(x, knots = knots, degree = 3)[,1:(n.knots)])
+}
+```
+
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+# shows heatmap of the basis
+B.heatmap <- function(B) {
+  return (B%>%
+  as.data.frame()%>%
+  mutate(rw=row_number())%>%
+  gather(key='key',value='value','1':'6')%>%
+  ggplot(aes(x=key,y=rw,fill=value))+geom_tile()+
+  labs(title='B-Spline Basis with 6 knots and 3rd-Degree Polynomials',x='Knot',y='Date'))
+}
+
+# shows multiple curves based on knots/partitions of the basis
+B.basis.plot <- function(B, n.knots=10) {
+  return(B%>%
+  as.data.frame()%>%
+  mutate(rw=row_number())%>%
+  gather(key='key',value='value',`1`:paste(n.knots))%>%
+  ggplot(aes(x=rw,y=value,col=key))+geom_line(aes(group=key))+
+  labs(title=paste('B-Spline Basis with ', n.knots, ' knots and 3rd-Degree Polynomials', sep='')))
+}
+```
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+# get spline model and return knots and spline predictions of training data
+bspline.model <- function(data, dates, n.knots=6, degree=3) {
+  X <- as.matrix(data)
+  x=seq(0,1,length.out=nrow(X))
+  knots = seq(0,1,length.out = n.knots-2)
+  B = bs(x, knots = knots, degree = 3)[,1:(n.knots)]
+  
+  Bcoef = matrix(0,1,n.knots)
+  Bcoef[1,] = solve(t(B)%*%B)%*%t(B)%*%as.matrix(X[,2])
+  
+  preds = (Bcoef%*%t(B))[1,]
+  l = list()
+  l[[1]] = Bcoef[1,]
+  l[[2]] = preds
+  return (l)
+}
+```
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+# get spline model and return knots and spline predictions of training data
+bspline.basis <- function(data, dates, n.knots=6, degree=3) {
+  X <- as.matrix(data)
+  x=seq(0,1,length.out=nrow(X))
+  knots = seq(0,1,length.out = n.knots-2)
+  B = bs(x, knots = knots, degree = 3)[,1:(n.knots)]
+  
+  Bcoef = matrix(0,1,n.knots)
+  Bcoef[1,] = solve(t(B)%*%B)%*%t(B)%*%as.matrix(X[,2])
+  
+  preds = (Bcoef%*%t(B))[1,]
+  l = list()
+  l[[1]] = Bcoef[1,]
+  l[[2]] = B
+  l[[3]] = preds
+  return (l)
+}
+```
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+plot.basis.com <- function(data, states, feature, n.knots=6, degree=3, x=1, y=1) {
+  # top_states = top_pop_states(covid, n)
+  # par(mfrow=c(x,y), mar=c(4,4,2,0.5)) # Setup grid, margins
+  data = data %>% subset(!is.na(data[, feature]))
+  n = length(states)
+  colors = rainbow(n.knots)
+  Bcoef.mat = matrix(0,n,n.knots)
+  
+  for (i in 1:n) {
+    plot(c(min(data$date), max(data$date)), c(min(data[,feature]), max(data[,feature])), xlab = "Time", ylab = feature, main = paste(states[i], "COVID basis demonstration"), type = "n", xaxt='n', pch = 20, cex = 0.5)
+    d = data %>% filter(state == states[i]) %>% select("date", contains(feature)) %>% arrange(date)
+    dates = d$date
+    d$date = as.numeric(d$date)
+    l = bspline.basis(d, dates, n.knots, degree)
+    lines(dates, l[[3]], pch = 20, cex = 1, col="black")
+    for (j in 1:n.knots) {
+      l[[2]][,j] = l[[1]][j] * l[[2]][,j]
+      lines(dates, l[[2]][,j], pch = 20, cex = 1, col=colors[j])
+    }
+    # print(paste(c("Basis", n.knots), 1:n.knots, as.character(l[[1]])))
+    legend("topleft", legend=c("Estimated Spline", paste(rep("Basis", n.knots), 1:n.knots, rep("coef:", n.knots) , as.character(round(l[[1]], digits = 3)))), col=c("black", colors), lty=1, cex=0.6)
+  }
+  ix <- seq(1, length(dates), by=60)
+  fmt <- "%b-%Y" # format for axis labels
+  labs <- format(dates[ix], fmt)
+  axis(side = 1, at = dates[ix], labels = labs,  cex.axis = 0.8)
+}
+```
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+# This function plots the bspline curves given the target states and parameters and returns knots for each state. 
+plot.bspline <- function(data, states, feature, n.knots=6, degree=3, x=1, y=1) {
+  # top_states = top_pop_states(covid, n)
+  par(mfrow=c(x,y), mar=c(4,4,2,0.5)) # Setup grid, margins
+  data = data %>% subset(!is.na(data[, feature]))
+  n = length(states)
+  colors = rainbow(n)
+  Bcoef.mat = matrix(0,n,n.knots)
+  
+
+  plot(c(min(data$date), max(data$date)), c(min(data[,feature]), max(data[,feature])), xlab = "Time", ylab = feature, main = "COVID cases across states", type = "n", xaxt='n', pch = 20, cex = 0.5)
+  for (i in 1:n) {
+    d = data %>% filter(state == states[i]) %>% select(date, contains(feature)) %>% arrange(date)
+    dates = d$date
+    d$date = as.numeric(d$date)
+    # points(d$date, d[,feature], pch = 20, cex = 0.5)
+    
+    l = bspline.model(d, dates, n.knots, degree)
+    lines(dates, l[[2]], pch = 20, cex = 1, col = colors[i])
+    Bcoef.mat[i,] = l[[1]]
+    legend("topleft", legend=states, col=colors, lty=1, cex=0.6)
+    ix <- seq(1, length(dates), by=60)
+    fmt <- "%b-%Y" # format for axis labels
+    labs <- format(dates[ix], fmt)
+    axis(side = 1, at = dates[ix], labels = labs,  cex.axis = 0.8)
+  }
+
+  return (Bcoef.mat)
+
+}
+```
+
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+state.name2abb <- function(states) {
+  return (state.abb[match(states, state.name)])
+}
+```
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+# 6
+Northeast = state.name2abb(c("Connecticut", "Massachusetts", "Maine", 
+              "New Hampshire", "Rhode Island", "Vermont"))
+
+# 8
+Mid.Atlantic = c(state.name2abb(c("Delaware", "Maryland", 
+                 "New Jersey", "New York", "Pennsylvania",
+                 "Virginia", "West Virginia")),"DC")
+
+# 9
+Southeast = state.name2abb(c("Alabama", "Arkansas", "Florida",
+                             "Georgia", "Louisiana", "Mississippi",
+                             "North Carolina", "South Carolina", "Tennessee"))
+
+# 13
+Midwest = state.name2abb(c("Indiana", "Illinois", "Iowa", 
+                           "Kansas", "Kentucky", "Michigan",
+                           "Minnesota", "Missouri", "Nebraska",
+                           "North Dakota", "Ohio", "South Dakota",
+                           "Wisconsin"))
+# 4
+Southwest = state.name2abb(c("Arizona", "New Mexico", "Oklahoma", "Texas"))
+
+# 11
+West = state.name2abb(c("Alaska", "California", "Colorado", "Hawaii",
+                        "Idaho", "Montana", "Nevada", "Oregon",
+                        "Utah", "Washington", "Wyoming"))
+
+region.list <- list(Northeast, Mid.Atlantic, Southeast, Midwest, Southwest, West)
+names(region.list) <- c('Northeast', 'Mid.Atlantic', 'Southeast', 'Midwest', 'Southwest', 'West')
+```
+
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+B.basis.plot(spline.basis(cdc.month, n.knots=10), n.knots=10)
+```
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+mid <- function(x) {
+  return ((max(x)+min(x))/2)
+}
+```
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+Bcoef.mat = plot.bspline(cdc.month, all.states, 'new_case', n.knots=10, degree=3)
+wss <- function(k) {
+  kmeans(as.data.frame(Bcoef.mat), k, nstart = 10)$tot.withinss
+}
+# Compute and plot wss for k = 2 to k = 15
+k.values <- 2:10
+
+# extract wss for 2-15 clusters
+wss_values <- map_dbl(k.values, wss)
+```
+
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+state.col = rainbow(length(all.states))
+```
+
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+# plot(k.values, wss_values, type="b", pch = 19, frame = FALSE, xlab="Number of clusters K", ylab="Total within-clusters sum of squares")
+map.df = map_data("state")
+map.df$state = state.name2abb(str_to_title(map.df$region))
+map.df$region = ifelse (map.df$state %in% Northeast, "Northeast",
+                  ifelse (map.df$state %in% Mid.Atlantic, "Mid.Atlantic",
+                  ifelse (map.df$state %in% Southeast, "Southeast",
+                  ifelse (map.df$state %in% Midwest, "Midwest",
+                  ifelse (map.df$state %in% Southwest, "Southwest",
+                  ifelse (map.df$state %in% West, "West", "Other"
+                          ))))))
+state.centers.df = map.df %>% group_by(state) %>% summarise(long.mid = mid(long), lat.mid = mid(lat), group=mean(group))
+
+map.state.names = geom_text(data=state.centers.df, aes(x=long.mid, y=lat.mid, group=group, label=state),size=1.5, hjust=0, vjust=0, colour = 1)
+map.state.points = geom_point(data=state.centers.df, aes(x=long.mid, y=lat.mid, group=group), size = 0.5, alpha = 0.6, colour = 1)
+```
+
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+sort.state.clusters <- function(clusters, sort.cluster.list) {
+  clen = length(clusters)
+  sort.clusters = 1:clen
+  color.counter = 1
+  for (c in 1:clen) {
+    if (sort.cluster.list[[clusters[c]]] < 0) {
+      sort.cluster.list[[clusters[c]]] = color.counter
+      color.counter = color.counter + 1
+    }
+    sort.clusters[c] = sort.cluster.list[[clusters[c]]]
+  }
+  return (sort.clusters)
+}
+```
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+for (i in 1:20) {
+# Run K-means to cluster the knots of the states
+  # Bcoef.mat = plot.bspline(covid.com, all.states, 'NEWCD_NORM_500', n.knots=15, degree=3)
+  
+  # choose the number of clusters we want and assign each state its closest cluster
+  set.seed(i)
+
+  for (k in 6) {
+    cluster.num = k
+    clusters = kmeans(as.data.frame(Bcoef.mat), cluster.num, nstart = 10)$cluster
+    sort.cluster.list = list()
+    for (j in 1:k) {
+      sort.cluster.list[[j]] = -1
+    }
+    
+    sort.clusters = sort.state.clusters(clusters, sort.cluster.list)
+
+    states.df = data.frame(state = all.states, CLUSTER = sort.clusters)
+    # write.csv(states.df, paste("./clusterings/cluster", i, ".csv", sep=""))
+    
+    state.cluster = list()
+    for (i in 1:cluster.num) {
+      state.cluster[[i]] = subset(states.df, CLUSTER==i)$state
+    }
+    cs = ifelse (map.df$state %in% state.cluster[[cluster.num]], cluster.num, cluster.num+1)
+    for (i in (cluster.num-1):1) {
+      cs = ifelse (map.df$state %in% state.cluster[[i]], i, cs)
+    }
+    
+    map.df$cluster = cs
+    #map.df$cluster = ifelse (map.df$STATE %in% state.cluster[[1]], 1,
+    #                 ifelse (map.df$STATE %in% state.cluster[[2]], 2,
+    #                 ifelse (map.df$STATE %in% state.cluster[[3]], 3,
+    #                 ifelse (map.df$STATE %in% state.cluster[[4]], 4,
+    #                 ifelse (map.df$STATE %in% state.cluster[[5]], 5,
+    #                 ifelse (map.df$STATE %in% state.cluster[[6]], 6, 7
+    #                        ))))))
+    
+    # us map on bspline knots clusters
+    colors = brewer.pal(n = k, name = "Set2")
+    us.bspline.map = ggplot(map.df, aes(x=long, y=lat, group = group)) + geom_polygon(colour="black", size=0.5)
+    for (i in 1:cluster.num) {
+      us.bspline.map = us.bspline.map + geom_polygon(fill=colors[i], data = filter(map.df, cluster == i))
+    }
+    print(us.bspline.map + map.state.names + map.state.points + ggtitle(paste('U.S. Map spline knots kmeans covid cases k=', k, sep='')))
+  }
+}
+```
+
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+# us map on regions
+region.num = length(region.list)
+region.cols = rainbow(region.num)
+
+us.region.map = ggplot(map.df, aes(x=long, y=lat, group=group)) + 
+                guides(fill=FALSE) + 
+                geom_polygon(colour = "black", size = 0.5)
+for (r in 1:region.num) {
+
+  us.region.map = us.region.map + geom_polygon(fill=region.cols[r], data = filter(map.df, state %in% region.list[[r]]))
+}
+
+us.region.map + ggtitle("U.S. Map regional covid cases") + map.state.names + map.state.points
+```
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+for (i in 1:length(state.cluster)) {
+  print(plot_states(cdc.month, state.cluster[[i]], "new_case", "Covid Monthly New Cases Time Series"))
+}
+```
+
+
+<!--chapter:end:05-results.Rmd-->
+
+```{r include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+# Interactive component
+
+
+
+<!--chapter:end:06-interactive.Rmd-->
+
+```{r include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+# Conclusion
+
+
+<!--chapter:end:07-conclusion.Rmd-->
+
+
+
+
+<!--chapter:end:cpibyregion.Rmd-->
+
+
+
+
+<!--chapter:end:cpidata.Rmd-->
+
+
+
+
+<!--chapter:end:regressions.Rmd-->
+

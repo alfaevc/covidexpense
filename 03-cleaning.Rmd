@@ -19,7 +19,6 @@ The cpi data is accessed through cdc website api via ```googlesheets4::read_shee
 gs4_deauth()
 cpi = googlesheets4::read_sheet('1fpEQ4wuuDlnfKokjKyRUrOcIwHUnIBmnBFubCUpnQ94',sheet='chained_data')
 cpi1= googlesheets4::read_sheet('1fpEQ4wuuDlnfKokjKyRUrOcIwHUnIBmnBFubCUpnQ94',sheet='Sheet1')
-
 chained = googlesheets4::read_sheet('1fpEQ4wuuDlnfKokjKyRUrOcIwHUnIBmnBFubCUpnQ94',sheet='chained')
 ```
 
@@ -76,6 +75,13 @@ cdc.month$date = as.character(cdc.month$date)
 cdc.month$date = paste(substr(cdc.month$date,5,8), match(substr(cdc.month$date,1,3), month.abb), sep="-")
 ```
 
+```{r merge_city_to_state}
+cdc.month$statefull = state.name[match(cdc.month$state,state.abb)]
+cdc.month$statefull[cdc.month$state=="DC"] = "Maryland"
+cdc.month$statefull[cdc.month$state=="NYC"] = "New York"
+```
+
+
 ```{r}
 head(cdc.month)
 ```
@@ -83,6 +89,10 @@ head(cdc.month)
 
 ```{r}
 write.csv(cdc.month,"data/cdcmonth.csv", row.names = FALSE)
+
+```
+```{r}
+write.csv(cdc,"data/cdc.csv")
 ```
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
