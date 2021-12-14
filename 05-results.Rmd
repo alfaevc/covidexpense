@@ -120,6 +120,28 @@ highchart(type = "map") %>%
    hc_mapNavigation(enabled = TRUE) %>% hc_exporting(enabled = TRUE)
 ```
 
+### correlation between CPI and COVID cases data
+```{r}
+cpi_monthly = cpi %>% select(date, value, item_name) %>% pivot_wider(id_cols = , names_from = item_name, values_from = value)
+#colnames(cpi_monthly)
+cdc_monthly_all_state = cdc %>% 
+  select(month, new_death, new_case, tot_cases, tot_death) %>% 
+  group_by(month) %>% 
+  summarise(new_death=sum(new_death),new_case=sum(new_case), tot_cases=sum(tot_cases), tot_death=sum(tot_death))
+#colnames(cdc_monthly_all_state)
+cor_matrix = inner_join(cpi_monthly, cdc_monthly_all_state, by=c("date"="month")) %>% select(-date, -new_case, -new_death) %>% cor() %>% as.data.frame()
+
+source('hchart _corr.R')
+hchart.cor(cor_matrix)
+
+cor_matrix %>% select("All items", )
+cor_matrix = inner_join(cpi_monthly, cdc_monthly_all_state, by=c("date"="month")) %>% 
+  select("tot_death", "tot_cases", "Apparel", "Communication" , "Public transportation", "Education") %>% 
+  cor()
+hchart.cor(cor_matrix)
+
+```
+
 ### cluster
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
 cdc.month = read.csv("data/cdcmonth.csv")
