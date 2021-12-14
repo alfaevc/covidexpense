@@ -54,10 +54,12 @@ The above line chart shows the change of CPI for different items by time. Since 
 
 Heatmap
 ```{r}
-
+cor_matrix = cpi_monthly %>%  select(-date) %>% cor() %>% as.data.frame()
+source('hchart _corr.R')
+hchart.cor(cor_matrix)
 ```
 
-
+According to the heat map, we can easily tell that many of the CPI items are highly and positively correlated with each other. However, `Public Transportation`, `Medical Care Services`, `Communication`, and `Apparel` showed white and red color in the heat map. This indicates that they are not or negatively correlated with other items. Combining with the trend graph, I know that their prices did not increase much. It is also reasonable because some of them have pricing mechanism that is not determined by the market. For instance, `Public Transportation`, `Medical Care Services` and `Communication` 
 
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
@@ -170,7 +172,7 @@ highchart(type = "map") %>%
 
 From the motion map, we can find that at first, New York is the state with the largest total cases and then from Jul 2020 until Nov 2021, California, Texas and Flora are the three States that have the largest total cases which compatible with the trend of new cases from the previous motion map. These three States have large populations and warm weather which provides with enough condition for Coronavirus to live and spread.
 
-```{r}
+```{r Covid-19 Data Trend}
 cdc = read.csv("data/cdc.csv")
 cdc$month = as.yearmon(format(as.Date(cdc$date), "%Y-%m"))
 
@@ -208,14 +210,17 @@ hchart.cor(cor_matrix)
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
 cdc.month = read.csv("data/cdcmonth.csv")
 cdc.month$date <- as.yearmon(cdc.month$date, "%Y-%m")
+#cdc = read.csv("data/cdc.csv")
+#cdc$date = as.Date(cdc$date)
+
 ```
+
+
 
 ```{r}
 all.states = unique(cdc.month$state)
 ```
-```{r, message=FALSE, warning=FALSE, echo=FALSE}
-head(cdc.month)
-```
+
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
 # extract top n states with the most people
 top_pop_states <- function(data, n=5) {
@@ -353,8 +358,8 @@ plot.bspline <- function(data, states, feature, n.knots=6, degree=3, x=1, y=1) {
   colors = rainbow(n)
   Bcoef.mat = matrix(0,n,n.knots)
   
-
-  plot(c(min(data$date), max(data$date)), c(min(data[,feature]), max(data[,feature])), xlab = "Time", ylab = feature, main = "COVID cases across states", type = "n", xaxt='n', pch = 20, cex = 0.5)
+  date = as.numeric(data$date, na.rm=TRUE)
+  plot(c(min(date, na.rm=TRUE), max(date, na.rm=TRUE)), c(min(data[,feature], na.rm=TRUE), max(data[,feature], na.rm=TRUE)), xlab = "Time", ylab = feature, main = "COVID cases across states", type = "n", xaxt='n', pch = 20, cex = 0.5)
   for (i in 1:n) {
     d = data %>% filter(state == states[i]) %>% select(date, contains(feature)) %>% arrange(date)
     dates = d$date
@@ -420,8 +425,8 @@ names(region.list) <- c('Northeast', 'Mid.Atlantic', 'Southeast', 'Midwest', 'So
 
 
 
-```{r, message=FALSE, warning=FALSE, echo=FALSE}
-B.basis.plot(spline.basis(cdc.month, n.knots=10), n.knots=10)
+```{r basis plot, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
+B.basis.plot(spline.basis(cdc, n.knots=7), n.knots=7)
 ```
 
 
@@ -432,7 +437,8 @@ mid <- function(x) {
 ```
 
 
-```{r, message=FALSE, warning=FALSE, echo=FALSE}
+
+```{r all splines, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
 Bcoef.mat = plot.bspline(cdc.month, all.states, 'new_case', n.knots=10, degree=3)
 wss <- function(k) {
   kmeans(as.data.frame(Bcoef.mat), k, nstart = 10)$tot.withinss
@@ -444,6 +450,9 @@ k.values <- 2:10
 wss_values <- map_dbl(k.values, wss)
 ```
 
+```{r kmeans, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
+plot(wss_values)
+```
 
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
@@ -488,8 +497,8 @@ sort.state.clusters <- function(clusters, sort.cluster.list) {
 ```
 
 
-```{r, message=FALSE, warning=FALSE, echo=FALSE}
-for (i in 1:20) {
+```{r spline map, message=FALSE, warning=FALSE, echo=FALSE}
+for (i in 9) {
 # Run K-means to cluster the knots of the states
   # Bcoef.mat = plot.bspline(covid.com, all.states, 'NEWCD_NORM_500', n.knots=15, degree=3)
   
@@ -540,7 +549,7 @@ for (i in 1:20) {
 
 
 
-```{r, message=FALSE, warning=FALSE, echo=FALSE}
+```{r us region map, message=FALSE, warning=FALSE, echo=FALSE}
 # us map on regions
 region.num = length(region.list)
 region.cols = rainbow(region.num)
@@ -556,7 +565,7 @@ for (r in 1:region.num) {
 us.region.map + ggtitle("U.S. Map regional covid cases") + map.state.names + map.state.points
 ```
 
-```{r, message=FALSE, warning=FALSE, echo=FALSE}
+```{r clustered spline curves, message=FALSE, warning=FALSE, echo=FALSE}
 for (i in 1:length(state.cluster)) {
   print(plot_states(cdc.month, state.cluster[[i]], "new_case", "Covid Monthly New Cases Time Series"))
 }
