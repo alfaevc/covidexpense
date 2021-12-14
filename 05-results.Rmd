@@ -215,9 +215,7 @@ cdc.month$date <- as.yearmon(cdc.month$date, "%Y-%m")
 ```{r}
 all.states = unique(cdc.month$state)
 ```
-```{r, message=FALSE, warning=FALSE, echo=FALSE}
-head(cdc.month)
-```
+
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
 # extract top n states with the most people
 top_pop_states <- function(data, n=5) {

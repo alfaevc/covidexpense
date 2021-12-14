@@ -49,3 +49,9 @@ all.states = unique(cdc$state)
 ```{r, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
 covid.age$date = as.Date(substr(covid.age$`Date Administered`, 1, 10), '%m/%d/%Y')
 ```
+
+```{r}
+head(covid.age)
+```
+
+
