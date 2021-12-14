@@ -26,6 +26,7 @@ cpi = read.csv("data/cpidata.csv")
 cpi$date <- as.yearmon(cpi$date, "%Y-%m")
 ```
 
+CDC trend
 
 ```{r, fig.height = 6, message=FALSE, warning=FALSE, echo=FALSE}
 cpi %>%
@@ -53,6 +54,19 @@ cpi.sub %>%
 cdc.month = read.csv("data/cdcmonth.csv")
 cdc.month$date <- as.yearmon(cdc.month$date, "%Y-%m")
 cdc.month = cdc.month  %>% group_by(statefull,date) %>% dplyr::summarise(new_case=sum(new_case),new_death=sum(new_death))
+```
+```{r}
+cdc = read.csv("data/cdc.csv")
+cdc$month = as.yearmon(format(as.Date(cdc$date), "%Y-%m"))
+
+cdc_monthly_all_state = cdc %>% 
+  select(month, new_death, new_case, conf_cases, conf_death) %>% 
+  group_by(month) %>% 
+  summarise(new_death=sum(new_death),new_case=sum(new_case), tot_cases=sum(conf_cases), tot_death=sum(conf_death))
+
+cdc_monthly_all_state %>% pivot_longer(cols = new_death:tot_death, names_to='var',values_to='value') %>%
+  ggplot( aes(x=month, y=value, group=var, color=var)) +
+    geom_line() + ggtitle("Covid-19 Data Trend") + theme(axis.text.x = element_text(angle = 90), plot.title = element_text(size = 40, face = "bold"))
 ```
 
 
@@ -119,8 +133,7 @@ highchart(type = "map") %>%
 
 ### Correlation CPI V.S. Covid-19 Cases
 ```{r correlation}
-cdc = read.csv("data/cdc.csv")
-cdc$month = as.yearmon(format(as.Date(cdc$date), "%Y-%m"))
+
 cpi_monthly = cpi %>% select(date, value, item_name) %>% pivot_wider(id_cols = , names_from = item_name, values_from = value)
 #colnames(cpi_monthly)
 cdc_monthly_all_state = cdc %>% 
@@ -128,11 +141,14 @@ cdc_monthly_all_state = cdc %>%
   group_by(month) %>% 
   summarise(new_death=sum(new_death),new_case=sum(new_case), tot_cases=sum(tot_cases), tot_death=sum(tot_death))
 #colnames(cdc_monthly_all_state)
-cor_matrix = inner_join(cpi_monthly, cdc_monthly_all_state, by=c("date"="month")) %>% select(-date, -new_case, -new_death) %>% cor() %>% as.data.frame()
+cor_matrix = inner_join(cpi_monthly, cdc_monthly_all_state, by=c("date"="month")) %>% select(-date) %>% cor() %>% as.data.frame()
 
 source('hchart _corr.R')
 hchart.cor(cor_matrix)
 ```
+
+* By looking at the pair-wise correlation between our variables(Covid data and CPI data), I am trying to use a quantitative method to find similar curves. Especially the curves that have similar trend as the total covid-19 cases. The results 
+
 
 ### cluster
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
