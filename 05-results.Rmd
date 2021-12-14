@@ -21,14 +21,14 @@ library(highcharter)
 ```
 
 ```{r lead data, message=FALSE, warning=FALSE, echo=FALSE}
-cdc_all = read_csv("data/cdc_all.csv")
-cdc_monthly_all_state = read_csv("data/cdc_monthly_all_state.csv")
-cpi_monthly = read_csv("data/cpi_monthly.csv")
-data_monthly = read_csv("data/data_monthly.csv")
-cdc_all = cdc_all %>% mutate(date=as.Date(date), month=as.yearmon(format(as.Date(date), "%Y-%m")))
-cdc_monthly_all_state = cdc_monthly_all_state %>% mutate(month=as.yearmon(month), "%Y-%m")
-cpi_monthly = cpi_monthly %>% mutate(date=as.yearmon(date))
-data_monthly = data_monthly %>% mutate(month=as.yearmon(month))
+
+cdc = read.csv("data/cdc.csv")
+cdc = cdc %>% mutate(date=as.Date(date), month=as.yearmon(format(as.Date(date), "%Y-%m")))
+cdc_all = read.csv("data/cdc_all.csv", fileEncoding="UTF-8")
+cdc_monthly_all_state = read.csv("data/cdc_monthly_all_state.csv", fileEncoding="UTF-8")
+cpi_monthly = read.csv("data/cpi_monthly.csv", fileEncoding="UTF-8")
+data_monthly = read.csv("data/data_monthly.csv", fileEncoding="UTF-8")
+
 ```
 
 
