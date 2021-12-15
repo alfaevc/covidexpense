@@ -9,31 +9,25 @@ library(readr)
 library(dplyr)
 library(tidyverse)
 library(highcharter)
-Monthly_Transportation_Statistics <- read_csv("data/Monthly_Transportation_Statistics.csv")
+travel <- read_csv("data/travel.csv")
 
 ```
 
-```{r}
-## put into clean data part
-Monthly_Transportation_Statistics = Monthly_Transportation_Statistics %>% select(travel = "U.S. Airline Traffic - Total - Seasonally Adjusted",date = "Date")
 
-Monthly_Transportation_Statistics = Monthly_Transportation_Statistics %>% drop_na()
-```
 
-```{r}
 
 changedate = Monthly_Transportation_Statistics %>% 
     mutate(change=c(0,diff(travel)), val = c(lag(travel,12)))
-changedate$date = as.Date(substr(changedate$date, 1, 10), format = "%m/%d/%Y")
+
 
 changedate$val = changedate$travel-changedate$val
 changedate <- changedate %>%
     mutate(val = if_else(is.na(val), 0, val))
-```
+
 
 
 ```{r}
-changedate %>%
+travel %>%
   hchart('line', hcaes(x = 'date', y = 'travel')) %>%
   hc_colors("grey")%>%
   hc_chart(zoomType = "x") %>%

@@ -140,6 +140,29 @@ cdc.month$date <- as.yearmon(cdc.month$date, "%Y-%m")
 head(cdc.month)
 ```
 
+### Travel
+```{r}
+Monthly_Transportation_Statistics <- read_csv("data/Monthly_Transportation_Statistics.csv")
+Monthly_Transportation_Statistics = Monthly_Transportation_Statistics %>% select(travel = "U.S. Airline Traffic - Total - Seasonally Adjusted",date = "Date")
+
+Monthly_Transportation_Statistics = Monthly_Transportation_Statistics %>% drop_na()
+Monthly_Transportation_Statistics$date = as.Date(substr(Monthly_Transportation_Statistics$date, 1, 10), format = "%m/%d/%Y")
+
+write.csv(Monthly_Transportation_Statistics,"data/travel.csv", row.names = F)
+```
+
+
+
+### Oil 
+```{r}
+oil <- read_csv("data/U.S._Field_Production_of_Crude_Oil.csv")
+oil$Month = as.Date(oil$Month)
+oil = oil %>% filter(Month >= "2017-01-01")
+write.csv(oil,"data/oil.csv", row.names = F)
+```
+
+
+
 ### COVID-19 Vaccination and Case Trends by Age Group in United States
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
