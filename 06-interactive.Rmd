@@ -1,3 +1,18 @@
 # Interactive component
 
 
+## Descriptions
+The interactive part of our analysis was built with D3 version 6. This plot gives users chance to choose the item they most interested in to see the detailed CPI change from Jan2019 to Oct2021. We are using the same dataset from BLS using API as we discussed in previous sections.
+
+## Instructions for using the map
+The plot shows the change of CPI for items. Different items are shown in different colors.
+
+1. Users can click the down arrow on the select button and scroll up or down to see all options of the items.
+
+2. Users can click on the item they interested in after click the select button
+
+3. Users can hover the mouse over a dot to see the CPI value for specific dates
+
+<iframe src="test.html" width="700" height="500"></iframe>
+
+

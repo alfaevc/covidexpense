@@ -1,0 +1,157 @@
+<!-- Load d3.js -->
+<script src="https://d3js.org/d3.v6.js"></script>
+
+<!-- Initialize a select button -->
+<select id="selectButton"></select>
+        
+<!-- Create a div where the graph will take place -->
+<div id="my_dataviz"></div>
+
+<script>
+
+// set the dimensions and margins of the graph
+const margin = {top: 10, right: 30, bottom: 50, left: 60},
+    width = 600 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+const svg = d3.select("#my_dataviz")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+d3.csv("cpidata.csv").then(function(data) {
+
+    // List of groups (here I have one group per column)
+    const allGroup = new Set(data.map(d => d.item_name))
+
+    // add the options to the button
+    d3.select("#selectButton")
+      .selectAll('myOptions')
+      .data(allGroup)
+      .enter()
+      .append('option')
+      .text(d => d) // text showed in the menu
+      .attr("value", d => d) // corresponding value returned by the button
+    const myColor = d3.scaleOrdinal()
+      .domain(allGroup)
+      .range(d3.schemeSet2);
+
+    // Add X axis --> it is a date format
+    const x = d3.scaleBand()
+         .range([ width, 0])
+         .domain(data.map(d => d.date))
+         .padding(0.8);
+    svg.append("g")
+       .attr("transform", `translate(0, ${height})`)
+       .call(d3.axisBottom(x))
+       .selectAll("text")
+       .attr("transform", "translate(-10,0)rotate(-65)")
+       .style("text-anchor", "end")
+       .style( "font","8px times");
+
+    // Add Y axis
+
+    const y = d3.scaleLinear()
+      .domain([50, 250])
+      .range([ height, 0 ]);
+    svg.append("g")
+      .call(d3.axisLeft(y));
+
+    // Initialize line with first group of the list
+    const line = svg.append("path")
+      .datum(data.filter(function(d){return d.item_name=="All items"}))
+      .attr("fill", "none")
+      .attr("stroke", function(d){ return myColor("valueA") })
+      .attr("stroke-width", 1.5)
+      .attr("d", d3.line()
+        .curve(d3.curveBasis) // Just add that to have a curve instead of segments
+        .x(d => x(d.date))
+        .y(d => y(d.value))
+        )
+    const Tooltip = d3.select("#my_dataviz")
+      .append("div")
+      .style("opacity", 0)
+      .attr("class", "tooltip")
+      .style("background-color", "white")
+      .style("border", "solid")
+      .style("border-width", "2px")
+      .style("border-radius", "5px")
+      .style("padding", "5px") 
+
+    const mouseover = function(event,d) {
+        Tooltip
+          .style("opacity", 1)
+      }
+      const mousemove = function(event,d) {
+        Tooltip
+          .html("Exact value: " + d.value)
+          .style("left", `${event.layerX+10}px`)
+          .style("top", `${event.layerY}px`)
+      }
+      const mouseleave = function(event,d) {
+        Tooltip
+          .style("opacity", 0)
+      }
+
+    const dot = svg
+      .selectAll('circle')
+      .data(data.filter(function(d){return d.item_name=="All items"}))
+      .join('circle')
+        .attr("cx", d => x(d.date))
+        .attr("cy", d => y(d.value))
+        .attr("r", 2)
+        .style("fill", "white")
+        .attr("stroke", function(d){ return myColor("valueA") })
+        .on("mouseover", mouseover)
+        .on("mousemove", mousemove)
+        .on("mouseleave", mouseleave)
+
+    // A function that update the chart
+    function update(selectedGroup) {
+
+      // Create new data with the selection?
+      const dataFilter = data.filter(function(d){return d.item_name==selectedGroup})
+
+      // Give these new data to update line
+
+      line
+          .datum(dataFilter)
+          .transition()
+          .duration(1000)
+          .attr("d", d3.line()
+                .curve(d3.curveBasis) // Just add that to have a curve instead of segments
+                .x(d => x(d.date))
+                .y(d => y(d.value))
+                )
+          .attr("stroke", function(d){ return myColor(selectedGroup) })
+
+      dot
+        .data(dataFilter)
+        .transition()
+        .duration(1000)
+          .attr("cx", d => x(d.date))
+          .attr("cy", d => y(d.value))
+          .attr("r", 2)
+          .attr("stroke", function(d){ return myColor(selectedGroup) })
+          .attr("stroke-width", 1)
+          .attr("fill", "white")
+          .on("mouseover", mouseover)
+          .on("mousemove", mousemove)
+          .on("mouseleave", mouseleave)
+    }
+    
+
+  
+    // When the button is changed, run the updateChart function
+    d3.select("#selectButton").on("change", function(event,d) {
+        // recover the option that has been chosen
+        const selectedOption = d3.select(this).property("value")
+        // run the updateChart function with this selected option
+        update(selectedOption)
+    })
+
+})
+</script>

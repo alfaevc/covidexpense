@@ -87,7 +87,7 @@ plot.basis.com <- function(data, states, feature, n.knots=6, degree=3, x=1, y=1)
   # par(mfrow=c(x,y), mar=c(4,4,2,0.5)) # Setup grid, margins
   data = data %>% subset(!is.na(data[, feature]))
   n = length(states)
-  colors = rainbow(n.knots)
+  colors = c("#BBE7FE","#D3B5E5", "#FFD4DB", "#EFF1DB", "#3cacae", "#fe9c52")
   Bcoef.mat = matrix(0,n,n.knots)
   
   for (i in 1:n) {
@@ -121,11 +121,11 @@ plot.bspline <- function(data, states, feature, n.knots=6, degree=3, x=1, y=1) {
   
   date = as.numeric(data$date, na.rm=TRUE)
   plot(c(min(date, na.rm=TRUE), max(date, na.rm=TRUE)), c(min(data[,feature], na.rm=TRUE), max(data[,feature], na.rm=TRUE)), xlab = "Time", ylab = feature, main = "COVID cases across states", type = "n", xaxt='n', pch = 20, cex = 0.5)
-  for (i in 1:n) {
+   for (i in 1:n) {
     d = data %>% filter(state == states[i]) %>% select(date, contains(feature)) %>% arrange(date)
     dates = d$date
     d$date = as.numeric(d$date)
-    # points(d$date, d[,feature], pch = 20, cex = 0.5)
+    points(d$date, d[,feature], pch = 20, cex = 0.5)
     
     l = bspline.model(d, dates, n.knots, degree)
     lines(dates, l[[2]], pch = 20, cex = 1, col = colors[i])
@@ -220,7 +220,7 @@ map.df$region = ifelse (map.df$state %in% Northeast, "Northeast",
                                                         ))))))
 state.centers.df = map.df %>% group_by(state) %>% summarise(long.mid = mid(long), lat.mid = mid(lat), group=mean(group))
 
-map.state.names = geom_text(data=state.centers.df, aes(x=long.mid, y=lat.mid, group=group, label=state),size=1.5, hjust=0, vjust=0, colour = 1)
-map.state.points = geom_point(data=state.centers.df, aes(x=long.mid, y=lat.mid, group=group), size = 0.5, alpha = 0.6, colour = 1)
+map.state.names = geom_text(data=state.centers.df, aes(x=long.mid, y=lat.mid, group=group, label=state),size=3, hjust=0, vjust=0, colour = 1)
+map.state.points = geom_point(data=state.centers.df, aes(x=long.mid, y=lat.mid, group=group), size = 1, alpha = 0.6, colour = 1)
 
 ### Ploting 
