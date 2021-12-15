@@ -27,4 +27,6 @@ In this project, we would focus on CPI data collected from [U.S. BUREAU OF LABOR
 
 
 
-Statistical Insights: Consumption shifts and inflation measurement during COVID-19. (n.d.). OECD. https://www.oecd.org/sdd/prices-ppp/statistical-insights-consumption-shifts-and-inflation-measurement-during-covid-19.htm
+Reference: 
+
+1. Statistical Insights: Consumption shifts and inflation measurement during COVID-19. (n.d.). OECD. https://www.oecd.org/sdd/prices-ppp/statistical-insights-consumption-shifts-and-inflation-measurement-during-covid-19.html
