@@ -1,0 +1,75 @@
+---
+title: "airtravel"
+author: "shuyue Xu"
+date: "12/14/2021"
+output: html_document
+---
+```{r}
+library(readr)
+library(dplyr)
+Monthly_Transportation_Statistics <- read_csv("data/Monthly_Transportation_Statistics.csv")
+
+```
+
+```{r}
+## put into clean data part
+Monthly_Transportation_Statistics = Monthly_Transportation_Statistics %>% select(travel = "U.S. Airline Traffic - Total - Seasonally Adjusted",date = "Date")
+
+Monthly_Transportation_Statistics = Monthly_Transportation_Statistics %>% drop_na()
+```
+
+```{r}
+
+changedate = Monthly_Transportation_Statistics %>% 
+    mutate(change=c(0,diff(travel)), val = c(lag(travel,12)))
+changedate$date = as.Date(substr(changedate$date, 1, 10), format = "%m/%d/%Y")
+
+changedate$val = changedate$travel-changedate$val
+changedate <- changedate %>%
+    mutate(val = if_else(is.na(val), 0, val))
+```
+
+
+```{r}
+changedate %>%
+  hchart('column', hcaes(x = 'date', y = 'change')) %>%
+  hc_colors("grey")%>%
+  hc_chart(zoomType = "x") %>%
+  hc_legend(align = "right", verticalAlign = "top",layout = "horizontal",floating=TRUE,y=80,x=-100) %>%
+  hc_xAxis(title = list(text = "date"),
+           labels= list(style=list(fontSize='10px'),
+                        rotation = -45, step = 1)) %>%
+  hc_yAxis(title = list(text = "travelchange")) %>%
+  hc_title(text = "<b>change of value month by month </b>") %>%
+  hc_subtitle(text = "Click on the legend to show selected month; click on a bar and drag across to zoom in") %>%
+  hc_exporting(enabled = TRUE)
+```
+
+```{r}
+changedate %>%
+  hchart('column', hcaes(x = 'date', y = 'val')) %>%
+  hc_colors("grey")%>%
+  hc_chart(zoomType = "x") %>%
+  hc_legend(align = "right", verticalAlign = "top",layout = "horizontal",floating=TRUE,y=80,x=-100) %>%
+  hc_xAxis(title = list(text = "date"),
+           labels= list(style=list(fontSize='10px'),
+                        rotation = -45, step = 1)) %>%
+  hc_yAxis(title = list(text = "travelchange")) %>%
+  hc_title(text = "<b>change of value year by year </b>") %>%
+  hc_subtitle(text = "Click on the legend to show selected month; click on a bar and drag across to zoom in") %>%
+  hc_exporting(enabled = TRUE)
+```
+
+
+
+```{r}
+ggplot(changedate, aes(x=date,y = change))+
+  geom_bar(stat="identity")+theme(axis.text.x = element_text(angle = 90)) + scale_x_date(date_labels = "%m/%d/%Y", date_breaks= "2 month" ) +labs(x = "Date", y = "travel change", caption = "Air traffic change by every two month", title = "Air traffic change by every two month.") +
+  theme_bw() +
+  theme(plot.title = element_text(face = "bold"),
+        plot.subtitle = element_text(face = "bold", color = "grey35"),
+        plot.caption = element_text(color = "grey68"),
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position="bottom")
+```
+
