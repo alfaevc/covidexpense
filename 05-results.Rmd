@@ -98,7 +98,7 @@ Navigate the motion slider by hitting the left and right arrow keys.
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
 cdc.month = read.csv("data/cdcmonth.csv")
 cdc.month$date <- as.yearmon(cdc.month$date, "%Y-%m")
-cdc.month = cdc.month  %>% group_by(statefull,date) %>% dplyr::summarise(new_case=sum(new_case),new_death=sum(new_death))
+cdc.month = cdc.month  %>% group_by(statefull,date) %>% dplyr::summarise(state=max(state),new_case=sum(new_case),new_death=sum(new_death))
 
 cdc_monthly_by_state = cdc %>% 
   select(month, state, new_death, new_case, conf_cases, tot_death) %>% 
@@ -195,13 +195,6 @@ hchart.cor(cor_matrix)
 
 
 ### cluster
-```{r, message=FALSE, warning=FALSE, echo=FALSE}
-cdc.month = read.csv("data/cdcmonth.csv")
-cdc.month$date <- as.yearmon(cdc.month$date, "%Y-%m")
-#cdc = read.csv("data/cdc.csv")
-#cdc$date = as.Date(cdc$date)
-
-```
 
 
 ```{r}
