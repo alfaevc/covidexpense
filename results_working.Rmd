@@ -24,7 +24,7 @@ cdc_monthly_all_state = read.csv("data/cdc_monthly_all_state.csv", fileEncoding=
 cpi_monthly = read.csv("data/cpi_monthly.csv", fileEncoding="UTF-8")
 data_monthly = read.csv("data/data_monthly.csv", fileEncoding="UTF-8")
 cdc.month = read.csv("data/cdcmonth.csv")
-
+cpi = read.csv("data/cpidata.csv")
 
 ```
 
@@ -50,6 +50,8 @@ cdc_monthly_by_state = cdc %>%
   summarise(new_death=sum(new_death),new_case=sum(new_case), tot_cases=max(conf_cases), tot_death=max(tot_death)) %>% 
   mutate(statefull=state.name[match(state,state.abb)]) %>% 
   drop_na()
+
+cpi = cpi %>% mutate(date = as.character(date))
 ```
 
 ## Covid Development in U.S.
@@ -241,15 +243,64 @@ for (i in 1:length(state.cluster)) {
 }
 ```
 
+## Consumer Price Index Development
+
+### Chang of Living Expenses by Items
+
+```{r}
+itemname = levels(as.factor(cpi$item_name))
+DF <- data.frame(item_name = character(),
+                 date =character() ,
+                 value = numeric(), 
+                 ratebefore = numeric(), 
+                 rateafter=numeric())
+
+for (i in itemname){
+  v = cpi %>% select(item_name,date,value) %>% filter(item_name == i,date == "2020-01")
+  v = v$value
+  b = cpi %>% select(item_name,date,value) %>% filter(item_name == i,date == "2019-01")
+  b = b$value
+  temp = cpi %>% select(item_name,date,value) %>% filter(item_name == i,date == "2021-10")
+  t =  cpi %>% select(item_name,date,value) %>% filter(item_name == i,date == "2019-12")
+  t = (t$value - b)/b
+  temp$rateafter = (temp$value - v)/v
+  temp$ratebefore = t
+  DF = bind_rows(DF,temp)
+}
+c = select(DF,c("item_name","ratebefore","rateafter"))
+c =c %>% gather("type", "value", -item_name)
+```
+
+```{r}
+ggplot(c, aes(x=item_name,y = value,fill = type))+
+  geom_bar(stat="identity", position = position_dodge())+theme(axis.text.x = element_text(angle = 90))
+```
+
+From the bar plot, we can see that public transportation is the only one that decreases the CPI after the Covid-19. Because of the Covid-19, many people avoided using pubilic transportation which is crowded. The decrease of demands decreased the CPI. In the opposite, private transportation, Energy and transportation CPI increases a lot after the Covid-19 comparing with the change rates before the Covid-19. More people choose to use private transportation to reduce the chance of exposure to the crowds. We already know that energy is a necessity for private transportation. The increase of demands on these three products increases the CPI at the same time. Durable goods is the one that has negative change in CPI before the Covid-19 and then increases sharply after the Covid-19. We know that during the Covid-19, people are forced to stay at home and this may be the reason that people bought lots of durable goods to prevent emergencies.
+
+### Correlation Between Consumer Items
+
+```{r}
+cor_matrix = cpi_monthly %>%  select(-date) %>% cor() %>% as.data.frame()
+source('hchart _corr.R')
+hchart.cor(cor_matrix)
+```
+
+According to the heat map, we can easily tell that many of the CPI items are highly and positively correlated with each other. However, `Public Transportation`, `Medical Care Commodities`, `Communication`, and `Apparel` showed white and red color in the heat map. This indicates that they are not or negatively correlated with other items. Combining with the trend graph, I know that their prices did not increase much. It is also reasonable because some of them have pricing mechanism that is not determined by the market. For instance, `Public Transportation`, `Medical Care Commodities` and `Communication` have government set prices and fixed prices.
+
+`Energy` are highly correlated with each other. `Energy`,  `Commodities`, `Transportation`, `Private Transportation`, `Durables` and `Fuel and Utilities`
+
+Therefore, we grouped similar CPI items together and will show their similarities in the next part. 
+
+### Group CPI Items
+
+The groups we created for CPI items are as follows:
+1. Price not sensitive to other items: `Public Transportation`, `Medical Care Commodities`, `Communication`, and `Apparel`
+2. Energy related items: 
+3. 
 
 
-
-
-
-
-
-
-
+`
 
 
 

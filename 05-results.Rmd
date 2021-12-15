@@ -1,5 +1,6 @@
 # Results
 
+
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
 library(googlesheets4)
 #library(blsAPI)
@@ -13,12 +14,14 @@ library("lhs")
 library(splines)
 library(maps)
 library(mapdata)
+library(usmap)
 library("viridis")
 library(RColorBrewer)
 library(zoo)
 # library(lubridate)
 library(highcharter)
 ```
+
 
 ```{r lead data, message=FALSE, warning=FALSE, echo=FALSE}
 cdc = read.csv("data/cdc.csv")
@@ -199,7 +202,6 @@ cdc.month$date <- as.yearmon(cdc.month$date, "%Y-%m")
 #cdc$date = as.Date(cdc$date)
 
 ```
-
 
 
 ```{r}
@@ -423,6 +425,35 @@ mid <- function(x) {
 
 
 
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+# plot(k.values, wss_values, type="b", pch = 19, frame = FALSE, xlab="Number of clusters K", ylab="Total within-clusters sum of squares")
+map.df = usmap::us_map()
+map.df$state = map.df$abbr
+#map.df$state = state.name2abb(str_to_title(map.df$region))
+map.df$region = ifelse (map.df$state %in% Northeast, "Northeast",
+                  ifelse (map.df$state %in% Mid.Atlantic, "Mid.Atlantic",
+                  ifelse (map.df$state %in% Southeast, "Southeast",
+                  ifelse (map.df$state %in% Midwest, "Midwest",
+                  ifelse (map.df$state %in% Southwest, "Southwest",
+                  ifelse (map.df$state %in% West, "West", "Other"
+                          ))))))
+#state.centers.df = map.df %>% group_by(state) %>% summarise(long.mid = mid(long), lat.mid = mid(lat), group=mean(group))
+#map.state.names = geom_text(data=state.centers.df, aes(x=x, y=lat.mid, group=group, label=state),size=1.5, hjust=0, vjust=0, colour = 1)
+#map.state.points = geom_point(data=state.centers.df, aes(x=long.mid, y=lat.mid, group=group), size = 0.5, alpha = 0.6, colour = 1)
+
+state.centers.df = map.df %>% group_by(state) %>% summarise(x.mid = mid(x), y.mid = mid(y), group=max(group))
+map.state.names = geom_text(data=state.centers.df, aes(x=x.mid, y=y.mid, group=group, label=state),size=2.5, hjust=0, vjust=0, colour = 1)
+map.state.points = geom_point(data=state.centers.df, aes(x=x.mid, y=y.mid, group=group, size = 0.05, alpha = 0.6, colour = 1))
+```
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+all.states = unique(map.df$state)
+state.col = rainbow(length(all.states))
+```
+
+
+
 ```{r all splines, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
 Bcoef.mat = plot.bspline(cdc.month, all.states, 'new_case', n.knots=10, degree=3)
 wss <- function(k) {
@@ -438,31 +469,6 @@ wss_values <- map_dbl(k.values, wss)
 ```{r kmeans, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
 plot(wss_values)
 ```
-
-
-```{r, message=FALSE, warning=FALSE, echo=FALSE}
-state.col = rainbow(length(all.states))
-```
-
-
-
-```{r, message=FALSE, warning=FALSE, echo=FALSE}
-# plot(k.values, wss_values, type="b", pch = 19, frame = FALSE, xlab="Number of clusters K", ylab="Total within-clusters sum of squares")
-map.df = map_data("state")
-map.df$state = state.name2abb(str_to_title(map.df$region))
-map.df$region = ifelse (map.df$state %in% Northeast, "Northeast",
-                  ifelse (map.df$state %in% Mid.Atlantic, "Mid.Atlantic",
-                  ifelse (map.df$state %in% Southeast, "Southeast",
-                  ifelse (map.df$state %in% Midwest, "Midwest",
-                  ifelse (map.df$state %in% Southwest, "Southwest",
-                  ifelse (map.df$state %in% West, "West", "Other"
-                          ))))))
-state.centers.df = map.df %>% group_by(state) %>% summarise(long.mid = mid(long), lat.mid = mid(lat), group=mean(group))
-
-map.state.names = geom_text(data=state.centers.df, aes(x=long.mid, y=lat.mid, group=group, label=state),size=1.5, hjust=0, vjust=0, colour = 1)
-map.state.points = geom_point(data=state.centers.df, aes(x=long.mid, y=lat.mid, group=group), size = 0.5, alpha = 0.6, colour = 1)
-```
-
 
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
@@ -482,6 +488,7 @@ sort.state.clusters <- function(clusters, sort.cluster.list) {
 ```
 
 
+
 ```{r spline map, message=FALSE, warning=FALSE, echo=FALSE}
 for (i in 9) {
 # Run K-means to cluster the knots of the states
@@ -499,9 +506,7 @@ for (i in 9) {
     }
     
     sort.clusters = sort.state.clusters(clusters, sort.cluster.list)
-
     states.df = data.frame(state = all.states, CLUSTER = sort.clusters)
-    # write.csv(states.df, paste("./clusterings/cluster", i, ".csv", sep=""))
     
     state.cluster = list()
     for (i in 1:cluster.num) {
@@ -523,7 +528,8 @@ for (i in 9) {
     
     # us map on bspline knots clusters
     colors = brewer.pal(n = k, name = "Set2")
-    us.bspline.map = ggplot(map.df, aes(x=long, y=lat, group = group)) + geom_polygon(colour="black", size=0.5)
+    #us.bspline.map = ggplot(map.df, aes(x=long, y=lat, group = group)) + geom_polygon(colour="black", size=0.5)
+    us.bspline.map = ggplot(map.df, aes(x=x, y=y, group = group)) + geom_polygon(colour="black", size=0.5)
     for (i in 1:cluster.num) {
       us.bspline.map = us.bspline.map + geom_polygon(fill=colors[i], data = filter(map.df, cluster == i))
     }
@@ -539,7 +545,7 @@ for (i in 9) {
 region.num = length(region.list)
 region.cols = rainbow(region.num)
 
-us.region.map = ggplot(map.df, aes(x=long, y=lat, group=group)) + 
+us.region.map = ggplot(map.df, aes(x=x, y=y, group=group)) + 
                 guides(fill=FALSE) + 
                 geom_polygon(colour = "black", size = 0.5)
 for (r in 1:region.num) {
