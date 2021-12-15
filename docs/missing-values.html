@@ -125,13 +125,14 @@
 </ul></li>
 <li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#cpi-data"><i class="fa fa-check"></i><b>3.1</b> CPI data</a></li>
+<li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#cpi-data"><i class="fa fa-check"></i><b>3.1</b> CPI data</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="data-transformation.html"><a href="data-transformation.html#travel"><i class="fa fa-check"></i><b>3.1.1</b> Travel</a></li>
+<li class="chapter" data-level="3.1.2" data-path="data-transformation.html"><a href="data-transformation.html#oil"><i class="fa fa-check"></i><b>3.1.2</b> Oil</a></li>
+</ul></li>
 <li class="chapter" data-level="3.2" data-path="data-transformation.html"><a href="data-transformation.html#covid-data"><i class="fa fa-check"></i><b>3.2</b> Covid data</a>
 <ul>
 <li class="chapter" data-level="3.2.1" data-path="data-transformation.html"><a href="data-transformation.html#united-states-covid-19-cases-and-deaths-by-state-overtime-1"><i class="fa fa-check"></i><b>3.2.1</b> United States COVID-19 Cases and Deaths by State overTime</a></li>
-<li class="chapter" data-level="3.2.2" data-path="data-transformation.html"><a href="data-transformation.html#travel"><i class="fa fa-check"></i><b>3.2.2</b> Travel</a></li>
-<li class="chapter" data-level="3.2.3" data-path="data-transformation.html"><a href="data-transformation.html#oil"><i class="fa fa-check"></i><b>3.2.3</b> Oil</a></li>
-<li class="chapter" data-level="3.2.4" data-path="data-transformation.html"><a href="data-transformation.html#covid-19-vaccination-and-case-trends-by-age-group-in-united-states"><i class="fa fa-check"></i><b>3.2.4</b> COVID-19 Vaccination and Case Trends by Age Group in United States</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a></li>
@@ -161,7 +162,11 @@
 <li class="chapter" data-level="6.1" data-path="interactive-component.html"><a href="interactive-component.html#descriptions"><i class="fa fa-check"></i><b>6.1</b> Descriptions</a></li>
 <li class="chapter" data-level="6.2" data-path="interactive-component.html"><a href="interactive-component.html#instructions-for-using-the-map"><i class="fa fa-check"></i><b>6.2</b> Instructions for using the map</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
+<li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="conclusion.html"><a href="conclusion.html#limitations-and-future-directions"><i class="fa fa-check"></i><b>7.1</b> Limitations and Future Directions</a></li>
+<li class="chapter" data-level="7.2" data-path="conclusion.html"><a href="conclusion.html#lessons-learned"><i class="fa fa-check"></i><b>7.2</b> Lessons Learned</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 </ul>
@@ -190,9 +195,6 @@
 <p><img src="finalproj_files/figure-html/cdc%20missing-1.png" width="672" /></p>
 <p>Overall, there are only 21 distinct missing pattern for nearly 40000 rows of data. In particular, less than half of the rows are complete cases. Total confirmed death, total probable death, total probable cases and total confirmed cases have the highest numbers of missing data, where the percent of missing values are roughly identical to about 20 percent. These four variables often have missing values at the same time. Around 15 percent of total rows only have these four variables missing at the same time. Percent of missing consent cases and consent deaths are roughly identical. Pecent of missing new probable cases and new probable deaths are also roughly identical. The missing percentage for these four variables are also significant, but they are a lot lower than the previous four attributes, where all other attributes have no missing data.</p>
 <p>There are also some correlations between variables. Consent cases and consent death variable indicates if the state consent to disclosure the data on cases and deaths. There are three values: ‘agree’, ‘not agree’ and NA (the missing value). After understanding the variable, we found that when consent cases is missing, total probable cases and total confirmed cases are missing as well. Same thing happen to consent deaths， total probable deaths and total confirmed deaths. Therefore, after the missing value analysis, we can conclude that missing values in consent cases and consent deaths is equivalent to ‘not agree’. And now the consent cases and consent death can be translate to a logical variable having 0 and 1 as values.</p>
-<p>Missing values plot for COVID-19 Vaccination and Case Trends by Age Group in United States:</p>
-<p><img src="finalproj_files/figure-html/covid%20age%20missing-1.png" width="672" /></p>
-<p>There are no missing values for this data.</p>
 
 </div>
             </section>

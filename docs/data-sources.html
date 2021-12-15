@@ -125,13 +125,14 @@
 </ul></li>
 <li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#cpi-data"><i class="fa fa-check"></i><b>3.1</b> CPI data</a></li>
+<li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#cpi-data"><i class="fa fa-check"></i><b>3.1</b> CPI data</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="data-transformation.html"><a href="data-transformation.html#travel"><i class="fa fa-check"></i><b>3.1.1</b> Travel</a></li>
+<li class="chapter" data-level="3.1.2" data-path="data-transformation.html"><a href="data-transformation.html#oil"><i class="fa fa-check"></i><b>3.1.2</b> Oil</a></li>
+</ul></li>
 <li class="chapter" data-level="3.2" data-path="data-transformation.html"><a href="data-transformation.html#covid-data"><i class="fa fa-check"></i><b>3.2</b> Covid data</a>
 <ul>
 <li class="chapter" data-level="3.2.1" data-path="data-transformation.html"><a href="data-transformation.html#united-states-covid-19-cases-and-deaths-by-state-overtime-1"><i class="fa fa-check"></i><b>3.2.1</b> United States COVID-19 Cases and Deaths by State overTime</a></li>
-<li class="chapter" data-level="3.2.2" data-path="data-transformation.html"><a href="data-transformation.html#travel"><i class="fa fa-check"></i><b>3.2.2</b> Travel</a></li>
-<li class="chapter" data-level="3.2.3" data-path="data-transformation.html"><a href="data-transformation.html#oil"><i class="fa fa-check"></i><b>3.2.3</b> Oil</a></li>
-<li class="chapter" data-level="3.2.4" data-path="data-transformation.html"><a href="data-transformation.html#covid-19-vaccination-and-case-trends-by-age-group-in-united-states"><i class="fa fa-check"></i><b>3.2.4</b> COVID-19 Vaccination and Case Trends by Age Group in United States</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a></li>
@@ -161,7 +162,11 @@
 <li class="chapter" data-level="6.1" data-path="interactive-component.html"><a href="interactive-component.html#descriptions"><i class="fa fa-check"></i><b>6.1</b> Descriptions</a></li>
 <li class="chapter" data-level="6.2" data-path="interactive-component.html"><a href="interactive-component.html#instructions-for-using-the-map"><i class="fa fa-check"></i><b>6.2</b> Instructions for using the map</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
+<li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="conclusion.html"><a href="conclusion.html#limitations-and-future-directions"><i class="fa fa-check"></i><b>7.1</b> Limitations and Future Directions</a></li>
+<li class="chapter" data-level="7.2" data-path="conclusion.html"><a href="conclusion.html#lessons-learned"><i class="fa fa-check"></i><b>7.2</b> Lessons Learned</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 </ul>
@@ -185,19 +190,24 @@
 <h1><span class="header-section-number">Chapter 2</span> Data sources</h1>
 <div id="cpi" class="section level2" number="2.1">
 <h2><span class="header-section-number">2.1</span> CPI</h2>
-<p>The CPI data is collected from BLS using API.</p>
+<p>The CPI data is collected from BLS using API. BLS is the abbreviation of <a href="https://www.bls.gov/help/hlpforma.htm#su">U.S. Bureau of Labor Statistics</a>, where it provides public API to help people access the data. Price indexes are available for the U.S., the four Census regions, nine Census divisions, two size of city classes, eight cross-classifications of regions and size-classes, and for 23 local areas. Indexes are available for major groups of consumer expenditures (food and beverages, housing, apparel, transportation, medical care, recreation, education and communications, and other goods and services), for items within each group, and for special categories, such as services. We chose <strong>Chained CPI-ALL Urban Consumers</strong> as our indicator of living expense. It is introduced to better estimate the real living expense of people compare to classic CPI.</p>
+<p>The data is collected using API. The <a href="https://download.bls.gov/pub/time.series/su/su.item">item codes</a> was used to generate API requests. After running for loop with each [item codes], we saved our data to a public <a href="https://docs.google.com/spreadsheets/d/1fpEQ4wuuDlnfKokjKyRUrOcIwHUnIBmnBFubCUpnQ94/edit#gid=0">googlesheet</a> so as to help others access the data more conveniently. The data we used is monthly data as mentioned in official introduction.</p>
 </div>
 <div id="bureau-of-transportation-statistics" class="section level2" number="2.2">
 <h2><span class="header-section-number">2.2</span> Bureau of Transportation Statistics</h2>
-<p>The transportation data contains information about the number of passengers travelling by air from Jan 2017 to Jul 2021. The data is downloaded from <a href="https://data.bts.gov/Research-and-Statistics/Monthly-Transportation-Statistics/crem-w557" class="uri">https://data.bts.gov/Research-and-Statistics/Monthly-Transportation-Statistics/crem-w557</a>.</p>
+<p>Monthly Transportation Statistics dataset is a collection of national statistical data on transportation. The Bureau of Transportation Statistics brings together the latest data from across the Federal government and transportation industry. Monthly Transportation Statistics contains over 50 time series from nearly two dozen data sources. Apart from the <code>Date</code> attribute in the character format, it has 134 numeric transportation attributes(e.g. Highway fatalities, highway vehicle miles traveled for all systems, etc.), where we are specifically interested in <code>U.S. Airline Traffic - Total - Seasonally Adjusted</code> that records the the total number of passengers travelling by air from Jan 1947 to Jul 2021 in a monthly basis(We need both international and domestic passengers since they both have potential contributions to covid cases). However, lots of the attributes including our target have lots of missing values, <code>U.S. Airline Traffic - Total - Seasonally Adjusted</code> has no record prior to Jan 2017 in particular, which is not a major problem since we are only interested in air travel records from recent years.</p>
+<p>The data can be directly downloaded from <a href="https://data.bts.gov/Research-and-Statistics/Monthly-Transportation-Statistics/crem-w557" class="uri">https://data.bts.gov/Research-and-Statistics/Monthly-Transportation-Statistics/crem-w557</a>.</p>
 </div>
 <div id="u.s.-field-production-of-crude-oil" class="section level2" number="2.3">
 <h2><span class="header-section-number">2.3</span> U.S. Field Production of Crude Oil</h2>
-<p>The oil data records the daily field production of crude Oil thousand barrels from Jan 1920 to Sep 2021. The data is downloaded from <a href="https://www.eia.gov/dnav/pet/hist/LeafHandler.ashx?n=PET&amp;s=MCRFPUS2&amp;f=A" class="uri">https://www.eia.gov/dnav/pet/hist/LeafHandler.ashx?n=PET&amp;s=MCRFPUS2&amp;f=A</a></p>
+<p>The oil data records the monthly field production of crude Oil thousand barrels from Jan 1920 to Sep 2021, where the attributes <code>Month</code> and <code>U.S. Field Production of Crude Oil Thousand Barrels per Day</code>
+are in the character and numeric format respectively. We would potentially trim the data before Jan 2017 in order to match the scope of the transportation statistics data above.</p>
+<p>This data is also directly downloaded from <a href="https://www.eia.gov/dnav/pet/hist/LeafHandler.ashx?n=PET&amp;s=MCRFPUS2&amp;f=A" class="uri">https://www.eia.gov/dnav/pet/hist/LeafHandler.ashx?n=PET&amp;s=MCRFPUS2&amp;f=A</a></p>
 </div>
 <div id="united-states-covid-19-cases-and-deaths-by-state-overtime" class="section level2" number="2.4">
 <h2><span class="header-section-number">2.4</span> United States COVID-19 Cases and Deaths by State overTime</h2>
-<p>The covid data is collected by the centers for Disease Control and Prevention(CDC), which reports aggregate counts of daily confirmed and probable COVID-19 cases and death numbers online for different states in the US. This is one of the main datasets of interest where we want to explore how the variation of covid cases affect CPI trends. More information is on the website where the data is downloaded: <a href="https://data.cdc.gov/Case-Surveillance/United-States-COVID-19-Cases-and-Deaths-by-State-o/9mfq-cb36" class="uri">https://data.cdc.gov/Case-Surveillance/United-States-COVID-19-Cases-and-Deaths-by-State-o/9mfq-cb36</a>.</p>
+<p>The covid data is collected by the centers for Disease Control and Prevention(CDC), which reports aggregate counts of daily confirmed and probable COVID-19 cases and death numbers online for different states in the US. There are 5 character variables, where the <code>submission_date</code> and <code>created_at</code> are supposed to be converted to date variable types and <code>state</code> contains the abbreviation of all states in the US. The other 10 are numeric variables, including confirmed total cases and death, probable total cases and death, confirmed new cases and death etc. There are only few missing reported cases for this data, so it would be reasonable to replace them with 0s given that we would combine the daily cases to monthly cases for each state via using sum. However, some attributes such as confirmed cases have negative values, which makes no sense in a real world setting and it’s definitely our concern to remove or replace them using some tactics. This is one of the main datasets of interest where we want to explore how the variation of covid cases affect CPI trends.</p>
+<p>More details are on the website where the data is downloaded: <a href="https://data.cdc.gov/Case-Surveillance/United-States-COVID-19-Cases-and-Deaths-by-State-o/9mfq-cb36" class="uri">https://data.cdc.gov/Case-Surveillance/United-States-COVID-19-Cases-and-Deaths-by-State-o/9mfq-cb36</a>.</p>
 
 </div>
 </div>

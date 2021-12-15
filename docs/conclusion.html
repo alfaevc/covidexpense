@@ -125,13 +125,14 @@
 </ul></li>
 <li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#cpi-data"><i class="fa fa-check"></i><b>3.1</b> CPI data</a></li>
+<li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#cpi-data"><i class="fa fa-check"></i><b>3.1</b> CPI data</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="data-transformation.html"><a href="data-transformation.html#travel"><i class="fa fa-check"></i><b>3.1.1</b> Travel</a></li>
+<li class="chapter" data-level="3.1.2" data-path="data-transformation.html"><a href="data-transformation.html#oil"><i class="fa fa-check"></i><b>3.1.2</b> Oil</a></li>
+</ul></li>
 <li class="chapter" data-level="3.2" data-path="data-transformation.html"><a href="data-transformation.html#covid-data"><i class="fa fa-check"></i><b>3.2</b> Covid data</a>
 <ul>
 <li class="chapter" data-level="3.2.1" data-path="data-transformation.html"><a href="data-transformation.html#united-states-covid-19-cases-and-deaths-by-state-overtime-1"><i class="fa fa-check"></i><b>3.2.1</b> United States COVID-19 Cases and Deaths by State overTime</a></li>
-<li class="chapter" data-level="3.2.2" data-path="data-transformation.html"><a href="data-transformation.html#travel"><i class="fa fa-check"></i><b>3.2.2</b> Travel</a></li>
-<li class="chapter" data-level="3.2.3" data-path="data-transformation.html"><a href="data-transformation.html#oil"><i class="fa fa-check"></i><b>3.2.3</b> Oil</a></li>
-<li class="chapter" data-level="3.2.4" data-path="data-transformation.html"><a href="data-transformation.html#covid-19-vaccination-and-case-trends-by-age-group-in-united-states"><i class="fa fa-check"></i><b>3.2.4</b> COVID-19 Vaccination and Case Trends by Age Group in United States</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a></li>
@@ -161,7 +162,11 @@
 <li class="chapter" data-level="6.1" data-path="interactive-component.html"><a href="interactive-component.html#descriptions"><i class="fa fa-check"></i><b>6.1</b> Descriptions</a></li>
 <li class="chapter" data-level="6.2" data-path="interactive-component.html"><a href="interactive-component.html#instructions-for-using-the-map"><i class="fa fa-check"></i><b>6.2</b> Instructions for using the map</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
+<li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="conclusion.html"><a href="conclusion.html#limitations-and-future-directions"><i class="fa fa-check"></i><b>7.1</b> Limitations and Future Directions</a></li>
+<li class="chapter" data-level="7.2" data-path="conclusion.html"><a href="conclusion.html#lessons-learned"><i class="fa fa-check"></i><b>7.2</b> Lessons Learned</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 </ul>
@@ -183,7 +188,18 @@
             <section class="normal" id="section-">
 <div id="conclusion" class="section level1" number="7">
 <h1><span class="header-section-number">Chapter 7</span> Conclusion</h1>
+<div id="limitations-and-future-directions" class="section level2" number="7.1">
+<h2><span class="header-section-number">7.1</span> Limitations and Future Directions</h2>
+<p>From this work, we have concluded how COVID-19 pandemic impact on price of energy. In the analysis, we simply conclude the other items like <code>Food</code>, <code>Housing</code> and <code>Services</code> have delayed affect by the price increase of <code>Energy</code>. We assume people are experiencing higher living expense due to <code>Energy</code> related price increase, so they ask for higher salary which yields to higher price in <code>Services</code>. The limitation here is that we did not further analysis the other reasons caused the price to increase. For example, in order to overcome the pandemic, U.S. government utilized monetary easing policy which will naturally cause inflation. Though the government policy is also highly related with Covid pandemic, it is the area we did not have effort to dig in. Further insights could be drawn by analysis in that direction.</p>
+<p>Also, when talking about the supply of energy, we only used crude oil productions in the United States. Though USA is one of the top crude oil producers in the world, there are still many other countries such as Saudi Arabia, Russia and Canada which produce large amounts of crude oil as well. Besides, we focused on crude oil while electricity, gas, coal also contributes to the energy price index, collecting these items’ data and analyze their supply and demand may provide other insights. And we also discovered that even travel recovered later 2021, the production of crude oil did not recover. This might caused by higher price of crude oil leads to higher profit, but could also provide another direction for future discussion.</p>
+<p>In short, due to the time and effort limitation, we made some assumptions and chose the most significant change along the analysis. There are still many aspects that could be discussed to explain why would COVID-19 pandemic caused our living expenses to surge that much. We are looking forward to more analysis on this topic!</p>
+</div>
+<div id="lessons-learned" class="section level2" number="7.2">
+<h2><span class="header-section-number">7.2</span> Lessons Learned</h2>
+<p>From our project, we found that energy is a representative item which has high correlations with other items and COVID data. When investigating CPI change for energy, we found that the energy, air travel(demands of energy) and oil production(supply of energy) first decrease sharply as a result of COVID-19 because of the travel ban and then raises slowly. Later, the air travel recovered while oil production still remained low. The gaps between demands and supply leads to an increase of energy CPI. Two possible reasons that the oil production didn’t increase are incremental of total revenue gained by company due to higher prices and lack of labor due to the pandemic. There is definitely plenty of rooms for further investigations.</p>
+<p>During our project, we achieve a better understanding of data visualization and analysis. We learned to use <code>API</code> to obtain data from Internet which we haven’t tried before. Dealing with unknowns, using <code>yearmon</code> data to investigate time series problem. Selecting the best way to present data will make huge difference on what people receive from the graph and viz. It is not only to make graph beautiful and fancy, but also to make the graph intuitive and informative. Moreover, tuning the graph with labels, annotations, and combination of colors all helped to make the plots better. There are too many possibilities for us to discover when visualizing data. We obtained interests and passion in analyzing data and presenting them in the best way.</p>
 
+</div>
 </div>
             </section>
 

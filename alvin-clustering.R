@@ -113,28 +113,28 @@ plot.basis.com <- function(data, states, feature, n.knots=6, degree=3, x=1, y=1)
 # This function plots the bspline curves given the target states and parameters and returns knots for each state. 
 plot.bspline <- function(data, states, feature, n.knots=6, degree=3, x=1, y=1) {
   # top_states = top_pop_states(covid, n)
-  par(mfrow=c(x,y), mar=c(4,4,2,0.5)) # Setup grid, margins
+  # par(mfrow=c(x,y), mar=c(4,4,2,0.5)) # Setup grid, margins
   data = data %>% subset(!is.na(data[, feature]))
   n = length(states)
   colors = rainbow(n)
   Bcoef.mat = matrix(0,n,n.knots)
   
   date = as.numeric(data$date, na.rm=TRUE)
-  plot(c(min(date, na.rm=TRUE), max(date, na.rm=TRUE)), c(min(data[,feature], na.rm=TRUE), max(data[,feature], na.rm=TRUE)), xlab = "Time", ylab = feature, main = "COVID cases across states", type = "n", xaxt='n', pch = 20, cex = 0.5)
+  # plot(c(min(date, na.rm=TRUE), max(date, na.rm=TRUE)), c(min(data[,feature], na.rm=TRUE), max(data[,feature], na.rm=TRUE)), xlab = "Time", ylab = feature, main = "COVID cases across states", type = "n", xaxt='n', pch = 20, cex = 0.5)
    for (i in 1:n) {
     d = data %>% filter(state == states[i]) %>% select(date, contains(feature)) %>% arrange(date)
     dates = d$date
     d$date = as.numeric(d$date)
-    points(d$date, d[,feature], pch = 20, cex = 0.5)
+    # points(d$date, d[,feature], pch = 20, cex = 0.5)
     
     l = bspline.model(d, dates, n.knots, degree)
-    lines(dates, l[[2]], pch = 20, cex = 1, col = colors[i])
+    # lines(dates, l[[2]], pch = 20, cex = 1, col = colors[i])
     Bcoef.mat[i,] = l[[1]]
-    legend("topleft", legend=states, col=colors, lty=1, cex=0.6)
+    # legend("topleft", legend=states, col=colors, lty=1, cex=0.6)
     ix <- seq(1, length(dates), by=60)
     fmt <- "%b-%Y" # format for axis labels
-    labs <- format(dates[ix], fmt)
-    axis(side = 1, at = dates[ix], labels = labs,  cex.axis = 0.8)
+    # labs <- format(dates[ix], fmt)
+    # axis(side = 1, at = dates[ix], labels = labs,  cex.axis = 0.8)
   }
   
   return (Bcoef.mat)
