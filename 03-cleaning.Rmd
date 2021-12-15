@@ -25,7 +25,7 @@ chained = googlesheets4::read_sheet('1fpEQ4wuuDlnfKokjKyRUrOcIwHUnIBmnBFubCUpnQ9
 head(cpi)
 ```
 
-We firstly add the item names to our main data of interest by matching corresponding seriesID. Since all attributes are in the string format, it's helpful to convert the item names into the factor type since we are interested in comparing time series for different items and cpi values into numeric values. We also create a new date attribute by concetenating year and month to get the full range of time series, which is further converted into the yearmon type.
+We firstly add the item names to our main data of interest by matching corresponding seriesID. Since all attributes are in the string format, it's helpful to convert the item names into the factor type since we are interested in comparing time series for different items and cpi values into numeric values. We also create a new date attribute by concetenating year and month to get the full range of time series, which is further converted into the yearmon type. 
 
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
@@ -45,7 +45,7 @@ head(cpi)
 
 ### United States COVID-19 Cases and Deaths by State overTime
 
-Observe that covid data are daily based and cpi data are monthly based, we use ```dplyr``` to shrink covid data to monthly based by summing the number of cases and deaths for every state, where we denote this new dataset ```cdcmonth.csv``` after adjusting date into the ```yearmon``` format. We also noticed that for the attributes ```consent_cases``` and```consent_deaths``` some ```NA```s are denoted as the string ```'N\A'```, where it makes sense to replace them with actual ```NA``` since they are indeed missing values. 
+Observe that covid data are daily based and cpi data are monthly based, we use ```dplyr``` to shrink covid data to monthly based by summing the number of cases and deaths for every state, where we denote this new dataset ```cdcmonth.csv``` after adjusting date into the ```yearmon``` format. We also noticed that for the attributes ```consent_cases``` and```consent_deaths``` some ```NA```s are denoted as the string ```'N\A'```, where it makes sense to replace them with actual ```NA``` since they are indeed missing values. Furthermore, we want to investigate cross state covid cases, where we want to focus on 50 main states. In particular, we have 60 states in total and the reported observations for New York City and Washington D.C. are separated from New York and Maryland respectively, where other states are disjoint from the 50. Hence, we adjust the observations for New York City and Washington D.C. and add them to New York and Maryland in ```cdcmonth.csv``` respectively.
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
 cdc = read_csv("data/United_States_COVID-19_Cases_and_Deaths_by_State_over_Time.csv")
@@ -139,6 +139,29 @@ cdc.month$date <- as.yearmon(cdc.month$date, "%Y-%m")
 ```{r}
 head(cdc.month)
 ```
+
+### Travel
+```{r}
+Monthly_Transportation_Statistics <- read_csv("data/Monthly_Transportation_Statistics.csv")
+Monthly_Transportation_Statistics = Monthly_Transportation_Statistics %>% select(travel = "U.S. Airline Traffic - Total - Seasonally Adjusted",date = "Date")
+
+Monthly_Transportation_Statistics = Monthly_Transportation_Statistics %>% drop_na()
+Monthly_Transportation_Statistics$date = as.Date(substr(Monthly_Transportation_Statistics$date, 1, 10), format = "%m/%d/%Y")
+
+write.csv(Monthly_Transportation_Statistics,"data/travel.csv", row.names = F)
+```
+
+
+
+### Oil 
+```{r}
+oil <- read_csv("data/U.S._Field_Production_of_Crude_Oil.csv")
+oil$Month = as.Date(oil$Month)
+oil = oil %>% filter(Month >= "2017-01-01")
+write.csv(oil,"data/oil.csv", row.names = F)
+```
+
+
 
 ### COVID-19 Vaccination and Case Trends by Age Group in United States
 

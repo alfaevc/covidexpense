@@ -1,0 +1,20 @@
+---
+title: "oil"
+author: "shuyue Xu"
+date: "12/14/2021"
+output: html_document
+---
+
+```{r all splines, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
+library(readr)
+library(zoo)
+library(dplyr) 
+oil <- read_csv("data/oil.csv")
+```
+
+```{r}
+oil$Month = as.Date(oil$Month)
+oil = oil %>% filter(Month >= "2017-01-01")
+```
+
+
