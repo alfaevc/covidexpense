@@ -453,7 +453,7 @@ state.col = rainbow(length(all.states))
 
 
 
-```{r all splines, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
+```{r all spline, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
 Bcoef.mat = plot.bspline(cdc.month, all.states, 'new_case', n.knots=10, degree=3)
 wss <- function(k) {
   kmeans(as.data.frame(Bcoef.mat), k, nstart = 10)$tot.withinss

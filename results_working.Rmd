@@ -18,7 +18,7 @@ library(highcharter)
 library(patchwork)
 ```
 
-```{r load data, message=FALSE, warning=FALSE, echo=FALSE}
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
 cdc = read.csv("data/cdc.csv")
 cdc_all = read.csv("data/cdc_all.csv", fileEncoding="UTF-8")
 cdc_monthly_all_state = read.csv("data/cdc_monthly_all_state.csv", fileEncoding="UTF-8")
@@ -29,7 +29,7 @@ cpi = read.csv("data/cpidata.csv")
 oil = read_csv("data/oil.csv")
 ```
 
-```{r simple data change, message=FALSE, warning=FALSE, echo=FALSE}
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
 cdc = cdc %>% mutate(date=as.Date(date), month=as.yearmon(format(as.Date(date), "%Y-%m")))
 
 cdc_all = cdc_all %>% mutate(date=as.Date(date), month=as.yearmon(format(as.Date(date), "%Y-%m")))
@@ -184,13 +184,13 @@ From the motion map, we can find that at first, New York is the state with the l
 
 ## Clustering States by Covid Trend
 
-```{r basis plot, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
+```{r, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
 source('alvin-clustering.r')
 B.basis.plot(spline.basis(cdc, n.knots=10), n.knots=10)
 ```
 
 
-```{r spline map, message=FALSE, warning=FALSE, echo=FALSE}
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
 for (i in 9) {
 # Run K-means to cluster the knots of the states
   # Bcoef.mat = plot.bspline(covid.com, all.states, 'NEWCD_NORM_500', n.knots=15, degree=3)
@@ -239,7 +239,8 @@ for (i in 9) {
   }
 }
 ```
-```{r clustered spline curves, message=FALSE, warning=FALSE, echo=FALSE}
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
 for (i in 1:length(state.cluster)) {
   print(plot_states(cdc.month, state.cluster[[i]], "new_case", "Covid Monthly New Cases Time Series"))
 }

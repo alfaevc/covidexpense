@@ -5,7 +5,7 @@ date: "12/14/2021"
 output: html_document
 ---
 
-```{r all splines, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
+```{r, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
 library(readr)
 library(zoo)
 library(dplyr) 
@@ -13,7 +13,7 @@ oil <- read_csv("data/oil.csv")
 colnames(oil)  = c('Month','oil')
 ```
 
-```{r all splines, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
+```{r, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
 oil %>%
   hchart('line', hcaes(x = 'Month', y = 'oil')) %>%
   hc_colors("grey")%>%
