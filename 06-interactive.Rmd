@@ -11,8 +11,8 @@ The plot shows the change of CPI for items. Different items are shown in differe
 
 2. Users can click on the item they interested in after click the select button
 
-3.Users can hover the mouse over a dot to see the CPI value for specific dates.
+3. Users can hover the mouse over a dot to see the CPI value for specific dates
 
-<iframe src="test.html" width="600" height="400"></iframe>
+<iframe src="test.html" width="700" height="500"></iframe>
 
 

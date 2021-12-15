@@ -121,7 +121,7 @@ plot.bspline <- function(data, states, feature, n.knots=6, degree=3, x=1, y=1) {
   
   date = as.numeric(data$date, na.rm=TRUE)
   plot(c(min(date, na.rm=TRUE), max(date, na.rm=TRUE)), c(min(data[,feature], na.rm=TRUE), max(data[,feature], na.rm=TRUE)), xlab = "Time", ylab = feature, main = "COVID cases across states", type = "n", xaxt='n', pch = 20, cex = 0.5)
-  for (i in 1:n) {
+   for (i in 1:n) {
     d = data %>% filter(state == states[i]) %>% select(date, contains(feature)) %>% arrange(date)
     dates = d$date
     d$date = as.numeric(d$date)
