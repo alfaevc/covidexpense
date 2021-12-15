@@ -145,6 +145,8 @@ state.name2abb <- function(states) {
   return (state.abb[match(states, state.name)])
 }
 
+Bcoef.mat = plot.bspline(cdc.month, all.states, 'new_case', n.knots=10, degree=3)
+
 mid <- function(x) {
   return ((max(x)+min(x))/2)
 }
