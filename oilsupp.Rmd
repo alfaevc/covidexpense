@@ -1,0 +1,19 @@
+---
+title: "oil"
+author: "shuyue Xu"
+date: "12/14/2021"
+output: html_document
+---
+
+```{r all splines, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
+library(readr)
+library(zoo)
+oil <- read_csv("data/U.S._Field_Production_of_Crude_Oil.csv")
+```
+
+```{r}
+oil$Month = as.Date(oil$Month)
+oil
+```
+
+
