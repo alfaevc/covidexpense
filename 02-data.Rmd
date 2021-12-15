@@ -1,7 +1,9 @@
 # Data sources
 
 ## CPI
-The CPI data is collected from BLS using API.
+The CPI data is collected from BLS using API. BLS is abbreviation of [U.S. Bureau of Labor Statistics](https://www.bls.gov/help/hlpforma.htm#su). According It provides public API to help people access the data. Price indexes are available for the U.S., the four Census regions, nine Census divisions, two size of city classes, eight cross-classifications of regions and size-classes, and for 23 local areas. Indexes are available for major groups of consumer expenditures (food and beverages, housing, apparel, transportation, medical care, recreation, education and communications, and other goods and services), for items within each group, and for special categories, such as services. We chose **Chained CPI-ALL Urban Consumers** as our indicator of living expense. It is introduced to better estimate the real living expense of people compare to classic CPI. 
+
+The data is collected using API. The [item codes](https://download.bls.gov/pub/time.series/su/su.item) was used to generate API requests. After running for loop with each [item codes], we saved our data to a public [googlesheet](https://docs.google.com/spreadsheets/d/1fpEQ4wuuDlnfKokjKyRUrOcIwHUnIBmnBFubCUpnQ94/edit#gid=0) so as to help others access the data more conveniently. The data we used is monthly data as mentioned in official introduction.  
 
 ## Bureau of Transportation Statistics
 The transportation data contains information about the number of passengers travelling by air from Jan 2017 to Jul 2021. The data is downloaded from https://data.bts.gov/Research-and-Statistics/Monthly-Transportation-Statistics/crem-w557.

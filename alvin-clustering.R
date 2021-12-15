@@ -125,7 +125,7 @@ plot.bspline <- function(data, states, feature, n.knots=6, degree=3, x=1, y=1) {
     d = data %>% filter(state == states[i]) %>% select(date, contains(feature)) %>% arrange(date)
     dates = d$date
     d$date = as.numeric(d$date)
-    # points(d$date, d[,feature], pch = 20, cex = 0.5)
+    points(d$date, d[,feature], pch = 20, cex = 0.5)
     
     l = bspline.model(d, dates, n.knots, degree)
     lines(dates, l[[2]], pch = 20, cex = 1, col = colors[i])
