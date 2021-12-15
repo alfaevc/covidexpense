@@ -8,11 +8,13 @@ The data is collected using API. The [item codes](https://download.bls.gov/pub/t
 ## Bureau of Transportation Statistics
 Monthly Transportation Statistics dataset is a collection of national statistical data on transportation. The Bureau of Transportation Statistics brings together the latest data from across the Federal government and transportation industry. Monthly Transportation Statistics contains over 50 time series from nearly two dozen data sources. Apart from the ```Date``` attribute in the character format, it has 134 numeric transportation attributes(e.g. Highway fatalities, highway vehicle miles traveled for all systems, etc.), where we are specifically interested in ```U.S. Airline Traffic - Total - Seasonally Adjusted``` that records the the total number of passengers travelling by air from Jan 1947 to Jul 2021 in a monthly basis(We need both international and domestic passengers since they both have potential contributions to covid cases). However, lots of the attributes including our target have lots of missing values, ```U.S. Airline Traffic - Total - Seasonally Adjusted``` has no record prior to Jan 2017 in particular, which is not a major problem since we are only interested in air travel records from recent years. 
 
-The transportation data contains information about the number of passengers travelling by air from Jan 2017 to Jul 2021 in a monthly basis. The data is downloaded from https://data.bts.gov/Research-and-Statistics/Monthly-Transportation-Statistics/crem-w557.
+The data can be directly downloaded from https://data.bts.gov/Research-and-Statistics/Monthly-Transportation-Statistics/crem-w557.
 
 ## U.S. Field Production of Crude Oil
 The oil data records the monthly field production of crude Oil thousand barrels from Jan 1920 to Sep 2021, where the attributes ```Month``` and ```U.S. Field Production of Crude Oil Thousand Barrels per Day```
- are in the character and numeric format respectively. We would potentially trim the data before Jan 2017 in order to match the scope of the transportation statistics data above. This data is also directly downloaded from https://www.eia.gov/dnav/pet/hist/LeafHandler.ashx?n=PET&s=MCRFPUS2&f=A
+ are in the character and numeric format respectively. We would potentially trim the data before Jan 2017 in order to match the scope of the transportation statistics data above. 
+ 
+This data is also directly downloaded from https://www.eia.gov/dnav/pet/hist/LeafHandler.ashx?n=PET&s=MCRFPUS2&f=A
 
 ## United States COVID-19 Cases and Deaths by State overTime
 The covid data is collected by the centers for Disease Control and Prevention(CDC), which reports aggregate counts of daily confirmed and probable COVID-19 cases and death numbers online for different states in the US. This is one of the main datasets of interest where we want to explore how the variation of covid cases affect CPI trends. More information is on the website where the data is downloaded: https://data.cdc.gov/Case-Surveillance/United-States-COVID-19-Cases-and-Deaths-by-State-o/9mfq-cb36.
