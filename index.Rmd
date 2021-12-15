@@ -7,15 +7,15 @@ site: bookdown::bookdown_site
 
 # Introduction
 
-Coronavirus disease 2019 (COVID-19) dominated 2020 and it still impacts Everyone's life. People limits their travel times beacuse of the travel ban and more people prefer private transportation than public transportation to prevent exposure to croweds. In [Statistical Insights: Consumption shifts and inflation measurement during COVID-19](https://www.oecd.org/sdd/prices-ppp/statistical-insights-consumption-shifts-and-inflation-measurement-during-covid-19.htm), the author mentions about the CPI changes as a result of COVID-19. This interests us to investigate whethre COVID-19 increases people's living expenses.
+Coronavirus disease 2019 (COVID-19) dominated 2020 and it still impacts Everyone's life. Travelling has been limited by travelling ban so that more people would prefer private transportation to public transportation in order to prevent exposure to crowds. In [Statistical Insights: Consumption shifts and inflation measurement during COVID-19](https://www.oecd.org/sdd/prices-ppp/statistical-insights-consumption-shifts-and-inflation-measurement-during-covid-19.htm), the author mentions about the CPI changes as a result of COVID-19. This interests us to investigate whethre COVID-19 increases people's living expenses.
 
-In this project, we would focus on CPI data collected from [U.S. BUREAU OF LABOR STATISTICS](https://beta.bls.gov/labs/) and the COVID-19 cases data from [Centers for Disease Control and Prevention](https://www.cdc.gov/) to find the correalations between CPI and Covid Cases. We would like to discuss this problem from both geographic and time series perspectives and answer the following questions:
+In this project, we focus on CPI data collected from [U.S. BUREAU OF LABOR STATISTICS](https://beta.bls.gov/labs/) and the COVID-19 cases data from [Centers for Disease Control and Prevention](https://www.cdc.gov/) to find the correlations between CPI and covid cases. We would like to discuss this problem from both geographic and time series perspectives and answer the following questions:
 
-1. How COVID-19 cases development in the US?
+1. How COVID-19 cases develop in the US?
 
-2. Did CPI index increase after Covid breakout? Which items's CPI change most after COVID-19?
+2. Did CPI index increase after Covid breakout? Which item's CPI change the most after COVID-19?
 
-3. Why this item correlates with COVID-19 most?
+3. Why does this particular item have the highest correlation with COVID-19 in terms of its CPI?
    -How did Covid affect the sales of this item?
    -Did the production of this item change as a result of COVID-19?
 

@@ -11,7 +11,7 @@ library(zoo)
 ```
 
 ## CPI data
-The cpi data is accessed through cdc website api via ```googlesheets4::read_sheet```.
+The cpi data is accessed through cdc website api via ```googlesheets4::read_sheet```. We firstly add the item names to our main data of interest by matching corresponding seriesID. Since all attributes are in the string format, it's helpful to convert the item names into the factor type since we are interested in comparing time series for different items and cpi values into numeric values. We also create a new date attribute by concetenating year and month to get the full range of time series, which is further converted into the yearmon type. Finally, we create another data ```cpi_monthly.csv``` by ```pivot_wider``` to obtain monthly cpi values for all item names so that the number of observations are equivalent to the number of distinct year-months. This data will be used to merge with covid data below.
 
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
@@ -24,8 +24,6 @@ chained = googlesheets4::read_sheet('1fpEQ4wuuDlnfKokjKyRUrOcIwHUnIBmnBFubCUpnQ9
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
 head(cpi)
 ```
-
-We firstly add the item names to our main data of interest by matching corresponding seriesID. Since all attributes are in the string format, it's helpful to convert the item names into the factor type since we are interested in comparing time series for different items and cpi values into numeric values. We also create a new date attribute by concetenating year and month to get the full range of time series, which is further converted into the yearmon type. Finally, we create another data ```cpi_monthly.csv``` by ```pivot_wider``` to obtain monthly cpi values for all item names such that the number of observations are equivalent to the number of distinct year-months. This data will be used to merge with covid data below.
 
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
