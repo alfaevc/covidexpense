@@ -9,31 +9,25 @@ library(readr)
 library(dplyr)
 library(tidyverse)
 library(highcharter)
-Monthly_Transportation_Statistics <- read_csv("data/Monthly_Transportation_Statistics.csv")
+travel <- read_csv("data/travel.csv")
 
 ```
 
-```{r}
-## put into clean data part
-Monthly_Transportation_Statistics = Monthly_Transportation_Statistics %>% select(travel = "U.S. Airline Traffic - Total - Seasonally Adjusted",date = "Date")
 
-Monthly_Transportation_Statistics = Monthly_Transportation_Statistics %>% drop_na()
-```
 
-```{r}
 
 changedate = Monthly_Transportation_Statistics %>% 
     mutate(change=c(0,diff(travel)), val = c(lag(travel,12)))
-changedate$date = as.Date(substr(changedate$date, 1, 10), format = "%m/%d/%Y")
+
 
 changedate$val = changedate$travel-changedate$val
 changedate <- changedate %>%
     mutate(val = if_else(is.na(val), 0, val))
-```
+
 
 
 ```{r}
-changedate %>%
+travel %>%
   hchart('line', hcaes(x = 'date', y = 'travel')) %>%
   hc_colors("grey")%>%
   hc_chart(zoomType = "x") %>%
@@ -41,11 +35,11 @@ changedate %>%
   hc_xAxis(title = list(text = "date"),
            labels= list(style=list(fontSize='10px'),
                         rotation = -45, step = 1)) %>%
-  hc_yAxis(title = list(text = "travelchange")) %>%
-  hc_title(text = "<b>change of travel from Jan 2021 to  Jul 2021 </b>") %>%
+  hc_yAxis(title = list(text = "travel number")) %>%
+  hc_title(text = "<b>change of travel from Jan 2017 to  Jul 2021 </b>") %>%
   hc_subtitle(text = "Click on the dot to show selected month; click on a dot and drag across to zoom in") %>%
   hc_exporting(enabled = TRUE)
 ```
 
 
-From the plot, we can see that at the begining of the Covid-19, from February 2020 to April 2020, the travel decreases sharply which follows the tread that CPI for energy decreases sharply from Jan 2020 to March 2020, and then CPI for energy rises a little in July 2020, stay until Dec 2020, and a slight decrease in Dec 2020. From the travel trend plot, we can also see that the travel number has a slow increase from April 2020 to February 2021. The CPI for energy and air travel number both increase from Jan 2021 until now.
+From the plot, we can see that before the Covid-19, the travel number increase steadily until February. At the begining of the Covid-19, from February 2020 to April 2020, the travel decreases sharply which follows the tread that CPI for energy decreases sharply from Jan 2020 to March 2020, and then CPI for energy rises a little in July 2020, stay until Dec 2020, and a slight decrease in Dec 2020. From the travel trend plot, we can also see that the travel number has a slow increase from April 2020 to February 2021. The CPI for energy and air travel number both increase from Jan 2021 until now.
