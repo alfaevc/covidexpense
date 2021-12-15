@@ -27,6 +27,7 @@ data_monthly = read.csv("data/data_monthly.csv", fileEncoding="UTF-8")
 cdc.month = read.csv("data/cdcmonth.csv")
 cpi = read.csv("data/cpidata.csv")
 oil = read_csv("data/oil.csv")
+travel = read_csv("data/travel.csv")
 ```
 
 ```{r simple data change, message=FALSE, warning=FALSE, echo=FALSE}
@@ -61,8 +62,9 @@ colnames(oil)  = c('Month','oil')
 
 ### Cases Trend Line
 
-#### Cumulative Total Cases
+Covid happened so fast and caused many people got impacted. Today, the cumulative Covid cases in U.S. has passed 40 million. The first two plots will show our audiences how Covid develops as time passed.
 
+#### Cumulative Total Cases
 ```{r}
 ggplot(cdc_all,
        aes(x=date, y=conf_cases/1000)) +
@@ -80,6 +82,7 @@ ggplot(cdc_all,
         axis.text.x = element_text(angle = 45, hjust = 1),
         legend.position="bottom")
 ```
+Covid started in March 2020 and has highest increase speed around the winter 2020. In the first half year, Covid cases number has surge to 5 million from 0. And it further increase to 25 million in the next half year. The increase of Covid cases is exponential as people would go social and the spreading of Virus also has 'Network Effect'. 
 
 #### Daily New Cases
 ```{r New Cases Trend Line, message=FALSE}
@@ -106,17 +109,19 @@ ggplot(cdc_all,
 
 ```
 
+The daily new cases plot further proved what we mentioned before. In winter 2020, the holidays helped the virus to spread in U.S.. Beside, the cold weather helped the Virus to live longer in the environment. Promoting and limiting social activities afterward definitely helped. Combining with warmer weather, summer 2021 has very low number of new cases. 
+
 ## Covid Development in Different States
 
-We compared how new cases and total cases change from 1976 to 2020 by state
+Here we compared how new cases and total cases change from 1976 to 2020 by state so as to see how Covid development differs in different location. 
 
 Instructions to use the graph:
 
-Play/pause clicking the play/pause button
+* Play/pause clicking the play/pause button
 
-Navigate the motion slider by dragging the slider thumb
+* Navigate the motion slider by dragging the slider thumb
 
-Navigate the motion slider by hitting the left and right arrow keys.
+* Navigate the motion slider by hitting the left and right arrow keys.
 
 ```{r}
 cdcmonthcase = cdc.month %>% group_by(statefull)%>%arrange(date)%>% 
@@ -147,7 +152,7 @@ highchart(type = "map") %>%
    hc_mapNavigation(enabled = TRUE) %>% hc_exporting(enabled = TRUE)
 ```
 
-From the above motion map, we can see that the first five cases in the United States come from Illinois State, Washington State and Arizona State. At the beginning, California and New York state has the most new cases which are two of the largest States that have the most population. From Jun 2020 to Sep 2020, California, Texas and Florida States have the most new cases. Then New York comes with them to have the most new cases. Because the population for these states are really large which increases the spread of Coronavirus disease.
+From the motion map, we can see that the first five cases in the United States come from Illinois State, Washington State and Arizona State. At the beginning, California and New York state has the most new cases which are two of the largest States that have the most population. From Jun 2020 to Sep 2020, California, Texas and Florida States have the most new cases. Then New York comes with them to have the most new cases. Because the population for these states are really large which increases the spread of Coronavirus disease.
 
 ```{r}
 cdcmonthtotal = cdc_monthly_by_state %>% 
@@ -188,7 +193,6 @@ From the motion map, we can find that at first, New York is the state with the l
 source('alvin-clustering.r')
 B.basis.plot(spline.basis(cdc, n.knots=10), n.knots=10)
 ```
-
 
 ```{r spline map, message=FALSE, warning=FALSE, echo=FALSE}
 for (i in 9) {
@@ -245,7 +249,11 @@ for (i in 1:length(state.cluster)) {
 }
 ```
 
+To identify difference and similarities between Covid case curves, we estimated a basis spline (B-spline) model for every state. Each estimated B-spline is a weighted piecewise combination of 10 polynomials, connected at “knots”. Estimated splines and weight coefficients are closely related in states with similar underlying case curves. We compared the estimated state splines by using the K-means algorithm to cluster similar sets of weight coefficients, identifying groups of states with similar covid case trajectories. In general, we can observe that the coefficients for two states in the same cluster are more similar than those in a different cluster(e.g. Florida and Texas).
+
 ## Consumer Price Index Development
+
+We utilized chained consumer price index to reflect the change in our living expenses. We will discover the item that had highest increase in price after Covid broke out. We will analysis their similarities with Covid development.
 
 ### Chang of Living Expenses by Items
 
@@ -274,13 +282,22 @@ c =c %>% gather("type", "value", -item_name)
 ```
 
 ```{r}
-ggplot(c, aes(x=item_name,y = value,fill = type))+
-  geom_bar(stat="identity", position = position_dodge())+theme(axis.text.x = element_text(angle = 90))
+ggplot(c, aes(y=reorder(item_name,value),x = value * 100,fill = type))+
+  geom_bar(stat="identity", position = position_dodge())+
+  theme(axis.text.x = element_text(angle = 90))+
+  labs(x = "Percentage Change", y = "CPI Items", 
+       title = "Price Index Percentage Changes" ,
+       subtitle = "Compare Price Index Change Rate in the Year Before and After Covid",
+       fill = "Change Rate Period"
+  ) +
+  #scale_fill_brewer(palette = "BuPu")+
+  scale_fill_hue(labels = c("After Covid", "Before Covid"))+
+  theme_bw()
 ```
 
-From the bar plot, we can see that public transportation is the only one that decreases the CPI after the Covid-19. Because of the Covid-19, many people avoided using pubilic transportation which is crowded. The decrease of demands decreased the CPI. In the opposite, private transportation, Energy and transportation CPI increases a lot after the Covid-19 comparing with the change rates before the Covid-19. More people choose to use private transportation to reduce the chance of exposure to the crowds. We already know that energy is a necessity for private transportation. The increase of demands on these three products increases the CPI at the same time. Durable goods is the one that has negative change in CPI before the Covid-19 and then increases sharply after the Covid-19. We know that during the Covid-19, people are forced to stay at home and this may be the reason that people bought lots of durable goods to prevent emergencies.
+From the bar plot, we can see that public transportation is the only one that decreases the CPI after the Covid-19. Because of the Covid-19, many people avoided using `pubilic transportation` which is crowded. The decrease of demands decreased the CPI. In the opposite, `private transportation`, `Energy` and `transportation` CPI increases a lot after the Covid-19 comparing with the change rates before the Covid-19. More people choose to use `private transportation` to reduce the chance of exposure to the crowds. We already know that energy is a necessity for `private transportation`. The increase of demands on these three products increases the CPI at the same time. Durable goods is the one that has negative change in CPI before the Covid-19 and then increases sharply after the Covid-19. We know that during the Covid-19, people are forced to stay at home and this may be the reason that people bought lots of durable goods as they spent less outdoor. Moreover, the increase in `Energy` lead to the manufacturing and transportation cost to increase which leads to a higher price of goods in the store. 
 
-### 
+### working
 ```{r, fig.height = 6, message=FALSE, warning=FALSE, echo=FALSE}
 cpi %>%
   ggplot( aes(x=date, y=value, group=item_name, color=item_name)) +
@@ -389,7 +406,45 @@ We have scaled the data so as to make their changes obvious and comparable. At b
 
 Next, we are going to investigate the probable reason that Covid could cause Energy price to change like what we discovered. We would discuss the cause from **supply** perspective and **demand** perspective. 
 
+#### Demand Side Analysis
+```{r}
+travel %>%
+  hchart('line', hcaes(x = 'date', y = 'travel')) %>%
+  hc_colors("grey")%>%
+  hc_chart(zoomType = "x") %>%
+  hc_legend(align = "right", verticalAlign = "top",layout = "horizontal",floating=TRUE,y=80,x=-100) %>%
+  hc_xAxis(title = list(text = "date"),
+           labels= list(style=list(fontSize='10px'),
+                        rotation = -45, step = 1)) %>%
+  hc_yAxis(title = list(text = "travel number")) %>%
+  hc_title(text = "<b>change of travel from Jan 2017 to  Jul 2021 </b>") %>%
+  hc_subtitle(text = "Click on the dot to show selected month; click on a dot and drag across to zoom in") %>%
+  hc_exporting(enabled = TRUE)
+```
 
+Before the Covid-19, the travel number increase steadily until February 2020. At the begining of the Covid-19 spread out, from February 2020 to April 2020, the travel decreases sharply which follows the tread that CPI for energy decreases sharply from Jan 2020 to March 2020, and then CPI for energy rises a little in July 2020, stay until Dec 2020, and a slight decrease in Dec 2020. From the travel trend plot, we can also see that the travel number has a slow increase from April 2020 to February 2021. The CPI for energy and air travel number both increase from Jan 2021 until now.
 
+Travel takes large porpotion of energy consumption. As the travel needs decrease, the demand to the energy decreased at the early 2020. The increase in travel in late 2020 and 2021 lead to the increase in energy demand. Thus, stimulates the Energy price to increase. 
 
+It is clear that people stop traveling and working from home at the early stage of Covid broke out. This lead to a huge decrease in number of travel passengers number. In later 2020, the number of travellers is 1/3 of the number in early 2020. People starts to go back to office and go on vacation in summer 2021 as the new cases number starts to drop and people can not stand the lives staying at home everyday any more.
+
+#### Supply Side Analysis
+```{r}
+oil %>%
+  hchart('line', hcaes(x = 'Month', y = 'oil')) %>%
+  hc_colors("grey")%>%
+  hc_chart(zoomType = "x") %>%
+  hc_legend(align = "right", verticalAlign = "top",layout = "horizontal",floating=TRUE,y=80,x=-100) %>%
+  hc_xAxis(title = list(text = "date"),
+           labels= list(style=list(fontSize='10px'),
+                        rotation = -45, step = 1)) %>%
+  hc_yAxis(title = list(text = "oil supply")) %>%
+  hc_title(text = "<b>change of oil supply from Jan 2017 to  Sep 2021 </b>") %>%
+  hc_subtitle(text = "Click on the dot to show selected month; click on a dot and drag across to zoom in") %>%
+  hc_exporting(enabled = TRUE)
+```
+
+From the above line chart, we can see that before the covid-19, the supply of oil increases steadily. At the beginning of Covid broke out, from Mar 2020 to May 2020, the oil production decreases sharply which shares the same trend with travel number. The decrease of needs for travel leads to the decrease of needs for energy, results in  the decrease of energy price and finally cause the decrease of supply. Then the production increases slowly to a relatively steady level. From the CPI of Energy plot and the travel number plot, we can see that both of them increases from Jan 2021 until now. 
+
+The increase of needs for travel increases the demand for energy. The extra needs for energy and the shortage of energy production together make the energy price index surges. 
 
