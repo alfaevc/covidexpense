@@ -131,7 +131,7 @@ cdc.month$date <- as.yearmon(cdc.month$date, "%Y-%m")
 
 
 ```{r}
-cdc.month
+head(cdc.month)
 ```
 
 ### COVID-19 Vaccination and Case Trends by Age Group in United States
