@@ -217,9 +217,7 @@ for (i in 1:length(item.cluster)) {
 ```{r}
 cpi = read.csv("data/cpidata.csv")
 cpi$date = as.character(cpi$date)
-```
-```{r}
-itemname = levels(cpi$item_name)
+itemname = levels(as.factor(cpi$item_name))
 ```
 
 ```{r}
@@ -254,3 +252,4 @@ ggplot(c, aes(x=item_name,y = value,fill = type))+
   geom_bar(stat="identity", position = position_dodge())+theme(axis.text.x = element_text(angle = 90))
 ```
 
+From the bar plot, we can see that public transportation is the only one that decreases the CPI after the Covid-19. Because of the Covid-19, many people avoided using pubilic transportation which is crowded. The decrease of demands decreased the CPI. In the opposite, private transportation, Energy and transportation CPI increases a lot after the Covid-19 comparing with the change rates before the Covid-19. More people choose to use private transportation to reduce the chance of exposure to the crowds. We already know that energy is a necessity for private transportation. The increase of demands on these three products increases the CPI at the same time. Durable goods is the one that has negative change in CPI before the Covid-19 and then increases sharply after the Covid-19. We know that during the Covid-19, people are forced to stay at home and this may be the reason that people bought lots of durable goods to prevent emergencies.

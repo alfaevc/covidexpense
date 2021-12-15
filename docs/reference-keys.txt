@@ -15,3 +15,10 @@ cluster
 interactive-component
 conclusion
 bar-plot
+results-1
+covid-development-in-u.s.
+total-cases-new-cases-trend-line
+cases-trend-line
+cumulative-total-cases
+daily-new-cases
+covid-development-in-different-states
