@@ -25,7 +25,7 @@ chained = googlesheets4::read_sheet('1fpEQ4wuuDlnfKokjKyRUrOcIwHUnIBmnBFubCUpnQ9
 head(cpi)
 ```
 
-We firstly add the item names to our main data of interest by matching corresponding seriesID. Since all attributes are in the string format, it's helpful to convert the item names into the factor type since we are interested in comparing time series for different items and cpi values into numeric values. We also create a new date attribute by concetenating year and month to get the full range of time series, which is further converted into the yearmon type. 
+We firstly add the item names to our main data of interest by matching corresponding seriesID. Since all attributes are in the string format, it's helpful to convert the item names into the factor type since we are interested in comparing time series for different items and cpi values into numeric values. We also create a new date attribute by concetenating year and month to get the full range of time series, which is further converted into the yearmon type. Finally, we create another data ```cpi_monthly.csv``` by ```pivot_wider``` to obtain monthly cpi values for all item names such that the number of observations are equivalent to the number of distinct year-months. This data will be used to merge with covid data below.
 
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
@@ -42,7 +42,7 @@ head(cpi)
 ```
 
 ### Travel
-For the monthly transportation statistics, 
+For the monthly transportation statistics, we only extract the ```Date``` and ```U.S. Airline Traffic - Total - Seasonally Adjusted``` for our primary interest in transportation, where we convert the dates into the ```yearmon``` type and remove all ```NA```s so that we are left with air passengers from Jan 2017 to Jul 2021.
 
 ```{r}
 Monthly_Transportation_Statistics <- read_csv("data/Monthly_Transportation_Statistics.csv")
@@ -60,14 +60,13 @@ Monthly_Transportation_Statistics$date = as.Date(substr(Monthly_Transportation_S
 write.csv(Monthly_Transportation_Statistics,"data/travel.csv", row.names = F)
 ```
 
-```{r}
-oil <- read_csv("data/U.S._Field_Production_of_Crude_Oil.csv")
-min(oil$Month)
-```
-
 
 
 ### Oil 
+
+For oil data, we simply remove the observations prior to Jan 2017 to match the transportation data above and convert the dates into the ```yearmon``` type as discussed in section 2.
+
+
 ```{r}
 oil <- read_csv("data/U.S._Field_Production_of_Crude_Oil.csv")
 oil$Month = as.Date(oil$Month)
@@ -79,11 +78,13 @@ write.csv(oil,"data/oil.csv", row.names = F)
 
 ### United States COVID-19 Cases and Deaths by State overTime
 
-Observe that covid data are daily based and cpi data are monthly based, we use ```dplyr``` to shrink covid data to monthly based by summing the number of cases and deaths for every state, where we denote this new dataset ```cdcmonth.csv``` after adjusting date into the ```yearmon``` format. We also noticed that for the attributes ```consent_cases``` and```consent_deaths``` some ```NA```s are denoted as the string ```'N\A'```, where it makes sense to replace them with actual ```NA``` since they are indeed missing values. Furthermore, we want to investigate cross state covid cases, where we want to focus on 50 main states. In particular, we have 60 states in total and the reported observations for New York City and Washington D.C. are separated from New York and Maryland respectively, where other states are disjoint from the 50. Hence, we adjust the observations for New York City and Washington D.C. and add them to New York and Maryland in ```cdcmonth.csv``` respectively.
+Observe that covid data are daily based and cpi data are monthly based, we use ```dplyr``` to shrink covid data to monthly based by summing the number of cases and deaths for every state, where we denote this new dataset ```cdcmonth.csv``` after adjusting date into the ```yearmon``` format. We also noticed that for the attributes ```consent_cases``` and```consent_deaths``` some ```NA```s are denoted as the string ```'N\A'```, where it makes sense to replace them with actual ```NA``` since they are indeed missing values. In addition, we want to investigate cross state covid cases, where we want to focus on 50 main states. In particular, we have 60 states in total and the reported observations for New York City and Washington D.C. are separated from New York and Maryland respectively, where other states are disjoint from the 50. Hence, we adjust the observations for New York City and Washington D.C. and add them to New York and Maryland in ```cdcmonth.csv``` respectively. Furthermore, we replace the ```NA```s in probable cases and deaths with 0s and further replace confirmed cases and deaths with total cases - probable cases and total deaths - probable deaths since some of the confirmed cases and deaths are < 0 as mentioned in section 2 and probable cases are considered to be unreliable records. We have also created 3 new datasets ```cdc_all.csv```, ```cdc_monthly_all_state.csv``` and ```data_monthly.csv```, where ```cdc_all.csv``` is obtained from getting the daily reported cases and deaths for the entire US by summing over the cases and death across all the states, then we further shrink the data to the national monthly cases and deaths ```cdc_monthly_all_state.csv``` by grouping the data by each month. We eventually merge ```cdc_monthly_all_state.csv``` and ```cpi_monthly.csv``` obtained above to conduct analysis between covid and cpi attributes as well as performing visualizations such as plotting us maps.
+
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
 cdc = read_csv("data/United_States_COVID-19_Cases_and_Deaths_by_State_over_Time.csv")
 ```
+
 
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
@@ -131,6 +132,7 @@ write.csv(cdc.month,"data/cdcmonth.csv", row.names = FALSE)
 
 ```
 
+
 ```{r}
 cdc = cdc  %>% mutate(prob_cases = ifelse(is.na(prob_cases), 0, prob_cases)) %>% mutate(conf_cases = tot_cases - prob_cases)
 cdc = cdc  %>% mutate(prob_death = ifelse(is.na(prob_death), 0, prob_death)) %>% mutate(conf_death = tot_death - prob_death)
@@ -140,7 +142,7 @@ write.csv(cdc,"data/cdc.csv", row.names = FALSE)
 
 
 ```{r}
-#cdc = read.csv("data/cdc.csv")
+cdc = read.csv("data/cdc.csv")
 cdc = cdc %>% mutate(date=as.Date(date), month=as.yearmon(format(as.Date(date), "%Y-%m")))
 
 ### total death working
@@ -171,24 +173,12 @@ cdc.month = read.csv("data/cdcmonth.csv")
 cdc.month$date <- as.yearmon(cdc.month$date, "%Y-%m")
 ```
 
+```{r}
+head(cpi)
+```
+
 
 ```{r}
 head(cdc.month)
-```
-
-### COVID-19 Vaccination and Case Trends by Age Group in United States
-
-```{r, message=FALSE, warning=FALSE, echo=FALSE}
-covid.age = read_csv("data/COVID-19_Vaccination_and_Case_Trends_by_Age_Group__United_States.csv")
-```
-
-
-
-```{r, message=FALSE, warning=FALSE, echo=FALSE}
-covid.age$date = as.Date(substr(covid.age$`Date Administered`, 1, 10), '%m/%d/%Y')
-```
-
-```{r}
-head(covid.age)
 ```
 
