@@ -59,7 +59,7 @@ source('hchart _corr.R')
 hchart.cor(cor_matrix)
 ```
 
-According to the heat map, we can easily tell that many of the CPI items are highly and positively correlated with each other. However, `Public Transportation`, `Medical Care Services`, `Communication`, and `Apparel` showed white and red color in the heat map. This indicates that they are not or negatively correlated with other items. Combining with the trend graph, I know that their prices did not increase much. It is also reasonable because some of them have pricing mechanism that is not determined by the market. For instance, `Public Transportation`, `Medical Care Services` and `Communication` 
+According to the heat map, we can easily tell that many of the CPI items are highly and positively correlated with each other. However, `Public Transportation`, `Medical Care Commodities`, `Communication`, and `Apparel` showed white and red color in the heat map. This indicates that they are not or negatively correlated with other items. Combining with the trend graph, I know that their prices did not increase much. It is also reasonable because some of them have pricing mechanism that is not determined by the market. For instance, `Public Transportation`, `Medical Care Commodities` and `Communication` have government set prices and fixed prices. 
 
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
@@ -171,21 +171,6 @@ highchart(type = "map") %>%
 ```
 
 From the motion map, we can find that at first, New York is the state with the largest total cases and then from Jul 2020 until Nov 2021, California, Texas and Flora are the three States that have the largest total cases which compatible with the trend of new cases from the previous motion map. These three States have large populations and warm weather which provides with enough condition for Coronavirus to live and spread.
-
-```{r Covid-19 Data Trend}
-cdc = read.csv("data/cdc.csv")
-cdc$month = as.yearmon(format(as.Date(cdc$date), "%Y-%m"))
-
-cdc_monthly_all_state = cdc %>% 
-  select(month, new_death, new_case, conf_cases, conf_death) %>% 
-  group_by(month) %>% 
-  summarise(new_death=sum(new_death),new_case=sum(new_case), tot_cases=sum(conf_cases), tot_death=sum(conf_death))
-
-cdc_monthly_all_state %>% pivot_longer(cols = new_death:tot_death, names_to='var',values_to='value') %>%
-  ggplot( aes(x=month, y=value, group=var, color=var)) +
-    geom_line() + ggtitle("Covid-19 Data Trend") + theme(axis.text.x = element_text(angle = 90), plot.title = element_text(size = 40, face = "bold"))
-```
-
 
 ### Correlation CPI V.S. Covid-19 Cases
 ```{r correlation}
@@ -426,7 +411,7 @@ names(region.list) <- c('Northeast', 'Mid.Atlantic', 'Southeast', 'Midwest', 'So
 
 
 ```{r basis plot, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
-B.basis.plot(spline.basis(cdc, n.knots=7), n.knots=7)
+B.basis.plot(spline.basis(cdc, n.knots=10), n.knots=10)
 ```
 
 
@@ -570,4 +555,6 @@ for (i in 1:length(state.cluster)) {
   print(plot_states(cdc.month, state.cluster[[i]], "new_case", "Covid Monthly New Cases Time Series"))
 }
 ```
+To identify difference and similarities between covid case curves, we estimated a basis spline (B-spline) model for every state. Each estimated B-spline is a weighted piecewise combination of 10 polynomials, connected at “knots”. Estimated splines and weight coefficients are closely related in states with similar underlying case curves. We compared the estimated state splines by using the K-means algorithm to cluster similar sets of weight coefficients, identifying groups of states with similar covid case trajectories. In general, we can observe that the coefficients for two states in the same cluster are more similar than those in a different cluster(e.g. Florida and Texas).
+
 
