@@ -45,6 +45,8 @@ head(cpi)
 
 ### United States COVID-19 Cases and Deaths by State overTime
 
+Observe that covid data are daily based and cpi data are monthly based, we use ```dplyr``` to shrink covid data to monthly based by summing the number of cases and deaths for every state, where we denote this new dataset ```cdcmonth.csv``` after adjusting date into the ```yearmon``` format. We also noticed that for the attributes ```consent_cases``` and```consent_deaths``` some ```NA```s are denoted as the string ```'N\A'```, where it makes sense to replace them with actual ```NA``` since they are indeed missing values. 
+
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
 cdc = read_csv("data/United_States_COVID-19_Cases_and_Deaths_by_State_over_Time.csv")
 ```
@@ -53,6 +55,8 @@ cdc = read_csv("data/United_States_COVID-19_Cases_and_Deaths_by_State_over_Time.
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
 head(cdc)
 ```
+
+
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
 cdc[,c('consent_cases')][cdc[,c('consent_cases')] == 'N/A'] = NA
 cdc[,c('consent_deaths')][cdc[,c('consent_deaths')] == 'N/A'] = NA
@@ -76,6 +80,8 @@ cdc.month$date = paste(substr(cdc.month$date,5,8), match(substr(cdc.month$date,1
 
 ```{r merge_city_to_state}
 cdc.month$statefull = state.name[match(cdc.month$state,state.abb)]
+cdc.month$state[cdc.month$state=="DC"] = "MD"
+cdc.month$state[cdc.month$state=="NYC"] = "NY"
 cdc.month$statefull[cdc.month$state=="DC"] = "Maryland"
 cdc.month$statefull[cdc.month$state=="NYC"] = "New York"
 ```
@@ -131,7 +137,7 @@ cdc.month$date <- as.yearmon(cdc.month$date, "%Y-%m")
 
 
 ```{r}
-cdc.month
+head(cdc.month)
 ```
 
 ### COVID-19 Vaccination and Case Trends by Age Group in United States
