@@ -426,31 +426,6 @@ mid <- function(x) {
 
 
 
-```{r all splines, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
-Bcoef.mat = plot.bspline(cdc.month, all.states, 'new_case', n.knots=10, degree=3)
-wss <- function(k) {
-  kmeans(as.data.frame(Bcoef.mat), k, nstart = 10)$tot.withinss
-}
-# Compute and plot wss for k = 2 to k = 15
-k.values <- 2:10
-
-# extract wss for 2-15 clusters
-wss_values <- map_dbl(k.values, wss)
-```
-
-```{r kmeans, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
-plot(wss_values)
-```
-
-
-```{r, message=FALSE, warning=FALSE, echo=FALSE}
-state.col = rainbow(length(all.states))
-```
-
-```{r}
-map.df = usmap::us_map()
-head(map.df)
-```
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
 # plot(k.values, wss_values, type="b", pch = 19, frame = FALSE, xlab="Number of clusters K", ylab="Total within-clusters sum of squares")
 map.df = usmap::us_map()
@@ -467,11 +442,34 @@ map.df$region = ifelse (map.df$state %in% Northeast, "Northeast",
 #map.state.names = geom_text(data=state.centers.df, aes(x=x, y=lat.mid, group=group, label=state),size=1.5, hjust=0, vjust=0, colour = 1)
 #map.state.points = geom_point(data=state.centers.df, aes(x=long.mid, y=lat.mid, group=group), size = 0.5, alpha = 0.6, colour = 1)
 
-state.centers.df = map.df %>% group_by(state) %>% summarise(x.mid = mid(x), y.mid = mid(y), group=mean(group))
-map.state.names = geom_text(data=state.centers.df, aes(x=x, y=y.mid, group=group, label=state),size=1.5, hjust=0, vjust=0, colour = 1)
-map.state.points = geom_point(data=state.centers.df, aes(x=x.mid, y=y.mid, group=group), size = 0.5, alpha = 0.6, colour = 1)
+state.centers.df = map.df %>% group_by(state) %>% summarise(x.mid = mid(x), y.mid = mid(y), group=max(group))
+map.state.names = geom_text(data=state.centers.df, aes(x=x.mid, y=y.mid, group=group, label=state),size=2.5, hjust=0, vjust=0, colour = 1)
+map.state.points = geom_point(data=state.centers.df, aes(x=x.mid, y=y.mid, group=group, size = 0.05, alpha = 0.6, colour = 1))
 ```
 
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+all.states = unique(map.df$state)
+state.col = rainbow(length(all.states))
+```
+
+
+
+```{r all splines, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
+Bcoef.mat = plot.bspline(cdc.month, all.states, 'new_case', n.knots=10, degree=3)
+wss <- function(k) {
+  kmeans(as.data.frame(Bcoef.mat), k, nstart = 10)$tot.withinss
+}
+# Compute and plot wss for k = 2 to k = 15
+k.values <- 2:10
+
+# extract wss for 2-15 clusters
+wss_values <- map_dbl(k.values, wss)
+```
+
+```{r kmeans, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
+plot(wss_values)
+```
 
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
@@ -491,6 +489,7 @@ sort.state.clusters <- function(clusters, sort.cluster.list) {
 ```
 
 
+
 ```{r spline map, message=FALSE, warning=FALSE, echo=FALSE}
 for (i in 9) {
 # Run K-means to cluster the knots of the states
@@ -508,9 +507,7 @@ for (i in 9) {
     }
     
     sort.clusters = sort.state.clusters(clusters, sort.cluster.list)
-    print(length(clusters))
     states.df = data.frame(state = all.states, CLUSTER = sort.clusters)
-    # write.csv(states.df, paste("./clusterings/cluster", i, ".csv", sep=""))
     
     state.cluster = list()
     for (i in 1:cluster.num) {
@@ -549,7 +546,7 @@ for (i in 9) {
 region.num = length(region.list)
 region.cols = rainbow(region.num)
 
-us.region.map = ggplot(map.df, aes(x=long, y=lat, group=group)) + 
+us.region.map = ggplot(map.df, aes(x=x, y=y, group=group)) + 
                 guides(fill=FALSE) + 
                 geom_polygon(colour = "black", size = 0.5)
 for (r in 1:region.num) {
