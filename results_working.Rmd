@@ -179,10 +179,68 @@ From the motion map, we can find that at first, New York is the state with the l
 
 ## Clustering States by Covid Trend
 
+```{r basis plot, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
+source('alvin-clustering.r')
+B.basis.plot(spline.basis(cdc, n.knots=10), n.knots=10)
+```
 
+```{r all splines, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
+Bcoef.mat = plot.bspline(cdc.month, all.states, 'new_case', n.knots=10, degree=3)
+```
+```{r spline map, message=FALSE, warning=FALSE, echo=FALSE}
+for (i in 9) {
+# Run K-means to cluster the knots of the states
+  # Bcoef.mat = plot.bspline(covid.com, all.states, 'NEWCD_NORM_500', n.knots=15, degree=3)
+  
+  # choose the number of clusters we want and assign each state its closest cluster
+  set.seed(i)
 
+  for (k in 6) {
+    cluster.num = k
+    clusters = kmeans(as.data.frame(Bcoef.mat), cluster.num, nstart = 10)$cluster
+    sort.cluster.list = list()
+    for (j in 1:k) {
+      sort.cluster.list[[j]] = -1
+    }
+    
+    sort.clusters = sort.state.clusters(clusters, sort.cluster.list)
 
-
+    states.df = data.frame(state = all.states, CLUSTER = sort.clusters)
+    # write.csv(states.df, paste("./clusterings/cluster", i, ".csv", sep=""))
+    
+    state.cluster = list()
+    for (i in 1:cluster.num) {
+      state.cluster[[i]] = subset(states.df, CLUSTER==i)$state
+    }
+    cs = ifelse (map.df$state %in% state.cluster[[cluster.num]], cluster.num, cluster.num+1)
+    for (i in (cluster.num-1):1) {
+      cs = ifelse (map.df$state %in% state.cluster[[i]], i, cs)
+    }
+    
+    map.df$cluster = cs
+    #map.df$cluster = ifelse (map.df$STATE %in% state.cluster[[1]], 1,
+    #                 ifelse (map.df$STATE %in% state.cluster[[2]], 2,
+    #                 ifelse (map.df$STATE %in% state.cluster[[3]], 3,
+    #                 ifelse (map.df$STATE %in% state.cluster[[4]], 4,
+    #                 ifelse (map.df$STATE %in% state.cluster[[5]], 5,
+    #                 ifelse (map.df$STATE %in% state.cluster[[6]], 6, 7
+    #                        ))))))
+    
+    # us map on bspline knots clusters
+    colors = brewer.pal(n = k, name = "Set2")
+    us.bspline.map = ggplot(map.df, aes(x=long, y=lat, group = group)) + geom_polygon(colour="black", size=0.5)
+    for (i in 1:cluster.num) {
+      us.bspline.map = us.bspline.map + geom_polygon(fill=colors[i], data = filter(map.df, cluster == i))
+    }
+    print(us.bspline.map + map.state.names + map.state.points + ggtitle(paste('U.S. Map spline knots kmeans covid cases k=', k, sep='')))
+  }
+}
+```
+```{r clustered spline curves, message=FALSE, warning=FALSE, echo=FALSE}
+for (i in 1:length(state.cluster)) {
+  print(plot_states(cdc.month, state.cluster[[i]], "new_case", "Covid Monthly New Cases Time Series"))
+}
+```
 
 
 
