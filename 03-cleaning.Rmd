@@ -101,7 +101,7 @@ write.csv(cdc.month,"data/cdcmonth.csv", row.names = FALSE)
 cdc = cdc  %>% mutate(prob_cases = ifelse(is.na(prob_cases), 0, prob_cases)) %>% mutate(conf_cases = tot_cases - prob_cases)
 cdc = cdc  %>% mutate(prob_death = ifelse(is.na(prob_death), 0, prob_death)) %>% mutate(conf_death = tot_death - prob_death)
 cdc = cdc %>% mutate(date=as.Date(date))
-write.csv(cdc,"data/cdc.csv")
+write.csv(cdc,"data/cdc.csv", row.names = FALSE)
 ```
 
 
@@ -120,6 +120,8 @@ cdc_monthly_all_state = cdc_all %>%
   summarise(new_death=sum(new_death),new_case=sum(new_case), tot_cases=max(conf_cases), tot_death=max(tot_death))
 
 # combine cpi and cdc
+selection = c("All items", "Energy","Apparel", "Commodities", "Durables", "Education", "Communication", "Food", "Housing", "Fuels and utilities", "Medical care commodities", "Medical care services", "Recreation", "Transportation", "Private transportation", "Public transportation" )
+cpi = cpi %>% filter(item_name %in% selection)
 cpi_monthly = cpi %>% select(date, value, item_name) %>% pivot_wider(id_cols = , names_from = item_name, values_from = value)
 data_monthly = left_join(cpi_monthly, cdc_monthly_all_state, by=c("date"="month")) %>% rename(month = date)
 

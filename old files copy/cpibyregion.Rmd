@@ -1,0 +1,166 @@
+---
+title: "cpiArea"
+author: "shuyue Xu"
+date: "12/13/2021"
+output: html_document
+---
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+library(googlesheets4)
+#library(blsAPI)
+library(rjson) 
+library(dplyr)
+library(ggplot2)
+library(graphics)
+library("readxl")
+library(tidyverse)
+library("lhs")
+library(splines)
+library(maps)
+library(mapdata)
+library("viridis")
+library(RColorBrewer)
+library(zoo)
+library(highcharter)
+```
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
+gs4_deauth()
+data= googlesheets4::read_sheet('1fpEQ4wuuDlnfKokjKyRUrOcIwHUnIBmnBFubCUpnQ94',sheet='CPI_area_data')
+
+data$value = as.numeric(data$value)
+data$date <- paste(data$year, "-", substr(data$period,2,3), sep="")
+head(data)
+```
+
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
+data = data  %>% group_by(description,date) %>% dplyr::summarise(avgvalue=mean(value))
+data$description[data$description=="0100 Northeast 0 T 5"] = "Northeast"
+data$description[data$description=="0120 Middle Atlantic 1 T 11"] = "Mid.Atlantic"
+data$description[data$description=="0360 East South Central 1 T 38"] = "Southeast"
+data$description[data$description=="0200 Midwest 0 T 14"] = "Midwest"
+data$description[data$description=="0370 West South Central 1 T 39"] = "Southwest"
+data$description[data$description=="0400 West 0 T 43"] = "West"
+```
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
+# 6
+Northeast = c("Connecticut", "Massachusetts", "Maine", 
+              "New Hampshire", "Rhode Island", "Vermont")
+
+# 8
+Mid.Atlantic = c("Delaware", "Maryland", 
+                 "New Jersey", "New York", "Pennsylvania",
+                 "Virginia", "West Virginia")
+
+# 9
+Southeast = c("Alabama", "Arkansas", "Florida",
+                             "Georgia", "Louisiana", "Mississippi",
+                             "North Carolina", "South Carolina", "Tennessee")
+
+# 13
+Midwest = c("Indiana", "Illinois", "Iowa", 
+                           "Kansas", "Kentucky", "Michigan",
+                           "Minnesota", "Missouri", "Nebraska",
+                           "North Dakota", "Ohio", "South Dakota",
+                           "Wisconsin")
+# 4
+Southwest = c("Arizona", "New Mexico", "Oklahoma", "Texas")
+
+# 11
+West = c("Alaska", "California", "Colorado", "Hawaii",
+                        "Idaho", "Montana", "Nevada", "Oregon",
+                        "Utah", "Washington", "Wyoming")
+
+region.list <- list(Northeast, Mid.Atlantic, Southeast, Midwest, Southwest, West)
+names(region.list) <- c('Northeast', 'Mid.Atlantic', 'Southeast', 'Midwest', 'Southwest', 'West')
+```
+
+```{r}
+for (i in c('Northeast', 'Mid.Atlantic', 'Southeast', 'Midwest', 'Southwest', 'West')){
+  value = data %>% filter(description == i,date == "2019-01")
+  value = value$avgvalue
+  data$scaled[data$description == i] = (data$avgvalue[data$description == i] - value)/value
+}
+```
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
+##create new dataframe
+DF <- data.frame(description = character(),
+                 state=character(), 
+                 avgvalue=numeric(),
+                 date=character(),
+                 scaled = numeric())
+
+temp = data %>% select(date,avgvalue,scaled) %>% filter(description=="Northeast")
+for(e in Northeast){
+  temp$state = e
+  DF = bind_rows(DF,temp)
+} 
+temp = data %>% select(date,avgvalue,scaled) %>% filter(description=="Mid.Atlantic")
+for(e in Mid.Atlantic){
+  temp$state = e
+  DF = bind_rows(DF,temp)
+} 
+temp = data %>% select(date,avgvalue,scaled) %>% filter(description=="Southeast")
+for(e in Southeast){
+  temp$state = e
+  DF = bind_rows(DF,temp)
+} 
+temp = data %>% select(date,avgvalue,scaled) %>% filter(description=="Midwest")
+for(e in Midwest){
+  temp$state = e
+  DF = bind_rows(DF,temp)
+} 
+temp = data %>% select(date,avgvalue,scaled) %>% filter(description=="Southwest")
+for(e in Southwest){
+  temp$state = e
+  DF = bind_rows(DF,temp)
+} 
+temp = data %>% select(date,avgvalue,scaled) %>% filter(description=="West")
+for(e in West){
+  temp$state = e
+  DF = bind_rows(DF,temp)
+} 
+DF %>% drop_na()
+```
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
+
+DFcase = DF %>% group_by(state)%>%arrange(date)%>% 
+    do(item = list(
+        state = first(.$state),
+        sequence = .$scaled,
+        value = first(.$scaled)
+    ))%>%
+    .$item
+highchart(type = "map") %>% 
+  hc_add_series(data = DFcase,
+                name = "Dem. Margin",
+                mapData = usgeojson,
+                joinBy = c("name","state"),
+                borderColor = "black",
+                borderWidth = 0.1,
+                dataLabels = list(enabled = TRUE, format = "{point.properties.postalcode}")
+                ) %>% 
+  hc_colorAxis(minColor = "white", maxColor = "orange") %>%
+  hc_title(text = "scaled CPI change from 2019 Jan to 2021 Nov by region") %>%
+  hc_add_theme(hc_theme_smpl()) %>%
+  hc_motion(
+    enabled = TRUE,
+    axisLabel = "yearmonth",
+    labels = as.character(sort(unique(DF$date),decreasing = FALSE))
+  )%>% 
+  hc_legend(title = list(text = "scaledcpi"), valueDecimals = 0, valueSuffix = "%") %>%
+   hc_mapNavigation(enabled = TRUE) %>% hc_exporting(enabled = TRUE)
+```
+
+
+
+

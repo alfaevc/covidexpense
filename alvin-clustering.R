@@ -87,7 +87,7 @@ plot.basis.com <- function(data, states, feature, n.knots=6, degree=3, x=1, y=1)
   # par(mfrow=c(x,y), mar=c(4,4,2,0.5)) # Setup grid, margins
   data = data %>% subset(!is.na(data[, feature]))
   n = length(states)
-  colors = rainbow(n.knots)
+  colors = c("#BBE7FE","#D3B5E5", "#FFD4DB", "#EFF1DB", "#3cacae", "#fe9c52")
   Bcoef.mat = matrix(0,n,n.knots)
   
   for (i in 1:n) {
@@ -220,7 +220,7 @@ map.df$region = ifelse (map.df$state %in% Northeast, "Northeast",
                                                         ))))))
 state.centers.df = map.df %>% group_by(state) %>% summarise(long.mid = mid(long), lat.mid = mid(lat), group=mean(group))
 
-map.state.names = geom_text(data=state.centers.df, aes(x=long.mid, y=lat.mid, group=group, label=state),size=1.5, hjust=0, vjust=0, colour = 1)
-map.state.points = geom_point(data=state.centers.df, aes(x=long.mid, y=lat.mid, group=group), size = 0.5, alpha = 0.6, colour = 1)
+map.state.names = geom_text(data=state.centers.df, aes(x=long.mid, y=lat.mid, group=group, label=state),size=3, hjust=0, vjust=0, colour = 1)
+map.state.points = geom_point(data=state.centers.df, aes(x=long.mid, y=lat.mid, group=group), size = 1, alpha = 0.6, colour = 1)
 
 ### Ploting 

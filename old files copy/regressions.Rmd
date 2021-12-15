@@ -1,0 +1,57 @@
+---
+title: "Undergrad research"
+authors: Alvin Pan
+output:
+  word_document:
+    toc: no
+  pdf_document:
+    toc: no
+  html_document:
+    theme: spacelab
+    toc: yes
+    toc_float: yes
+Andrew IDs: qpan
+---
+
+```{r}
+library(graphics)
+library("readxl")
+library(dplyr)
+library(tidyverse)
+library(np)
+
+library("lhs")
+library(splines)
+library(ggplot2)
+library(maps)
+library(mapdata)
+library("viridis")
+library(RColorBrewer)
+library(zoo)
+
+```
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
+cdc = read_csv("data/United_States_COVID-19_Cases_and_Deaths_by_State_over_Time.csv")
+cdc[,c('consent_cases')][cdc[,c('consent_cases')] == 'N/A'] = NA
+cdc[,c('consent_deaths')][cdc[,c('consent_deaths')] == 'N/A'] = NA
+```
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
+covid.age = read_csv("data/COVID-19_Vaccination_and_Case_Trends_by_Age_Group__United_States.csv")
+```
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
+all.states = unique(cdc$state)
+```
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
+covid.age$date = as.Date(substr(covid.age$`Date Administered`, 1, 10), '%m/%d/%Y')
+```
+
+```{r}
+head(covid.age)
+```
+
+
