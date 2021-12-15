@@ -5,7 +5,7 @@ plot_missing <- function(dataset, percent = FALSE) {
   
   #upper plot data
   upper_data = data.frame(colname = names(dataset), missing_number = colSums(is.na(dataset))) %>% 
-    mutate(missing_percent = 100 * missing_number/sum(missing_number))
+    mutate(missing_percent = 100 * missing_number/dim(dataset)[1])
   #right plot data
   missing_patterns = data.frame(is.na(dataset)) %>%
     group_by_all() %>%
