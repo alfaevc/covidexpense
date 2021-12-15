@@ -24,7 +24,7 @@ library(highcharter)
 
 
 ```{r lead data, message=FALSE, warning=FALSE, echo=FALSE}
-cdc = read.csv("data/cdc.csv")
+cdc = read_csv("data/cdc.csv")
 cdc = cdc %>% mutate(date=as.Date(date), month=as.yearmon(format(as.Date(date), "%Y-%m")))
 cdc_all = read.csv("data/cdc_all.csv", fileEncoding="UTF-8")
 cdc_monthly_all_state = read.csv("data/cdc_monthly_all_state.csv", fileEncoding="UTF-8")
@@ -35,6 +35,7 @@ cdc_monthly_all_state = cdc_monthly_all_state %>% mutate(month=as.yearmon(month)
 cpi_monthly = cpi_monthly %>% mutate(date=as.yearmon(date))
 data_monthly = data_monthly %>% mutate(month=as.yearmon(month))
 ```
+
 
 
 ## CPI
@@ -94,6 +95,8 @@ Play/pause clicking the play/pause button
 Navigate the motion slider by dragging the slider thumb
 
 Navigate the motion slider by hitting the left and right arrow keys.
+
+
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
 cdc.month = read.csv("data/cdcmonth.csv")
@@ -195,6 +198,9 @@ hchart.cor(cor_matrix)
 
 
 ### cluster
+```{r}
+cdc.month$statefull = NULL
+```
 
 
 ```{r}
@@ -441,7 +447,7 @@ map.state.points = geom_point(data=state.centers.df, aes(x=x.mid, y=y.mid, group
 
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
-all.states = unique(map.df$state)
+all.states = unique(cdc.month$state)[1:50]
 state.col = rainbow(length(all.states))
 ```
 

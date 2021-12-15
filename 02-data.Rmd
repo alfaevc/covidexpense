@@ -1,5 +1,14 @@
 # Data sources
 
-The covid data are collected by the centers for Disease Control and Prevention(CDC)
+## CPI
+The CPI data is collected from BLS using API.
 
-The CPI data is collected from BLS using API. 
+## Bureau of Transportation Statistics
+The transportation data contains information about the number of passengers travelling by air from Jan 2017 to Jul 2021. The data is downloaded from https://data.bts.gov/Research-and-Statistics/Monthly-Transportation-Statistics/crem-w557.
+
+## U.S. Field Production of Crude Oil
+The oil data records the daily field production of crude Oil thousand barrels from Jan 1920 to Sep 2021. The data is downloaded from https://www.eia.gov/dnav/pet/hist/LeafHandler.ashx?n=PET&s=MCRFPUS2&f=A
+
+## United States COVID-19 Cases and Deaths by State overTime
+The covid data is collected by the centers for Disease Control and Prevention(CDC), which reports aggregate counts of daily confirmed and probable COVID-19 cases and death numbers online for different states in the US. This is one of the main datasets of interest where we want to explore how the variation of covid cases affect CPI trends. More information is on the website where the data is downloaded: https://data.cdc.gov/Case-Surveillance/United-States-COVID-19-Cases-and-Deaths-by-State-o/9mfq-cb36.
+

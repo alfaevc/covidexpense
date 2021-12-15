@@ -152,7 +152,6 @@ write.csv(Monthly_Transportation_Statistics,"data/travel.csv", row.names = F)
 ```
 
 
-
 ### Oil 
 ```{r}
 oil <- read_csv("data/U.S._Field_Production_of_Crude_Oil.csv")
