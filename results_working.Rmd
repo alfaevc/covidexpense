@@ -288,7 +288,7 @@ hchart.cor(cor_matrix)
 
 According to the heat map, we can easily tell that many of the CPI items are highly and positively correlated with each other. However, `Public Transportation`, `Medical Care Commodities`, `Communication`, and `Apparel` showed white and red color in the heat map. This indicates that they are not or negatively correlated with other items. Combining with the trend graph, I know that their prices did not increase much. It is also reasonable because some of them have pricing mechanism that is not determined by the market. For instance, `Public Transportation`, `Medical Care Commodities` and `Communication` have government set prices and fixed prices.
 
-Industrial resources are highly correlated with each other. `Energy`,  `Commodities`, `Transportation
+`Energy` are highly correlated with each other. `Energy`,  `Commodities`, `Transportation`, `Private Transportation`, `Durables` and `Fuel and Utilities`
 
 Therefore, we grouped similar CPI items together and will show their similarities in the next part. 
 
@@ -300,7 +300,7 @@ The groups we created for CPI items are as follows:
 3. 
 
 
-
+`
 
 
 

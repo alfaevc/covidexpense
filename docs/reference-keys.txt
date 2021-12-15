@@ -22,3 +22,8 @@ cases-trend-line
 cumulative-total-cases
 daily-new-cases
 covid-development-in-different-states
+clustering-states-by-covid-trend
+consumer-price-index-development
+chang-of-living-expenses-by-items
+correlation-between-consumer-items
+group-cpi-items
