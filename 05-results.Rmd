@@ -292,7 +292,10 @@ ggplot(c, aes(y=reorder(item_name,value),x = value * 100,fill = type))+
 
 From the bar plot, we can see that public transportation is the only one that decreases the CPI after the Covid-19. Because of the Covid-19, many people avoided using `pubilic transportation` which is crowded. The decrease of demands decreased the CPI. In the opposite, `private transportation`, `Energy` and `transportation` CPI increases a lot after the Covid-19 comparing with the change rates before the Covid-19. More people choose to use `private transportation` to reduce the chance of exposure to the crowds. We already know that energy is a necessity for `private transportation`. The increase of demands on these three products increases the CPI at the same time. Durable goods is the one that has negative change in CPI before the Covid-19 and then increases sharply after the Covid-19. We know that during the Covid-19, people are forced to stay at home and this may be the reason that people bought lots of durable goods as they spent less outdoor. Moreover, the increase in `Energy` lead to the manufacturing and transportation cost to increase which leads to a higher price of goods in the store. 
 
-### w
+### All Items' Price Trend
+
+Here we put all CPI items together for display so that we can know how the trend look like. The graph visualization is not idea and may not be informative. We will solve the problem and apply scaling, grouping, and correlation analysis on those data so as to draw useful insights and clear graphs. 
+
 ```{r, fig.height = 6, message=FALSE, warning=FALSE, echo=FALSE}
 cpi %>%
   ggplot( aes(x=date, y=value, group=item_name, color=item_name)) +
