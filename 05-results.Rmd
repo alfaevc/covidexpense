@@ -204,7 +204,6 @@ cdc.month$date <- as.yearmon(cdc.month$date, "%Y-%m")
 ```
 
 
-
 ```{r}
 all.states = unique(cdc.month$state)
 ```
