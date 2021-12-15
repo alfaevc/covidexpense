@@ -83,6 +83,7 @@ ggplot(cdc_all,
         axis.text.x = element_text(angle = 45, hjust = 1),
         legend.position="bottom")
 ```
+
 Covid started in March 2020 and has highest increase speed around the winter 2020. In the first half year, Covid cases number has surge to 5 million from 0. And it further increase to 25 million in the next half year. The increase of Covid cases is exponential as people would go social and the spreading of Virus also has 'Network Effect'. 
 
 #### Daily New Cases
@@ -241,6 +242,7 @@ for (i in 9) {
   }
 }
 ```
+
 To identify difference and similarities between Covid case curves, we estimated a basis spline (B-spline) model for every state. Each estimated B-spline is a weighted piecewise combination of 10 polynomials, connected at “knots”. Estimated splines and weight coefficients are closely related in states with similar underlying case curves. We compared the estimated state splines by using the K-means algorithm to cluster similar sets of weight coefficients, identifying groups of states with similar Covid case trajectories. In general, we can observe that the coefficients for two states in the same cluster are more similar than those in a different cluster(e.g. Florida and Texas).
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
@@ -248,6 +250,7 @@ for (i in c(2,4,6)) {
   print(plot_states(cdc.month, state.cluster[[i]], "new_case", "Covid Monthly New Cases Time Series"))
 }
 ```
+
 The plotted trend line further proved the clustering model did a great job grouping stats. For instance, `California`, `Florida` and `Texas` are grouped together. Those states are in south of U.S. indicating a warmer weather which would help virus to stay alive longer in the environment. Moreover, their population are much larger than other states. The high population density also helps virus to spread and make the data in those states differ from others. Other groups showed above have geographical, population density, and policy similarities which lead to the similar trend. 
 
 
@@ -379,6 +382,7 @@ p2
 p3
 p4
 ```
+
 From the scaled trend lines, it proves that our grouping did a pretty good job! **Price Stable Items** had price drop since early 2019 and started to rise in price after mid 2020. **Energy Related Items** had a increase trend in early 2019 and had a huge drop after Covid broke out and increase in price afterwards dramatically. **Labor Related Items** had a general increasing trend since 2019, and had a higher slop after Covid broke out. The last graph showed one item from each of three groups to showcase their difference in trend as response to the Covid development.
 
 According to the trends of different groups, **Energy Related Items** are more interesting to us. Their price dropped a lot after Covid just broke out. And then, the price increased dramatically after the first several months. Other goods, doesn't seem to have such big impact from Covid. Therefore, we think **Energy Related Items** will be the target we will further investigate so as to discover how Covid caused our living expense to increase. 
