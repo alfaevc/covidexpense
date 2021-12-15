@@ -170,7 +170,7 @@ highchart(type = "map") %>%
    hc_mapNavigation(enabled = TRUE) %>% hc_exporting(enabled = TRUE)
 ```
 
-From the motion map, we can find that at first, New York is the state with the largest total cases and then from Jul 2020 until Nov 2021, California, Texas and Flora are the three States that have the largest total cases which compatible with the trend of new cases from the previous motion map. These three States have large populations and warm weather which provides with enough condition for Coronavirus to live and spread.
+From the motion map, we can find that at first, New York is the state with the largest total cases and then from Jul 2020 until Nov 2021, California, Texas and Florida are the three States that have the largest total cases which compatible with the trend of new cases from the previous motion map. These three States have large populations and warm weather which provides with enough condition for Coronavirus to live and spread. From the above two motion graphs, we have an opinion that the California, Texas and Florida have really similar trends. We would also like to know whether other states share the same trend. We are going to cluster the States into several regions by covid trend in the following sessions.
 
 ```{r Covid-19 Data Trend}
 cdc = read.csv("data/cdc.csv")
