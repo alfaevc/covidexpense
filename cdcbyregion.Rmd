@@ -65,11 +65,11 @@ cdc_monthly_by_state$region = ifelse (cdc_monthly_by_state$statefull %in% Northe
                           ))))))
 ```
 
-```{r}
+```{r, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
 cdcregion = cdc_monthly_by_state %>% select(region,month,statefull,tot_death)  %>% group_by(region,month) %>% dplyr::summarise(avgvalue=mean(tot_death),statefull = statefull)
 ```
 
-```{r}
+```{r, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
 
 cdcr = cdcregion %>% group_by(statefull)%>%arrange(month)%>% 
     do(item = list(
@@ -79,7 +79,7 @@ cdcr = cdcregion %>% group_by(statefull)%>%arrange(month)%>%
     ))%>%
     .$item
 ```
-```{r}
+```{r, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
 highchart(type = "map") %>% 
   hc_add_series(data =cdcr,
                 name = "Margin",
