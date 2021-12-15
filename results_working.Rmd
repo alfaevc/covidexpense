@@ -26,7 +26,7 @@ cpi_monthly = read.csv("data/cpi_monthly.csv", fileEncoding="UTF-8")
 data_monthly = read.csv("data/data_monthly.csv", fileEncoding="UTF-8")
 cdc.month = read.csv("data/cdcmonth.csv")
 cpi = read.csv("data/cpidata.csv")
-
+oil = read_csv("data/oil.csv")
 ```
 
 ```{r simple data change, message=FALSE, warning=FALSE, echo=FALSE}
@@ -53,6 +53,8 @@ cdc_monthly_by_state = cdc %>%
   drop_na()
 
 cpi = cpi %>% mutate(date = as.character(date))
+
+colnames(oil)  = c('Month','oil')
 ```
 
 ## Covid Development in U.S.
@@ -183,7 +185,6 @@ From the motion map, we can find that at first, New York is the state with the l
 ## Clustering States by Covid Trend
 
 ```{r basis plot, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
-Bcoef.mat = plot.bspline(cdc.month, all.states, 'new_case', n.knots=10, degree=3)
 source('alvin-clustering.r')
 B.basis.plot(spline.basis(cdc, n.knots=10), n.knots=10)
 ```
@@ -316,6 +317,7 @@ In order to confirm their similarities, their trend lines are plotted together b
 data_monthly_sclae_plot = data_monthly %>% 
   mutate(across(All.items:tot_death,scale)) %>% 
   pivot_longer(cols = All.items:tot_death, names_to='var',values_to='value') 
+
 selection = c('Public.transportation','Medical.care.commodities', 'Communication', 'Apparel')
 p1 = data_monthly_sclae_plot %>% filter(var %in% selection) %>% 
   mutate(value=scale(value)) %>% 
@@ -324,7 +326,8 @@ p1 = data_monthly_sclae_plot %>% filter(var %in% selection) %>%
   geom_smooth(method = 'loess', span=0.5,se=F)+
   geom_point(alpha=0.4)+
   ggtitle("Scaled CPI Trend")+
-  labs(colour="CPI Items", y="Scaled CPI", x='Month',subtitle = "Stable Price Group")
+  labs(colour="CPI Items", colour="CPI Items", y="Scaled CPI", x='Month',subtitle = "Stable Price Group")
+
 selection = c('Energy','Commodities', 'Private.transportation', 'Durables')
 p2 = data_monthly_sclae_plot %>% filter(var %in% selection) %>% 
   mutate(value=scale(value)) %>% 
@@ -333,7 +336,8 @@ p2 = data_monthly_sclae_plot %>% filter(var %in% selection) %>%
   geom_smooth(method = 'loess', span=0.5,se=F)+
   geom_point(alpha=0.4)+
   ggtitle("Scaled CPI Trend")+
-  labs(colour="CPI Items", y="Scaled CPI", x='Month',subtitle = "Energy Related Group")
+  labs(colour="CPI Items", y="Scaled CPI", x='Month',subtitle = "Energy Related Group") #colour="CPI Items",
+
 selection = c('Food','Education', 'Housing', '`Medical.care.services', 'Recreation')
 p3 = data_monthly_sclae_plot %>% filter(var %in% selection) %>% 
   mutate(value=scale(value)) %>% 
@@ -342,19 +346,48 @@ p3 = data_monthly_sclae_plot %>% filter(var %in% selection) %>%
   geom_smooth(method = 'loess', span=0.5,se=F)+
   geom_point(alpha=0.4)+
   ggtitle("Scaled CPI Trend")+
-  labs(colour="CPI Items", y="Scaled CPI", x='Month',subtitle = "Labor Related Group") 
+  labs( y="Scaled CPI", x='Month',subtitle = "Labor Related Group")
+selection = c('Education','Energy', 'Communication')
+p4 = data_monthly_sclae_plot %>% filter(var %in% selection) %>% 
+  mutate(value=scale(value)) %>% 
+  ggplot(aes(x=month, y=value, color=var)) + 
+  geom_line(alpha=0.4)+
+  geom_smooth(method = 'loess', span=0.5,se=F)+
+  geom_point(alpha=0.4)+
+  ggtitle("Scaled CPI Trend")+
+  labs(colour="CPI Items", y="Scaled CPI", x='Month',subtitle = "Comparison") 
 p1 
 p2 
 p3
+p4
 ```
-From the scaled trend lines, it proves that our grouping did a pretty good job! **Price Stable Items** had price drop since early 2019 and started to rise in price after mid 2020. **Energy Related Items** had a increase trend in early 2019 and had a huge drop after Covid broke out and increase in price afterwards dramatically. **Labor Related Items** had a general increasing trend since 2019, and had a higher slop after Covid broke out. 
+From the scaled trend lines, it proves that our grouping did a pretty good job! **Price Stable Items** had price drop since early 2019 and started to rise in price after mid 2020. **Energy Related Items** had a increase trend in early 2019 and had a huge drop after Covid broke out and increase in price afterwards dramatically. **Labor Related Items** had a general increasing trend since 2019, and had a higher slop after Covid broke out. The last graph showed one item from each of three groups to showcase their difference in trend as response to the Covid development.
 
 According to the trends of different groups, **Energy Related Items** are more interesting to us. Their price dropped a lot after Covid just broke out. And then, the price increased dramatically after the first several months. Other goods, doesn't seem to have such big impact from Covid. Therefore, we think **Energy Related Items** will be the target we will further investigate so as to discover how Covid caused our living expense to increase. 
 
+## Covid's Impact on Energy Price Index
+
+### Covid & Energy Trend Comparison
+
+```{r Covid & Energy Trend Comparison, message=FALSE, warning=FALSE, echo=FALSE}
+selection = c('tot_cases','Energy')
+data_monthly_sclae_plot %>% filter(var %in% selection) %>% 
+  mutate(value=scale(value)) %>% 
+  ggplot(aes(x=month, y=value, color=var)) + 
+  geom_line(alpha=0.4)+
+  #geom_line(stat='smooth', method = 'loess', span=0.3,se=F, alpha=0.5, size=1)+
+  geom_smooth(method = 'loess', span=0.3,se=F)+
+  geom_point(alpha=1)+
+  ggtitle("Covid & Energy Trend Lines")+
+  labs(colour="Variable Name", y="Scaled Changed", x='Month',subtitle = "Showing How Energy Price Index Varies as Covid Develops")
+```
+
+We have scaled the data so as to make their changes obvious and comparable. At beginning of 2020, `Energy` started to drop from 0 which is its mean to over -1.5 times its standard deviation. At the end of 2020, though `Total Cases` was still growing, `Energy` price started to recover and increase to higher level than before Covid broke out. 
 
 
+### Change of Energy Price Index
 
-
+Next, we are going to investigate the probable reason that Covid could cause Energy price to change like what we discovered. We would discuss the cause from **supply** perspective and **demand** perspective. 
 
 
 
