@@ -15,6 +15,7 @@ library(RColorBrewer)
 library(zoo)
 # library(lubridate)
 library(highcharter)
+library(patchwork)
 ```
 
 ```{r load data, message=FALSE, warning=FALSE, echo=FALSE}
@@ -278,7 +279,15 @@ ggplot(c, aes(x=item_name,y = value,fill = type))+
 
 From the bar plot, we can see that public transportation is the only one that decreases the CPI after the Covid-19. Because of the Covid-19, many people avoided using pubilic transportation which is crowded. The decrease of demands decreased the CPI. In the opposite, private transportation, Energy and transportation CPI increases a lot after the Covid-19 comparing with the change rates before the Covid-19. More people choose to use private transportation to reduce the chance of exposure to the crowds. We already know that energy is a necessity for private transportation. The increase of demands on these three products increases the CPI at the same time. Durable goods is the one that has negative change in CPI before the Covid-19 and then increases sharply after the Covid-19. We know that during the Covid-19, people are forced to stay at home and this may be the reason that people bought lots of durable goods to prevent emergencies.
 
+### 
+```{r, fig.height = 6, message=FALSE, warning=FALSE, echo=FALSE}
+cpi %>%
+  ggplot( aes(x=date, y=value, group=item_name, color=item_name)) +
+    geom_line() + ggtitle("CPI Time Series for All Items") + theme(axis.text.x = element_text(angle = 90),legend.text = element_text(size=5),legend.position = 'bottom', plot.title = element_text(size = 30, face = "bold"))
+```
+
 ### Correlation Between Consumer Items
+From the first graph with all CPI items, it is hard for us to tell clearly how each one moves. And by their names and our common sense, it is very likely that some of them share similar trend. Therefore, we decided to use a heat map to represent their correlations so that we can evaluate their similarities quantitatively. Our purpose here is to find similarities and group similar ones so that we can find the main cause of higher prices easier. 
 
 ```{r}
 cor_matrix = cpi_monthly %>%  select(-date) %>% cor() %>% as.data.frame()
@@ -288,19 +297,60 @@ hchart.cor(cor_matrix)
 
 According to the heat map, we can easily tell that many of the CPI items are highly and positively correlated with each other. However, `Public Transportation`, `Medical Care Commodities`, `Communication`, and `Apparel` showed white and red color in the heat map. This indicates that they are not or negatively correlated with other items. Combining with the trend graph, I know that their prices did not increase much. It is also reasonable because some of them have pricing mechanism that is not determined by the market. For instance, `Public Transportation`, `Medical Care Commodities` and `Communication` have government set prices and fixed prices.
 
-`Energy` are highly correlated with each other. `Energy`,  `Commodities`, `Transportation`, `Private Transportation`, `Durables` and `Fuel and Utilities`
+`Energy` are highly correlated with some other industrial and transportation related items. According to the heatmap, I would group the following items together: `Energy`,  `Commodities`, `Transportation`, `Private Transportation`, `Durables` and `Fuel and Utilities`. 
+
+The rest of items are `Food`, `Education`, `Housing`, `Medical Care Services` and `Recreation`. Their correlation are higher than 0.8 indicating a high correlation between them. Their prices are highly affected by labor cost in services area. Since our living expenses increased, people working at services industry would need higher salaries and results in higher price for services. Moreover, their correlation with `Energy` is relatively low. Just like I explained before, it would take time to have effect on those prices. People would first feel the living expense to increase before they ask for higher salary. The delaying effect caused the correlation between them and `Energy` to be low. 
 
 Therefore, we grouped similar CPI items together and will show their similarities in the next part. 
 
 ### Group CPI Items
 
 The groups we created for CPI items are as follows:
-1. Price not sensitive to other items: `Public Transportation`, `Medical Care Commodities`, `Communication`, and `Apparel`
-2. Energy related items: 
-3. 
+1. **Price Stable Items**: `Public Transportation`, `Medical Care Commodities`, `Communication`, and `Apparel`
+2. **Energy Related Items**: `Energy`,  `Commodities`, `Transportation`, `Private Transportation`, `Durables` and `Fuel and Utilities`
+3. **Labor Related Goods**: `Food`, `Education`, `Housing`, `Medical Care Services` and `Recreation`
 
+In order to confirm their similarities, their trend lines are plotted together below. Since their base values are different, the difference in scale would cause some trends not as obvious as others with larger scale. The standardized method is used here to showcase the similarities better. 
 
-`
+```{r cpi group similarities,message=FALSE, warning=FALSE, echo=FALSE}
+data_monthly_sclae_plot = data_monthly %>% 
+  mutate(across(All.items:tot_death,scale)) %>% 
+  pivot_longer(cols = All.items:tot_death, names_to='var',values_to='value') 
+selection = c('Public.transportation','Medical.care.commodities', 'Communication', 'Apparel')
+p1 = data_monthly_sclae_plot %>% filter(var %in% selection) %>% 
+  mutate(value=scale(value)) %>% 
+  ggplot(aes(x=month, y=value, color=var)) + 
+  geom_line(alpha=0.4)+
+  geom_smooth(method = 'loess', span=0.5,se=F)+
+  geom_point(alpha=0.4)+
+  ggtitle("Scaled CPI Trend")+
+  labs(colour="CPI Items", y="Scaled CPI", x='Month',subtitle = "Stable Price Group")
+selection = c('Energy','Commodities', 'Private.transportation', 'Durables')
+p2 = data_monthly_sclae_plot %>% filter(var %in% selection) %>% 
+  mutate(value=scale(value)) %>% 
+  ggplot(aes(x=month, y=value, color=var)) + 
+  geom_line(alpha=0.4)+
+  geom_smooth(method = 'loess', span=0.5,se=F)+
+  geom_point(alpha=0.4)+
+  ggtitle("Scaled CPI Trend")+
+  labs(colour="CPI Items", y="Scaled CPI", x='Month',subtitle = "Energy Related Group")
+selection = c('Food','Education', 'Housing', '`Medical.care.services', 'Recreation')
+p3 = data_monthly_sclae_plot %>% filter(var %in% selection) %>% 
+  mutate(value=scale(value)) %>% 
+  ggplot(aes(x=month, y=value, color=var)) + 
+  geom_line(alpha=0.4)+
+  geom_smooth(method = 'loess', span=0.5,se=F)+
+  geom_point(alpha=0.4)+
+  ggtitle("Scaled CPI Trend")+
+  labs(colour="CPI Items", y="Scaled CPI", x='Month',subtitle = "Labor Related Group") 
+p1 
+p2 
+p3
+```
+From the scaled trend lines, it proves that our grouping did a pretty good job! **Price Stable Items** had price drop since early 2019 and started to rise in price after mid 2020. **Energy Related Items** had a increase trend in early 2019 and had a huge drop after Covid broke out and increase in price afterwards dramatically. **Labor Related Items** had a general increasing trend since 2019, and had a higher slop after Covid broke out. 
+
+According to the trends of different groups, **Energy Related Items** are more interesting to us. Their price dropped a lot after Covid just broke out. And then, the price increased dramatically after the first several months. Other goods, doesn't seem to have such big impact from Covid. Therefore, we think **Energy Related Items** will be the target we will further investigate so as to discover how Covid caused our living expense to increase. 
+
 
 
 
