@@ -453,7 +453,7 @@ state.col = rainbow(length(all.states))
 
 
 
-```{r all splines, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
+```{r all spline, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
 Bcoef.mat = plot.bspline(cdc.month, all.states, 'new_case', n.knots=10, degree=3)
 wss <- function(k) {
   kmeans(as.data.frame(Bcoef.mat), k, nstart = 10)$tot.withinss
@@ -539,7 +539,7 @@ for (i in 9) {
 
 
 
-```{r us region map, message=FALSE, warning=FALSE, echo=FALSE}
+```{r us region map, message=FALSE, warning=FALSE, echo=FALSE, fig.show='hide'}
 # us map on regions
 region.num = length(region.list)
 region.cols = rainbow(region.num)
@@ -560,6 +560,6 @@ for (i in 1:length(state.cluster)) {
   print(plot_states(cdc.month, state.cluster[[i]], "new_case", "Covid Monthly New Cases Time Series"))
 }
 ```
-To identify difference and similarities between covid case curves, we estimated a basis spline (B-spline) model for every state. Each estimated B-spline is a weighted piecewise combination of 10 polynomials, connected at “knots”. Estimated splines and weight coefficients are closely related in states with similar underlying case curves. We compared the estimated state splines by using the K-means algorithm to cluster similar sets of weight coefficients, identifying groups of states with similar covid case trajectories. In general, we can observe that the coefficients for two states in the same cluster are more similar than those in a different cluster(e.g. Florida and Texas).
+To identify difference and similarities between covid case curves, we estimated a basis spline (B-spline) model for every state. Each estimated B-spline is a weighted piecewise combination of 10 polynomials, connected at “knots”. Estimated splines and weight coefficients are closely related in states with similar underlying case curves. We compared the estimated state splines by using the K-means algorithm to cluster similar sets of weight coefficients, identifying groups of states with similar covid case trajectories. In general, we can observe that the coefficients for two states in the same cluster are more similar than those in a different cluster(e.g. Florida and Texas). The above us map demonstrates the color distribution of all the states in the US, where the states with the same color have closer coefficients and thus similar spline curves.
 
 
