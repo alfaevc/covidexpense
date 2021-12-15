@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<!-- saved from url=(0057)http://[::]:8000/test%E7%9A%84%E5%89%AF%E6%9C%AC%202.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        
+<!-- Load d3.js -->
+<script src="./test_files/d3.v6.js"></script>
+
+<!-- Initialize a select button -->
+</head><body><select id="selectButton"><option value="All items">All items</option><option value="Energy">Energy</option><option value="All items less food and energy">All items less food and energy</option><option value="Apparel">Apparel</option><option value="Commodities">Commodities</option><option value="Durables">Durables</option><option value="Education and communication">Education and communication</option><option value="Education">Education</option><option value="Communication">Communication</option><option value="Food and beverages">Food and beverages</option><option value="Food">Food</option><option value="Food at home">Food at home</option><option value="Alcoholic beverages">Alcoholic beverages</option><option value="Other goods and services">Other goods and services</option><option value="Housing">Housing</option><option value="Shelter">Shelter</option><option value="Fuels and utilities">Fuels and utilities</option><option value="Household furnishings and operations">Household furnishings and operations</option><option value="Medical care">Medical care</option><option value="Medical care commodities">Medical care commodities</option><option value="Medical care services">Medical care services</option><option value="Nondurables">Nondurables</option><option value="Recreation">Recreation</option><option value="Services">Services</option><option value="Transportation">Transportation</option><option value="Private transportation">Private transportation</option><option value="Food away from home">Food away from home</option><option value="New vehicles">New vehicles</option><option value="Public transportation">Public transportation</option></select>
+        
+<!-- Create a div where the graph will take place -->
+<div id="my_dataviz"><svg width="600" height="400"><g transform="translate(60, 10)"><g transform="translate(0, 340)" fill="none" font-size="10" font-family="sans-serif" text-anchor="middle"><path class="domain" stroke="currentColor" d="M510,6V0H0V6"></path><g class="tick" opacity="1" transform="translate(496.81034482758616,0)"><line stroke="currentColor" y2="6"></line><text fill="currentColor" y="9" dy="0.71em" transform="translate(-10,0)rotate(-65)" style="text-anchor: end; font: 8px times;">2021 M10</text></g><g class="tick" opacity="1" transform="translate(482.155172413793,0)"><line stroke="currentColor" y2="6"></line><text fill="currentColor" y="9" dy="0.71em" transform="translate(-10,0)rotate(-65)" style="text-anchor: end; font: 8px times;">2021 M09</text></g><g class="tick" opacity="1" transform="translate(467.5,0)"><line stroke="currentColor" y2="6"></line><text fill="currentColor" y="9" dy="0.71em" transform="translate(-10,0)rotate(-65)" style="text-anchor: end; font: 8px times;">2021 M08</text></g><g class="tick" opacity="1" transform="translate(452.84482758620686,0)"><line stroke="currentColor" y2="6"></line><text fill="currentColor" y="9" dy="0.71em" transform="translate(-10,0)rotate(-65)" style="text-anchor: end; font: 8px times;">2021 M07</text></g><g class="tick" opacity="1" transform="translate(438.1896551724137,0)"><line stroke="currentColor" y2="6"></line><text fill="currentColor" y="9" dy="0.71em" transform="translate(-10,0)rotate(-65)" style="text-anchor: end; font: 8px times;">2021 M06</text></g><g class="tick" opacity="1" transform="translate(423.5344827586207,0)"><line stroke="currentColor" y2="6"></line><text fill="currentColor" y="9" dy="0.71em" transform="translate(-10,0)rotate(-65)" style="text-anchor: end; font: 8px times;">2021 M05</text></g><g class="tick" opacity="1" transform="translate(408.87931034482756,0)"><line stroke="currentColor" y2="6"></line><text fill="currentColor" y="9" dy="0.71em" transform="translate(-10,0)rotate(-65)" style="text-anchor: end; font: 8px times;">2021 M04</text></g><g class="tick" opacity="1" transform="translate(394.2241379310344,0)"><line stroke="currentColor" y2="6"></line><text fill="currentColor" y="9" dy="0.71em" transform="translate(-10,0)rotate(-65)" style="text-anchor: end; font: 8px times;">2021 M03</text></g><g class="tick" opacity="1" transform="translate(379.5689655172414,0)"><line stroke="currentColor" y2="6"></line><text fill="currentColor" y="9" dy="0.71em" transform="translate(-10,0)rotate(-65)" style="text-anchor: end; font: 8px times;">2021 M02</text></g><g class="tick" opacity="1" transform="translate(364.91379310344826,0)"><line stroke="currentColor" y2="6"></line><text fill="currentColor" y="9" dy="0.71em" transform="translate(-10,0)rotate(-65)" style="text-anchor: end; font: 8px times;">2021 M01</text></g><g class="tick" opacity="1" transform="translate(350.2586206896551,0)"><line stroke="currentColor" y2="6"></line><text fill="currentColor" y="9" dy="0.71em" transform="translate(-10,0)rotate(-65)" style="text-anchor: end; font: 8px times;">2020 M12</text></g><g class="tick" opacity="1" transform="translate(335.6034482758621,0)"><line stroke="currentColor" y2="6"></line><text fill="currentColor" y="9" dy="0.71em" transform="translate(-10,0)rotate(-65)" style="text-anchor: end; font: 8px times;">2020 M11</text></g><g class="tick" opacity="1" transform="translate(320.94827586206895,0)"><line stroke="currentColor" y2="6"></line><text fill="currentColor" y="9" dy="0.71em" transform="translate(-10,0)rotate(-65)" style="text-anchor: end; font: 8px times;">2020 M10</text></g><g class="tick" opacity="1" transform="translate(306.2931034482758,0)"><line stroke="currentColor" y2="6"></line><text fill="currentColor" y="9" dy="0.71em" transform="translate(-10,0)rotate(-65)" style="text-anchor: end; font: 8px times;">2020 M09</text></g><g class="tick" opacity="1" transform="translate(291.6379310344828,0)"><line stroke="currentColor" y2="6"></line><text fill="currentColor" y="9" dy="0.71em" transform="translate(-10,0)rotate(-65)" style="text-anchor: end; font: 8px times;">2020 M08</text></g><g class="tick" opacity="1" transform="translate(276.98275862068965,0)"><line stroke="currentColor" y2="6"></line><text fill="currentColor" y="9" dy="0.71em" transform="translate(-10,0)rotate(-65)" style="text-anchor: end; font: 8px times;">2020 M07</text></g><g class="tick" opacity="1" transform="translate(262.3275862068965,0)"><line stroke="currentColor" y2="6"></line><text fill="currentColor" y="9" dy="0.71em" transform="translate(-10,0)rotate(-65)" style="text-anchor: end; font: 8px times;">2020 M06</text></g><g class="tick" opacity="1" transform="translate(247.67241379310343,0)"><line stroke="currentColor" y2="6"></line><text fill="currentColor" y="9" dy="0.71em" transform="translate(-10,0)rotate(-65)" style="text-anchor: end; font: 8px times;">2020 M05</text></g><g class="tick" opacity="1" transform="translate(233.01724137931032,0)"><line stroke="currentColor" y2="6"></line><text fill="currentColor" y="9" dy="0.71em" transform="translate(-10,0)rotate(-65)" style="text-anchor: end; font: 8px times;">2020 M04</text></g><g class="tick" opacity="1" transform="translate(218.36206896551724,0)"><line stroke="currentColor" y2="6"></line><text fill="currentColor" y="9" dy="0.71em" transform="translate(-10,0)rotate(-65)" style="text-anchor: end; font: 8px times;">2020 M03</text></g><g class="tick" opacity="1" transform="translate(203.70689655172413,0)"><line stroke="currentColor" y2="6"></line><text fill="currentColor" y="9" dy="0.71em" transform="translate(-10,0)rotate(-65)" style="text-anchor: end; font: 8px times;">2020 M02</text></g><g class="tick" opacity="1" transform="translate(189.05172413793102,0)"><line stroke="currentColor" y2="6"></line><text fill="currentColor" y="9" dy="0.71em" transform="translate(-10,0)rotate(-65)" style="text-anchor: end; font: 8px times;">2020 M01</text></g><g class="tick" opacity="1" transform="translate(174.39655172413794,0)"><line stroke="currentColor" y2="6"></line><text fill="currentColor" y="9" dy="0.71em" transform="translate(-10,0)rotate(-65)" style="text-anchor: end; font: 8px times;">2019 M12</text></g><g class="tick" opacity="1" transform="translate(159.74137931034483,0)"><line stroke="currentColor" y2="6"></line><text fill="currentColor" y="9" dy="0.71em" transform="translate(-10,0)rotate(-65)" style="text-anchor: end; font: 8px times;">2019 M11</text></g><g class="tick" opacity="1" transform="translate(145.08620689655172,0)"><line stroke="currentColor" y2="6"></line><text fill="currentColor" y="9" dy="0.71em" transform="translate(-10,0)rotate(-65)" style="text-anchor: end; font: 8px times;">2019 M10</text></g><g class="tick" opacity="1" transform="translate(130.4310344827586,0)"><line stroke="currentColor" y2="6"></line><text fill="currentColor" y="9" dy="0.71em" transform="translate(-10,0)rotate(-65)" style="text-anchor: end; font: 8px times;">2019 M09</text></g><g class="tick" opacity="1" transform="translate(115.77586206896554,0)"><line stroke="currentColor" y2="6"></line><text fill="currentColor" y="9" dy="0.71em" transform="translate(-10,0)rotate(-65)" style="text-anchor: end; font: 8px times;">2019 M08</text></g><g class="tick" opacity="1" transform="translate(101.12068965517243,0)"><line stroke="currentColor" y2="6"></line><text fill="currentColor" y="9" dy="0.71em" transform="translate(-10,0)rotate(-65)" style="text-anchor: end; font: 8px times;">2019 M07</text></g><g class="tick" opacity="1" transform="translate(86.46551724137933,0)"><line stroke="currentColor" y2="6"></line><text fill="currentColor" y="9" dy="0.71em" transform="translate(-10,0)rotate(-65)" style="text-anchor: end; font: 8px times;">2019 M06</text></g><g class="tick" opacity="1" transform="translate(71.81034482758623,0)"><line stroke="currentColor" y2="6"></line><text fill="currentColor" y="9" dy="0.71em" transform="translate(-10,0)rotate(-65)" style="text-anchor: end; font: 8px times;">2019 M05</text></g><g class="tick" opacity="1" transform="translate(57.15517241379312,0)"><line stroke="currentColor" y2="6"></line><text fill="currentColor" y="9" dy="0.71em" transform="translate(-10,0)rotate(-65)" style="text-anchor: end; font: 8px times;">2019 M04</text></g><g class="tick" opacity="1" transform="translate(42.50000000000002,0)"><line stroke="currentColor" y2="6"></line><text fill="currentColor" y="9" dy="0.71em" transform="translate(-10,0)rotate(-65)" style="text-anchor: end; font: 8px times;">2019 M03</text></g><g class="tick" opacity="1" transform="translate(27.844827586206918,0)"><line stroke="currentColor" y2="6"></line><text fill="currentColor" y="9" dy="0.71em" transform="translate(-10,0)rotate(-65)" style="text-anchor: end; font: 8px times;">2019 M02</text></g><g class="tick" opacity="1" transform="translate(13.189655172413815,0)"><line stroke="currentColor" y2="6"></line><text fill="currentColor" y="9" dy="0.71em" transform="translate(-10,0)rotate(-65)" style="text-anchor: end; font: 8px times;">2019 M01</text></g></g><g fill="none" font-size="10" font-family="sans-serif" text-anchor="end"><path class="domain" stroke="currentColor" d="M-6,340H0V0H-6"></path><g class="tick" opacity="1" transform="translate(0,323)"><line stroke="currentColor" x2="-6"></line><text fill="currentColor" x="-9" dy="0.32em">60</text></g><g class="tick" opacity="1" transform="translate(0,289)"><line stroke="currentColor" x2="-6"></line><text fill="currentColor" x="-9" dy="0.32em">80</text></g><g class="tick" opacity="1" transform="translate(0,255)"><line stroke="currentColor" x2="-6"></line><text fill="currentColor" x="-9" dy="0.32em">100</text></g><g class="tick" opacity="1" transform="translate(0,221)"><line stroke="currentColor" x2="-6"></line><text fill="currentColor" x="-9" dy="0.32em">120</text></g><g class="tick" opacity="1" transform="translate(0,187.00000000000003)"><line stroke="currentColor" x2="-6"></line><text fill="currentColor" x="-9" dy="0.32em">140</text></g><g class="tick" opacity="1" transform="translate(0,152.99999999999997)"><line stroke="currentColor" x2="-6"></line><text fill="currentColor" x="-9" dy="0.32em">160</text></g><g class="tick" opacity="1" transform="translate(0,118.99999999999999)"><line stroke="currentColor" x2="-6"></line><text fill="currentColor" x="-9" dy="0.32em">180</text></g><g class="tick" opacity="1" transform="translate(0,85)"><line stroke="currentColor" x2="-6"></line><text fill="currentColor" x="-9" dy="0.32em">200</text></g><g class="tick" opacity="1" transform="translate(0,51.00000000000001)"><line stroke="currentColor" x2="-6"></line><text fill="currentColor" x="-9" dy="0.32em">220</text></g><g class="tick" opacity="1" transform="translate(0,17.000000000000014)"><line stroke="currentColor" x2="-6"></line><text fill="currentColor" x="-9" dy="0.32em">240</text></g></g><path fill="none" stroke="rgb(231, 138, 195)" stroke-width="1.5" d="M495.34482758620686,161.02059999999997L492.9022988505747,161.2716333333333C490.4597701149425,161.52266666666665,485.57471264367814,162.02473333333333,480.6896551724138,162.41091666666668C475.80459770114936,162.79710000000003,470.91954022988506,163.0674,466.0344827586207,163.1286C461.1494252873563,163.1898,456.2643678160919,163.04189999999997,451.3793103448276,163.0379333333333C446.4942528735632,163.03396666666666,441.6091954022988,163.17393333333334,436.7241379310344,163.07561666666666C431.83908045977006,162.9773,426.95402298850576,162.6407,422.0689655172414,162.45936666666668C417.18390804597703,162.27803333333335,412.2988505747126,162.25196666666668,407.4137931034482,162.44038333333333C402.5287356321839,162.62879999999998,397.64367816091954,163.0317,392.7586206896552,163.25893333333335C387.87356321839076,163.4861666666667,382.98850574712645,163.53773333333334,378.1034482758621,163.3221166666667C373.2183908045977,163.1065,368.3333333333333,162.62369999999999,363.448275862069,162.33214999999998C358.5632183908046,162.0406,353.6781609195402,161.9403,348.7931034482758,161.77086666666665C343.90804597701145,161.60143333333335,339.02298850574715,161.36286666666663,334.1379310344828,161.00105C329.25287356321843,160.63923333333332,324.367816091954,160.15416666666667,319.48275862068965,159.62744999999998C314.5977011494253,159.10073333333332,309.7126436781609,158.53236666666666,304.82758620689657,157.96711666666664C299.94252873563215,157.40186666666662,295.05747126436785,156.83973333333333,290.1724137931035,156.6501833333333C285.2873563218391,156.46063333333333,280.4022988505747,156.64366666666663,275.51724137931035,156.74453333333332C270.632183908046,156.84539999999998,265.74712643678157,156.86409999999998,260.8620689655172,156.86013333333332C255.97701149425288,156.85616666666667,251.0919540229885,156.82953333333333,246.2068965517241,156.87429999999998C241.32183908045977,156.91906666666668,236.43678160919538,157.0352333333333,231.55172413793102,156.99925C226.66666666666666,156.96326666666667,221.7816091954023,156.77513333333334,216.89655172413794,156.69041666666666C212.01149425287358,156.6057,207.1264367816092,156.6244,202.2413793103448,156.55753333333334C197.35632183908046,156.49066666666667,192.47126436781608,156.3382333333333,187.58620689655172,156.08181666666664C182.70114942528735,155.82539999999997,177.816091954023,155.465,172.93103448275863,155.49645C168.04597701149427,155.52790000000002,163.16091954022988,155.9512,158.27586206896552,156.11808333333335C153.39080459770116,156.2849666666667,148.50574712643677,156.19543333333334,143.6206896551724,156.38951666666665C138.73563218390805,156.5836,133.8505747126437,157.0613,128.9655172413793,156.93238333333332C124.08045977011494,156.80346666666665,119.19540229885058,156.06793333333334,114.31034482758622,155.98775C109.42528735632186,155.90756666666667,104.54022988505749,156.48273333333333,99.6551724137931,156.87741666666668C94.77011494252874,157.2721,89.88505747126437,157.4863,85.00000000000001,157.46873333333332C80.11494252873565,157.45116666666664,75.22988505747128,157.20183333333333,70.34482758620692,157.09416666666664C65.45977011494254,156.98649999999998,60.574712643678176,157.02049999999997,55.68965517241381,157.24319999999997C50.80459770114944,157.46589999999995,45.91954022988508,157.87729999999996,41.03448275862071,158.2275C36.149425287356344,158.57769999999996,31.264367816091976,158.8667,26.379310344827612,158.81031666666667C21.49425287356324,158.75393333333332,16.609195402298873,158.35216666666668,14.166666666666691,158.15128333333337L11.724137931034505,157.95040000000003"></path><circle cx="495.34482758620686" cy="161.02059999999997" r="2" stroke="rgb(231, 138, 195)" style="fill: white;" stroke-width="1" fill="rgb(255, 255, 255)"></circle><circle cx="480.6896551724137" cy="162.52680000000004" r="2" stroke="rgb(231, 138, 195)" style="fill: white;" stroke-width="1" fill="rgb(255, 255, 255)"></circle><circle cx="466.0344827586207" cy="163.33769999999998" r="2" stroke="rgb(231, 138, 195)" style="fill: white;" stroke-width="1" fill="rgb(255, 255, 255)"></circle><circle cx="451.37931034482756" cy="162.89399999999998" r="2" stroke="rgb(231, 138, 195)" style="fill: white;" stroke-width="1" fill="rgb(255, 255, 255)"></circle><circle cx="436.7241379310344" cy="163.31390000000002" r="2" stroke="rgb(231, 138, 195)" style="fill: white;" stroke-width="1" fill="rgb(255, 255, 255)"></circle><circle cx="422.0689655172414" cy="162.3041" r="2" stroke="rgb(231, 138, 195)" style="fill: white;" stroke-width="1" fill="rgb(255, 255, 255)"></circle><circle cx="407.41379310344826" cy="162.2259" r="2" stroke="rgb(231, 138, 195)" style="fill: white;" stroke-width="1" fill="rgb(255, 255, 255)"></circle><circle cx="392.7586206896551" cy="163.43460000000002" r="2" stroke="rgb(231, 138, 195)" style="fill: white;" stroke-width="1" fill="rgb(255, 255, 255)"></circle><circle cx="378.1034482758621" cy="163.5893" r="2" stroke="rgb(231, 138, 195)" style="fill: white;" stroke-width="1" fill="rgb(255, 255, 255)"></circle><circle cx="363.44827586206895" cy="162.1409" r="2" stroke="rgb(231, 138, 195)" style="fill: white;" stroke-width="1" fill="rgb(255, 255, 255)"></circle><circle cx="348.7931034482758" cy="161.84" r="2" stroke="rgb(231, 138, 195)" style="fill: white;" stroke-width="1" fill="rgb(255, 255, 255)"></circle><circle cx="334.1379310344828" cy="161.12429999999998" r="2" stroke="rgb(231, 138, 195)" style="fill: white;" stroke-width="1" fill="rgb(255, 255, 255)"></circle><circle cx="319.48275862068965" cy="159.66910000000001" r="2" stroke="rgb(231, 138, 195)" style="fill: white;" stroke-width="1" fill="rgb(255, 255, 255)"></circle><circle cx="304.8275862068965" cy="157.96399999999997" r="2" stroke="rgb(231, 138, 195)" style="fill: white;" stroke-width="1" fill="rgb(255, 255, 255)"></circle><circle cx="290.1724137931035" cy="156.27759999999998" r="2" stroke="rgb(231, 138, 195)" style="fill: white;" stroke-width="1" fill="rgb(255, 255, 255)"></circle><circle cx="275.51724137931035" cy="156.8267" r="2" stroke="rgb(231, 138, 195)" style="fill: white;" stroke-width="1" fill="rgb(255, 255, 255)"></circle><circle cx="260.8620689655172" cy="156.88279999999997" r="2" stroke="rgb(231, 138, 195)" style="fill: white;" stroke-width="1" fill="rgb(255, 255, 255)"></circle><circle cx="246.20689655172413" cy="156.8029" r="2" stroke="rgb(231, 138, 195)" style="fill: white;" stroke-width="1" fill="rgb(255, 255, 255)"></circle><circle cx="231.55172413793102" cy="157.1514" r="2" stroke="rgb(231, 138, 195)" style="fill: white;" stroke-width="1" fill="rgb(255, 255, 255)"></circle><circle cx="216.89655172413794" cy="156.58700000000002" r="2" stroke="rgb(231, 138, 195)" style="fill: white;" stroke-width="1" fill="rgb(255, 255, 255)"></circle><circle cx="202.24137931034483" cy="156.6431" r="2" stroke="rgb(231, 138, 195)" style="fill: white;" stroke-width="1" fill="rgb(255, 255, 255)"></circle><circle cx="187.58620689655172" cy="156.18579999999997" r="2" stroke="rgb(231, 138, 195)" style="fill: white;" stroke-width="1" fill="rgb(255, 255, 255)"></circle><circle cx="172.93103448275863" cy="155.1046" r="2" stroke="rgb(231, 138, 195)" style="fill: white;" stroke-width="1" fill="rgb(255, 255, 255)"></circle><circle cx="158.27586206896552" cy="156.3745" r="2" stroke="rgb(231, 138, 195)" style="fill: white;" stroke-width="1" fill="rgb(255, 255, 255)"></circle><circle cx="143.6206896551724" cy="156.1059" r="2" stroke="rgb(231, 138, 195)" style="fill: white;" stroke-width="1" fill="rgb(255, 255, 255)"></circle><circle cx="128.9655172413793" cy="157.539" r="2" stroke="rgb(231, 138, 195)" style="fill: white;" stroke-width="1" fill="rgb(255, 255, 255)"></circle><circle cx="114.31034482758622" cy="155.3324" r="2" stroke="rgb(231, 138, 195)" style="fill: white;" stroke-width="1" fill="rgb(255, 255, 255)"></circle><circle cx="99.65517241379311" cy="157.0579" r="2" stroke="rgb(231, 138, 195)" style="fill: white;" stroke-width="1" fill="rgb(255, 255, 255)"></circle><circle cx="85.00000000000001" cy="157.70049999999998" r="2" stroke="rgb(231, 138, 195)" style="fill: white;" stroke-width="1" fill="rgb(255, 255, 255)"></circle><circle cx="70.34482758620692" cy="156.9525" r="2" stroke="rgb(231, 138, 195)" style="fill: white;" stroke-width="1" fill="rgb(255, 255, 255)"></circle><circle cx="55.68965517241381" cy="157.05449999999996" r="2" stroke="rgb(231, 138, 195)" style="fill: white;" stroke-width="1" fill="rgb(255, 255, 255)"></circle><circle cx="41.03448275862071" cy="158.28869999999998" r="2" stroke="rgb(231, 138, 195)" style="fill: white;" stroke-width="1" fill="rgb(255, 255, 255)"></circle><circle cx="26.37931034482761" cy="159.1557" r="2" stroke="rgb(231, 138, 195)" style="fill: white;" stroke-width="1" fill="rgb(255, 255, 255)"></circle><circle cx="11.724137931034505" cy="157.95040000000003" r="2" stroke="rgb(231, 138, 195)" style="fill: white;" stroke-width="1" fill="rgb(255, 255, 255)"></circle></g></svg><div class="tooltip" style="opacity: 0; background-color: white; border: 2px solid; border-radius: 5px; padding: 5px;"></div></div>
+
+<script>
+
+// set the dimensions and margins of the graph
+const margin = {top: 10, right: 30, bottom: 50, left: 60},
+    width = 600 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+const svg = d3.select("#my_dataviz")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+d3.csv("cpidata.csv").then(function(data) {
+
+    // List of groups (here I have one group per column)
+    const allGroup = new Set(data.map(d => d.item_name))
+
+    // add the options to the button
+    d3.select("#selectButton")
+      .selectAll('myOptions')
+      .data(allGroup)
+      .enter()
+      .append('option')
+      .text(d => d) // text showed in the menu
+      .attr("value", d => d) // corresponding value returned by the button
+    const myColor = d3.scaleOrdinal()
+      .domain(allGroup)
+      .range(d3.schemeSet2);
+
+    // Add X axis --> it is a date format
+    const x = d3.scaleBand()
+         .range([ width, 0])
+         .domain(data.map(d => d.date))
+         .padding(0.8);
+    svg.append("g")
+       .attr("transform", `translate(0, ${height})`)
+       .call(d3.axisBottom(x))
+       .selectAll("text")
+       .attr("transform", "translate(-10,0)rotate(-65)")
+       .style("text-anchor", "end")
+       .style( "font","8px times");
+
+    // Add Y axis
+
+    const y = d3.scaleLinear()
+      .domain([50, 250])
+      .range([ height, 0 ]);
+    svg.append("g")
+      .call(d3.axisLeft(y));
+
+    // Initialize line with first group of the list
+    const line = svg.append("path")
+      .datum(data.filter(function(d){return d.item_name=="All items"}))
+      .attr("fill", "none")
+      .attr("stroke", function(d){ return myColor("valueA") })
+      .attr("stroke-width", 1.5)
+      .attr("d", d3.line()
+        .curve(d3.curveBasis) // Just add that to have a curve instead of segments
+        .x(d => x(d.date))
+        .y(d => y(d.value))
+        )
+    const Tooltip = d3.select("#my_dataviz")
+      .append("div")
+      .style("opacity", 0)
+      .attr("class", "tooltip")
+      .style("background-color", "white")
+      .style("border", "solid")
+      .style("border-width", "2px")
+      .style("border-radius", "5px")
+      .style("padding", "5px") 
+
+    const mouseover = function(event,d) {
+        Tooltip
+          .style("opacity", 1)
+      }
+      const mousemove = function(event,d) {
+        Tooltip
+          .html("Exact value: " + d.value)
+          .style("left", `${event.layerX+10}px`)
+          .style("top", `${event.layerY}px`)
+      }
+      const mouseleave = function(event,d) {
+        Tooltip
+          .style("opacity", 0)
+      }
+
+    const dot = svg
+      .selectAll('circle')
+      .data(data.filter(function(d){return d.item_name=="All items"}))
+      .join('circle')
+        .attr("cx", d => x(d.date))
+        .attr("cy", d => y(d.value))
+        .attr("r", 2)
+        .style("fill", "white")
+        .attr("stroke", function(d){ return myColor("valueA") })
+        .on("mouseover", mouseover)
+        .on("mousemove", mousemove)
+        .on("mouseleave", mouseleave)
+
+    // A function that update the chart
+    function update(selectedGroup) {
+
+      // Create new data with the selection?
+      const dataFilter = data.filter(function(d){return d.item_name==selectedGroup})
+
+      // Give these new data to update line
+
+      line
+          .datum(dataFilter)
+          .transition()
+          .duration(1000)
+          .attr("d", d3.line()
+                .curve(d3.curveBasis) // Just add that to have a curve instead of segments
+                .x(d => x(d.date))
+                .y(d => y(d.value))
+                )
+          .attr("stroke", function(d){ return myColor(selectedGroup) })
+
+      dot
+        .data(dataFilter)
+        .transition()
+        .duration(1000)
+          .attr("cx", d => x(d.date))
+          .attr("cy", d => y(d.value))
+          .attr("r", 2)
+          .attr("stroke", function(d){ return myColor(selectedGroup) })
+          .attr("stroke-width", 1)
+          .attr("fill", "white")
+          .on("mouseover", mouseover)
+          .on("mousemove", mousemove)
+          .on("mouseleave", mouseleave)
+    }
+    
+
+  
+    // When the button is changed, run the updateChart function
+    d3.select("#selectButton").on("change", function(event,d) {
+        // recover the option that has been chosen
+        const selectedOption = d3.select(this).property("value")
+        // run the updateChart function with this selected option
+        update(selectedOption)
+    })
+
+})
+</script></body></html>
