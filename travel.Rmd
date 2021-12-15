@@ -7,6 +7,8 @@ output: html_document
 ```{r}
 library(readr)
 library(dplyr)
+library(tidyverse)
+library(highcharter)
 Monthly_Transportation_Statistics <- read_csv("data/Monthly_Transportation_Statistics.csv")
 
 ```
@@ -32,7 +34,7 @@ changedate <- changedate %>%
 
 ```{r}
 changedate %>%
-  hchart('column', hcaes(x = 'date', y = 'change')) %>%
+  hchart('line', hcaes(x = 'date', y = 'travel')) %>%
   hc_colors("grey")%>%
   hc_chart(zoomType = "x") %>%
   hc_legend(align = "right", verticalAlign = "top",layout = "horizontal",floating=TRUE,y=80,x=-100) %>%
@@ -40,36 +42,10 @@ changedate %>%
            labels= list(style=list(fontSize='10px'),
                         rotation = -45, step = 1)) %>%
   hc_yAxis(title = list(text = "travelchange")) %>%
-  hc_title(text = "<b>change of value month by month </b>") %>%
-  hc_subtitle(text = "Click on the legend to show selected month; click on a bar and drag across to zoom in") %>%
-  hc_exporting(enabled = TRUE)
-```
-
-```{r}
-changedate %>%
-  hchart('column', hcaes(x = 'date', y = 'val')) %>%
-  hc_colors("grey")%>%
-  hc_chart(zoomType = "x") %>%
-  hc_legend(align = "right", verticalAlign = "top",layout = "horizontal",floating=TRUE,y=80,x=-100) %>%
-  hc_xAxis(title = list(text = "date"),
-           labels= list(style=list(fontSize='10px'),
-                        rotation = -45, step = 1)) %>%
-  hc_yAxis(title = list(text = "travelchange")) %>%
-  hc_title(text = "<b>change of value year by year </b>") %>%
-  hc_subtitle(text = "Click on the legend to show selected month; click on a bar and drag across to zoom in") %>%
+  hc_title(text = "<b>change of travel from Jan 2021 to  Jul 2021 </b>") %>%
+  hc_subtitle(text = "Click on the dot to show selected month; click on a dot and drag across to zoom in") %>%
   hc_exporting(enabled = TRUE)
 ```
 
 
-
-```{r}
-ggplot(changedate, aes(x=date,y = change))+
-  geom_bar(stat="identity")+theme(axis.text.x = element_text(angle = 90)) + scale_x_date(date_labels = "%m/%d/%Y", date_breaks= "2 month" ) +labs(x = "Date", y = "travel change", caption = "Air traffic change by every two month", title = "Air traffic change by every two month.") +
-  theme_bw() +
-  theme(plot.title = element_text(face = "bold"),
-        plot.subtitle = element_text(face = "bold", color = "grey35"),
-        plot.caption = element_text(color = "grey68"),
-        axis.text.x = element_text(angle = 45, hjust = 1),
-        legend.position="bottom")
-```
-
+From the plot, we can see that at the begining of the Covid-19, from February 2020 to April 2020, the travel decreases sharply which follows the tread that CPI for energy decreases sharply from Jan 2020 to March 2020, and then CPI for energy rises a little in July 2020, stay until Dec 2020, and a slight decrease in Dec 2020. From the travel trend plot, we can also see that the travel number has a slow increase from April 2020 to February 2021. The CPI for energy and air travel number both increase from Jan 2021 until now.
