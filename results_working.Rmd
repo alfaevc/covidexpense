@@ -180,13 +180,12 @@ From the motion map, we can find that at first, New York is the state with the l
 ## Clustering States by Covid Trend
 
 ```{r basis plot, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
+Bcoef.mat = plot.bspline(cdc.month, all.states, 'new_case', n.knots=10, degree=3)
 source('alvin-clustering.r')
 B.basis.plot(spline.basis(cdc, n.knots=10), n.knots=10)
 ```
 
-```{r all splines, message=FALSE, warning=FALSE, echo=FALSE, results='hide', fig.show='hide'}
-Bcoef.mat = plot.bspline(cdc.month, all.states, 'new_case', n.knots=10, degree=3)
-```
+
 ```{r spline map, message=FALSE, warning=FALSE, echo=FALSE}
 for (i in 9) {
 # Run K-means to cluster the knots of the states
