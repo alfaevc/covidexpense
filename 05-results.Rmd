@@ -63,10 +63,10 @@ colnames(oil)  = c('Month','oil')
 
 ### Cases Trend Line
 
-Covid happened so fast and caused many people got impacted. Today, the cumulative Covid cases in U.S. has passed 40 million. The first two plots will show our audiences how Covid develops as time passed.
+The spread of covid was extremely fast such that people's lives were significantly impacted all over the nation. The cumulative Covid cases in U.S. have currently surpassed 40 million. The first two plots will demonstrate how Covid has been developing since the time it started.
 
 #### Cumulative Total Cases
-```{r}
+```{r covid develop trend}
 ggplot(cdc_all,
        aes(x=date, y=conf_cases/1000)) +
   geom_area(alpha=0.8, fill="#0d2b53") + 
@@ -84,7 +84,7 @@ ggplot(cdc_all,
         legend.position="bottom")
 ```
 
-Covid started in March 2020 and has highest increase speed around the winter 2020. In the first half year, Covid cases number has surge to 5 million from 0. And it further increase to 25 million in the next half year. The increase of Covid cases is exponential as people would go social and the spreading of Virus also has 'Network Effect'. 
+Covid started in March 2020 and reaches highest increase rate during winter 2020. In the first half of the year, covid cases number had surged to 5 million from 0, and it further increased to 25 million in the next half year. The increase of Covid cases was in an exponential rate as people went outdoors more frequently to socialize since the spread of the coronavirus also posseseses 'Network Effect'. 
 
 #### Daily New Cases
 ```{r New Cases Trend Line, message=FALSE}
@@ -111,7 +111,7 @@ ggplot(cdc_all,
 
 ```
 
-The daily new cases plot further proved what we mentioned before. In winter 2020, the holidays helped the virus to spread in U.S.. Beside, the cold weather helped the Virus to live longer in the environment. Promoting and limiting social activities afterward definitely helped. Combining with warmer weather, summer 2021 has very low number of new cases. 
+The daily new cases plot further justified what we mentioned above. The winter holiday in 2020 created an opening for facilitation of the spread of the virus in the United States, where the cold weather also enabled the Virus to live longer in the environment. In contrast, with the aid of a warmer weather, promoting and limiting social activities afterwards played a vital role in the obstruction of the spread during summer 2021, where we can observe that numbers of new cases are a lot less. 
 
 ## Covid Development in Different States
 
@@ -125,7 +125,7 @@ Instructions to use the graph:
 
 * Navigate the motion slider by hitting the left and right arrow keys.
 
-```{r}
+```{r new cases}
 cdcmonthcase = cdc.month %>% group_by(statefull)%>%arrange(date)%>% 
     do(item = list(
         state = first(.$statefull),
@@ -143,7 +143,7 @@ highchart(type = "map") %>%
                 dataLabels = list(enabled = TRUE, format = "{point.properties.postalcode}")
                 ) %>% 
   hc_colorAxis(minColor = "white", maxColor = "orange") %>%
-  hc_title(text = "new cases from 2020 Apirl to 2021 Nov by state") %>%
+  hc_title(text = "new cases from 2020 Apr to 2021 Nov by state") %>%
   hc_add_theme(hc_theme_smpl()) %>%
   hc_motion(
     enabled = TRUE,
@@ -154,9 +154,9 @@ highchart(type = "map") %>%
    hc_mapNavigation(enabled = TRUE) %>% hc_exporting(enabled = TRUE)
 ```
 
-From the motion map, we can see that the first five cases in the United States come from Illinois State, Washington State and Arizona State. At the beginning, California and New York state has the most new cases which are two of the largest States that have the most population. From Jun 2020 to Sep 2020, California, Texas and Florida States have the most new cases. Then New York comes with them to have the most new cases. Because the population for these states are really large which increases the spread of Coronavirus disease.
+From the motion map, we can see that the first five cases in the United States come from Illinois, Washington and Arizona. At the beginning, California and New York have the highest number of new cases, which are two of the largest states that have the most population. From Jun 2020 to Sep 2020, it turned out that California, Texas and Florida continuously had the highest number new cases, followed by New York in a later period. A reasonable explanation is that population for these states are sufficiently large to enable the efficient spread of Coronavirus virus, especially if the restrictions are not rigorous enough.
 
-```{r}
+```{r tot cases}
 cdcmonthtotal = cdc_monthly_by_state %>% 
   group_by(statefull)%>%
   arrange(month)%>% 
@@ -187,12 +187,12 @@ highchart(type = "map") %>%
    hc_mapNavigation(enabled = TRUE) %>% hc_exporting(enabled = TRUE)
 ```
 
-From the motion map, we can find that at first, New York is the state with the largest total cases and then from Jul 2020 until Nov 2021, California, Texas and Flora are the three States that have the largest total cases which compatible with the trend of new cases from the previous motion map. These three States have large populations and warm weather which provides with enough condition for Coronavirus to live and spread.
+From the motion map, we can observe that New York is the state with the largest total cases in the beginning and then from Jul 2020 until Nov 2021, California, Texas and Floria are the three States that have the largest total cases which is consistent with the trend of new cases from the previous motion map. Again, these are states with large populations and decent weather acts like a catalyst for the virus to live and spread even more rapidly.
 
 ## Clustering States by Covid Trend
 
 
-```{r, message=FALSE, warning=FALSE, echo=FALSE}
+```{r spline map, message=FALSE, warning=FALSE, echo=FALSE}
 source('alvin-clustering.r')
 for (i in 9) {
 # Run K-means to cluster the knots of the states
@@ -243,20 +243,20 @@ for (i in 9) {
 }
 ```
 
-To identify difference and similarities between Covid case curves, we estimated a basis spline (B-spline) model for every state. Each estimated B-spline is a weighted piecewise combination of 10 polynomials, connected at “knots”. Estimated splines and weight coefficients are closely related in states with similar underlying case curves. We compared the estimated state splines by using the K-means algorithm to cluster similar sets of weight coefficients, identifying groups of states with similar Covid case trajectories. In general, we can observe that the coefficients for two states in the same cluster are more similar than those in a different cluster(e.g. Florida and Texas).
+To identify difference and similarities between Covid case curves, we estimated a basis spline (B-spline) model for every state. Each estimated B-spline is a weighted piecewise combination of 10 polynomials, connected at the “knots”. The estimated splines in terms of their weight coefficients are closely related in states with similar underlying case curves. We compared the estimated state splines by using the K-means algorithm(We set k = 6) to cluster similar sets of weight coefficients, identifying groups of states with similar Covid case trajectories. In general, we can observe that the coefficients for two states in the same cluster are more similar than those in a different cluster(e.g. Florida and Texas). (Relevant link: https://towardsdatascience.com/using-b-splines-and-k-means-to-cluster-time-series-16468f588ea6)
 
-```{r, message=FALSE, warning=FALSE, echo=FALSE}
+```{r covid spline cases, message=FALSE, warning=FALSE, echo=FALSE}
 for (i in c(2,4,6)) {
   print(plot_states(cdc.month, state.cluster[[i]], "new_case", "Covid Monthly New Cases Time Series"))
 }
 ```
 
-The plotted trend line further proved the clustering model did a great job grouping stats. For instance, `California`, `Florida` and `Texas` are grouped together. Those states are in south of U.S. indicating a warmer weather which would help virus to stay alive longer in the environment. Moreover, their population are much larger than other states. The high population density also helps virus to spread and make the data in those states differ from others. Other groups showed above have geographical, population density, and policy similarities which lead to the similar trend. 
+The plotted trend line further accentuated that the clustering model is a reasonable method to group the cases curves across all states. For instance, `California`, `Florida` and `Texas` are grouped, which is consistent with the observation from interactive US map above. Those states are in the southern area of America, implying that a warmer weather that provides a fit environment for the virus to boost its longevity and activity. 
 
 
 ## Consumer Price Index Development
 
-We utilized chained consumer price index to reflect the change in our living expenses. We will discover the item that had highest increase in price after Covid broke out. We will analysis their similarities with Covid development.
+We utilized chained consumer price index to reflect the change in our living expenses. We aim to find the item that had highest increase in price after the covid breakout. We will also analyse their similarities with covid case patterns.
 
 ### Chang of Living Expenses by Items
 
@@ -279,7 +279,7 @@ c = select(DF,c("item_name","ratebefore","rateafter"))
 c =c %>% gather("type", "value", -item_name)
 ```
 
-```{r}
+```{r index percent change}
 ggplot(c, aes(y=reorder(item_name,value),x = value * 100,fill = type))+
   geom_bar(stat="identity", position = position_dodge())+
   theme(axis.text.x = element_text(angle = 90))+
@@ -293,13 +293,13 @@ ggplot(c, aes(y=reorder(item_name,value),x = value * 100,fill = type))+
   theme_bw()
 ```
 
-From the bar plot, we can see that public transportation is the only one that decreases the CPI after the Covid-19. Because of the Covid-19, many people avoided using `pubilic transportation` which is crowded. The decrease of demands decreased the CPI. In the opposite, `private transportation`, `Energy` and `transportation` CPI increases a lot after the Covid-19 comparing with the change rates before the Covid-19. More people choose to use `private transportation` to reduce the chance of exposure to the crowds. We already know that energy is a necessity for `private transportation`. The increase of demands on these three products increases the CPI at the same time. Durable goods is the one that has negative change in CPI before the Covid-19 and then increases sharply after the Covid-19. We know that during the Covid-19, people are forced to stay at home and this may be the reason that people bought lots of durable goods as they spent less outdoor. Moreover, the increase in `Energy` lead to the manufacturing and transportation cost to increase which leads to a higher price of goods in the store. 
+From the bar plot, we can see that public transportation is the only one that decreases the CPI after the Covid-19. Because of the Covid-19, many people avoided using `pubilic transportation` which is crowded. The decrease of demands decreased the CPI. In the opposite, `private transportation`, `Energy` and `transportation` CPI increases a lot after the Covid-19 comparing with the change rates before the Covid-19. More people choose to use `private transportation` to reduce the chance of exposure to the crowds. We already know that energy is a necessity for `private transportation`. The increase of demands on these three products increases the CPI at the same time. Durable goods is the one that has negative change in CPI before the Covid-19 and then increases sharply after the Covid-19. We know that during the Covid-19, people are forced to stay at home and this may be the reason that people bought lots of durable goods as they spent less outdoor. Moreover, the increase in `Energy` led to the manufacturing and transportation cost to increase which leads to a higher price of goods in the store. 
 
 ### All Items' Price Trend
 
 Here we put all CPI items together for display so that we can know how the trend look like. The graph visualization is not idea and may not be informative. We will solve the problem and apply scaling, grouping, and correlation analysis on those data so as to draw useful insights and clear graphs. 
 
-```{r, fig.height = 6, message=FALSE, warning=FALSE, echo=FALSE}
+```{r cpi trends, fig.height = 6, message=FALSE, warning=FALSE, echo=FALSE}
 cpi %>%
   ggplot( aes(x=date, y=value, group=item_name, color=item_name)) +
   geom_line() + ggtitle("CPI Trend Lines for All Items") + 
@@ -311,7 +311,7 @@ cpi %>%
 ### Correlation Between Consumer Items
 From the first graph with all CPI items, it is hard for us to tell clearly how each one moves. And by their names and our common sense, it is very likely that some of them share similar trend. Therefore, we decided to use a heat map to represent their correlations so that we can evaluate their similarities quantitatively. Our purpose here is to find similarities and group similar ones so that we can find the main cause of higher prices easier. 
 
-```{r}
+```{r cor mat}
 cor_matrix = cpi_monthly %>%  select(-date) %>% cor() %>% as.data.frame()
 source('hchart _corr.R')
 hchart.cor(cor_matrix)
@@ -412,7 +412,7 @@ We have scaled the data so as to make their changes obvious and comparable. At b
 Next, we are going to investigate the probable reason that Covid could cause Energy price to change like what we discovered. We would discuss the cause from **supply** perspective and **demand** perspective. 
 
 #### Demand Side Analysis
-```{r}
+```{r travel change}
 travel %>%
   hchart('line', hcaes(x = 'date', y = 'travel')) %>%
   hc_colors("grey")%>%
@@ -434,7 +434,7 @@ Travel takes large porpotion of energy consumption. As the travel needs decrease
 It is clear that people stop traveling and working from home at the early stage of Covid broke out. This lead to a huge decrease in number of travel passengers number. In later 2020, the number of travellers is 1/3 of the number in early 2020. People starts to go back to office and go on vacation in summer 2021 as the new cases number starts to drop and people can not stand the lives staying at home everyday any more.
 
 #### Supply Side Analysis
-```{r}
+```{r oil supply}
 oil %>%
   hchart('line', hcaes(x = 'Month', y = 'oil')) %>%
   hc_colors("grey")%>%

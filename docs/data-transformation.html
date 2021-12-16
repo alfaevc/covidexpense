@@ -135,7 +135,13 @@
 <li class="chapter" data-level="3.2.1" data-path="data-transformation.html"><a href="data-transformation.html#united-states-covid-19-cases-and-deaths-by-state-overtime-1"><i class="fa fa-check"></i><b>3.2.1</b> United States COVID-19 Cases and Deaths by State overTime</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a></li>
+<li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="missing-values.html"><a href="missing-values.html#cpi-1"><i class="fa fa-check"></i><b>4.1</b> CPI</a></li>
+<li class="chapter" data-level="4.2" data-path="missing-values.html"><a href="missing-values.html#air-travel"><i class="fa fa-check"></i><b>4.2</b> Air Travel</a></li>
+<li class="chapter" data-level="4.3" data-path="missing-values.html"><a href="missing-values.html#oil-1"><i class="fa fa-check"></i><b>4.3</b> Oil</a></li>
+<li class="chapter" data-level="4.4" data-path="missing-values.html"><a href="missing-values.html#united-states-covid-19-cases-and-deaths-by-state-overtime-2"><i class="fa fa-check"></i><b>4.4</b> United States COVID-19 Cases and Deaths by State overTime:</a></li>
+</ul></li>
 <li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a>
 <ul>
 <li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#covid-development-in-u.s."><i class="fa fa-check"></i><b>5.1</b> Covid Development in U.S.</a>
@@ -190,45 +196,35 @@
 <h1><span class="header-section-number">Chapter 3</span> Data transformation</h1>
 <div id="cpi-data" class="section level2" number="3.1">
 <h2><span class="header-section-number">3.1</span> CPI data</h2>
-<p>The cpi data is accessed through cdc website api via <code>googlesheets4::read_sheet</code>.</p>
-<pre><code>## # A tibble: 6 x 5
-##   year  period periodName value   seriesID   
-##   &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;      &lt;chr&gt;   &lt;chr&gt;      
-## 1 2021  M10    October    155.317 SUUR0000SA0
-## 2 2021  M09    September  154.076 SUUR0000SA0
-## 3 2021  M08    August     153.643 SUUR0000SA0
-## 4 2021  M07    July       153.352 SUUR0000SA0
-## 5 2021  M06    June       152.649 SUUR0000SA0
-## 6 2021  M05    May        151.334 SUUR0000SA0</code></pre>
-<p>We firstly add the item names to our main data of interest by matching corresponding seriesID. Since all attributes are in the string format, it’s helpful to convert the item names into the factor type since we are interested in comparing time series for different items and cpi values into numeric values. We also create a new date attribute by concetenating year and month to get the full range of time series, which is further converted into the yearmon type. Finally, we create another data <code>cpi_monthly.csv</code> by <code>pivot_wider</code> to obtain monthly cpi values for all item names such that the number of observations are equivalent to the number of distinct year-months. This data will be used to merge with covid data below.</p>
-<pre><code>## # A tibble: 6 x 7
+<p>The cpi data is accessed through cdc website api via <code>googlesheets4::read_sheet</code>. We firstly add the item names to our main data of interest by matching corresponding seriesID. Since all attributes are in the string format, it’s helpful to convert the item names into the factor type since we are interested in comparing time series for different items and cpi values into numeric values. We also create a new date attribute by concetenating year and month to get the full range of time series, which is further converted into the yearmon type. Finally, we create another data <code>cpi_monthly.csv</code> by <code>pivot_wider</code> to obtain monthly cpi values for all item names so that the number of observations are equivalent to the number of distinct year-months. This data will be used to merge with covid data below.</p>
+<pre><code>## # A tibble: 6 × 7
 ##   year  period periodName value seriesID    item_name date     
 ##   &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;      &lt;dbl&gt; &lt;chr&gt;       &lt;fct&gt;     &lt;yearmon&gt;
-## 1 2021  M10    October     155. SUUR0000SA0 All items 10月 2021
-## 2 2021  M09    September   154. SUUR0000SA0 All items 9月 2021 
-## 3 2021  M08    August      154. SUUR0000SA0 All items 8月 2021 
-## 4 2021  M07    July        153. SUUR0000SA0 All items 7月 2021 
-## 5 2021  M06    June        153. SUUR0000SA0 All items 6月 2021 
-## 6 2021  M05    May         151. SUUR0000SA0 All items 5月 2021</code></pre>
+## 1 2021  M10    October     155. SUUR0000SA0 All items Oct 2021 
+## 2 2021  M09    September   154. SUUR0000SA0 All items Sep 2021 
+## 3 2021  M08    August      154. SUUR0000SA0 All items Aug 2021 
+## 4 2021  M07    July        153. SUUR0000SA0 All items Jul 2021 
+## 5 2021  M06    June        153. SUUR0000SA0 All items Jun 2021 
+## 6 2021  M05    May         151. SUUR0000SA0 All items May 2021</code></pre>
 <div id="travel" class="section level3" number="3.1.1">
 <h3><span class="header-section-number">3.1.1</span> Travel</h3>
 <p>For the monthly transportation statistics, we only extract the <code>Date</code> and <code>U.S. Airline Traffic - Total - Seasonally Adjusted</code> for our primary interest in transportation, where we convert the dates into the <code>yearmon</code> type and remove all <code>NA</code>s so that we are left with air passengers from Jan 2017 to Jul 2021.</p>
-<pre><code>## # A tibble: 6 x 136
-##   Index Date  `Air Safety - G~ `Highway Fatali~ `Highway Fatali~ `U.S. Airline T~ `U.S. Airline T~ `U.S. Airline T~ `Transit Riders~ `Transit Riders~ `Transit Riders~ `Freight Rail I~ `Freight Rail C~ `Highway Vehicl~ `Highway Vehicl~ `Highway Vehicl~ `Highway Vehicl~
-##   &lt;dbl&gt; &lt;chr&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;
-## 1     0 01/0~               NA               NA               NA               NA               NA               NA               NA               NA               NA               NA               NA               NA               NA               NA               NA
-## 2     1 02/0~               NA               NA               NA               NA               NA               NA               NA               NA               NA               NA               NA               NA               NA               NA               NA
-## 3     2 03/0~               NA               NA               NA               NA               NA               NA               NA               NA               NA               NA               NA               NA               NA               NA               NA
-## 4     3 04/0~               NA               NA               NA               NA               NA               NA               NA               NA               NA               NA               NA               NA               NA               NA               NA
-## 5     4 05/0~               NA               NA               NA               NA               NA               NA               NA               NA               NA               NA               NA               NA               NA               NA               NA
-## 6     5 06/0~               NA               NA               NA               NA               NA               NA               NA               NA               NA               NA               NA               NA               NA               NA               NA
-## # ... with 119 more variables: Highway Vehicle Miles Traveled - Rural Interstate &lt;dbl&gt;, State and Local Government Construction Spending - Breakwater/Jetty &lt;dbl&gt;, State and Local Government Construction Spending - Dam/Levee &lt;dbl&gt;,
-## #   State and Local Government Construction Spending - Conservation and Development &lt;dbl&gt;, State and Local Government Construction Spending - Pump Station &lt;dbl&gt;, State and Local Government Construction Spending - Line &lt;dbl&gt;,
-## #   State and Local Government Construction Spending - Water Treatment Plant &lt;dbl&gt;, State and Local Government Construction Spending - Water Supply &lt;dbl&gt;, State and Local Government Construction Spending - Line/Drain &lt;dbl&gt;,
-## #   State and Local Government Construction Spending - Waste Water Treatment Plant &lt;dbl&gt;, State and Local Government Construction Spending - Waste Water &lt;dbl&gt;, State and Local Government Construction Spending - Line/Pump Station &lt;dbl&gt;,
-## #   State and Local Government Construction Spending - Sewage Treatment Plant &lt;dbl&gt;, State and Local Government Construction Spending - Sewage / Dry Waste &lt;dbl&gt;, State and Local Government Construction Spending - Sewage and Waste Disposal &lt;dbl&gt;,
-## #   State and Local Government Construction Spending - Rest Facility &lt;dbl&gt;, State and Local Government Construction Spending - Bridge &lt;dbl&gt;, State and Local Government Construction Spending - Lighting &lt;dbl&gt;,
-## #   State and Local Government Construction Spending - Pavement &lt;dbl&gt;, State and Local Government Construction Spending - Highway and Street &lt;dbl&gt;, State and Local Government Construction Spending - Power &lt;dbl&gt;, ...</code></pre>
+<pre><code>## # A tibble: 6 × 136
+##   Index Date   `Air Safety - Gen… `Highway Fatalitie… `Highway Fatali… `U.S. Airline Tr… `U.S. Airline Tra… `U.S. Airline Tra…
+##   &lt;dbl&gt; &lt;chr&gt;               &lt;dbl&gt;               &lt;dbl&gt;            &lt;dbl&gt;             &lt;dbl&gt;              &lt;dbl&gt;              &lt;dbl&gt;
+## 1     0 01/01…                 NA                  NA               NA                NA                 NA                 NA
+## 2     1 02/01…                 NA                  NA               NA                NA                 NA                 NA
+## 3     2 03/01…                 NA                  NA               NA                NA                 NA                 NA
+## 4     3 04/01…                 NA                  NA               NA                NA                 NA                 NA
+## 5     4 05/01…                 NA                  NA               NA                NA                 NA                 NA
+## 6     5 06/01…                 NA                  NA               NA                NA                 NA                 NA
+## # … with 128 more variables: Transit Ridership - Other Transit Modes - Adjusted &lt;dbl&gt;,
+## #   Transit Ridership - Fixed Route Bus - Adjusted &lt;dbl&gt;, Transit Ridership - Urban Rail - Adjusted &lt;dbl&gt;,
+## #   Freight Rail Intermodal Units &lt;dbl&gt;, Freight Rail Carloads &lt;dbl&gt;, Highway Vehicle Miles Traveled - All Systems &lt;dbl&gt;,
+## #   Highway Vehicle Miles Traveled - Total Rural &lt;dbl&gt;, Highway Vehicle Miles Traveled - Other Rural &lt;dbl&gt;,
+## #   Highway Vehicle Miles Traveled - Rural Other Arterial &lt;dbl&gt;, Highway Vehicle Miles Traveled - Rural Interstate &lt;dbl&gt;,
+## #   State and Local Government Construction Spending - Breakwater/Jetty &lt;dbl&gt;,
+## #   State and Local Government Construction Spending - Dam/Levee &lt;dbl&gt;, …</code></pre>
 </div>
 <div id="oil" class="section level3" number="3.1.2">
 <h3><span class="header-section-number">3.1.2</span> Oil</h3>
@@ -240,40 +236,22 @@
 <div id="united-states-covid-19-cases-and-deaths-by-state-overtime-1" class="section level3" number="3.2.1">
 <h3><span class="header-section-number">3.2.1</span> United States COVID-19 Cases and Deaths by State overTime</h3>
 <p>Observe that covid data are daily based and cpi data are monthly based, we use <code>dplyr</code> to shrink covid data to monthly based by summing the number of cases and deaths for every state, where we denote this new dataset <code>cdcmonth.csv</code> after adjusting date into the <code>yearmon</code> format. We also noticed that for the attributes <code>consent_cases</code> and<code>consent_deaths</code> some <code>NA</code>s are denoted as the string <code>'N\A'</code>, where it makes sense to replace them with actual <code>NA</code> since they are indeed missing values. In addition, we want to investigate cross state covid cases, where we want to focus on 50 main states. In particular, we have 60 states in total and the reported observations for New York City and Washington D.C. are separated from New York and Maryland respectively, where other states are disjoint from the 50. Hence, we adjust the observations for New York City and Washington D.C. and add them to New York and Maryland in <code>cdcmonth.csv</code> respectively. Furthermore, we replace the <code>NA</code>s in probable cases and deaths with 0s and further replace confirmed cases and deaths with total cases - probable cases and total deaths - probable deaths since some of the confirmed cases and deaths are &lt; 0 as mentioned in section 2 and probable cases are considered to be unreliable records. We have also created 3 new datasets <code>cdc_all.csv</code>, <code>cdc_monthly_all_state.csv</code> and <code>data_monthly.csv</code>, where <code>cdc_all.csv</code> is obtained from getting the daily reported cases and deaths for the entire US by summing over the cases and death across all the states, then we further shrink the data to the national monthly cases and deaths <code>cdc_monthly_all_state.csv</code> by grouping the data by each month. We eventually merge <code>cdc_monthly_all_state.csv</code> and <code>cpi_monthly.csv</code> obtained above to conduct analysis between covid and cpi attributes as well as performing visualizations such as plotting us maps.</p>
-<pre><code>## # A tibble: 6 x 15
-##   submission_date state tot_cases conf_cases prob_cases new_case pnew_case tot_death conf_death prob_death new_death pnew_death created_at             consent_cases consent_deaths
-##   &lt;chr&gt;           &lt;chr&gt;     &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;                  &lt;chr&gt;         &lt;chr&gt;         
-## 1 04/01/2021      CA      3570660    3570660          0     2234         0     58090      58090          0       154          0 04/03/2021 12:00:00 AM Agree         Agree         
-## 2 05/31/2021      CA      3685032    3685032          0      644         0     62011      62011          0         5          0 06/02/2021 12:00:00 AM Agree         Agree         
-## 3 02/06/2020      NE            0         NA         NA        0        NA         0         NA         NA         0         NA 03/26/2020 04:22:39 PM Agree         Agree         
-## 4 07/30/2020      ME         3910       3497        413       22         2       123        122          1         2          0 07/31/2020 02:35:06 PM Agree         Agree         
-## 5 02/02/2021      MS       280182     176228     103954     1059       559      6730       4739       1991        13          7 02/04/2021 12:00:00 AM Agree         Agree         
-## 6 05/03/2020      NH         2518         NA         NA       89         0        86         NA         NA         2          0 05/04/2020 10:49:24 PM Not agree     Not agree</code></pre>
-<pre><code>## # A tibble: 6 x 5
+<pre><code>## # A tibble: 6 × 5
 ##   new_case new_death date    state statefull
 ##      &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;    
-## 1     7507        47 2020-NA AK    Alaska   
-## 2    22800       143 2021-NA AK    Alaska   
-## 3    16395        89 2020-NA AK    Alaska   
-## 4     8604       111 2021-NA AK    Alaska   
-## 5    13978        76 2020-NA AK    Alaska   
-## 6        0         0 020-NA  AK    Alaska</code></pre>
-<pre><code>## # A tibble: 6 x 7
-##   year  period periodName value seriesID    item_name date     
-##   &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;      &lt;dbl&gt; &lt;chr&gt;       &lt;fct&gt;     &lt;yearmon&gt;
-## 1 2021  M10    October     155. SUUR0000SA0 All items 10月 2021
-## 2 2021  M09    September   154. SUUR0000SA0 All items 9月 2021 
-## 3 2021  M08    August      154. SUUR0000SA0 All items 8月 2021 
-## 4 2021  M07    July        153. SUUR0000SA0 All items 7月 2021 
-## 5 2021  M06    June        153. SUUR0000SA0 All items 6月 2021 
-## 6 2021  M05    May         151. SUUR0000SA0 All items 5月 2021</code></pre>
-<pre><code>##   new_case new_death date state statefull
-## 1     7507        47 &lt;NA&gt;    AK    Alaska
-## 2    22800       143 &lt;NA&gt;    AK    Alaska
-## 3    16395        89 &lt;NA&gt;    AK    Alaska
-## 4     8604       111 &lt;NA&gt;    AK    Alaska
-## 5    13978        76 &lt;NA&gt;    AK    Alaska
-## 6        0         0 &lt;NA&gt;    AK    Alaska</code></pre>
+## 1      227         3 2020-4  AK    Alaska   
+## 2     4871         1 2021-4  AK    Alaska   
+## 3     2297        19 2020-8  AK    Alaska   
+## 4    12078        49 2021-8  AK    Alaska   
+## 5    13978        76 2020-12 AK    Alaska   
+## 6        0         0 2020-2  AK    Alaska</code></pre>
+<pre><code>##   new_case new_death     date state statefull
+## 1      227         3 Apr 2020    AK    Alaska
+## 2     4871         1 Apr 2021    AK    Alaska
+## 3     2297        19 Aug 2020    AK    Alaska
+## 4    12078        49 Aug 2021    AK    Alaska
+## 5    13978        76 Dec 2020    AK    Alaska
+## 6        0         0 Feb 2020    AK    Alaska</code></pre>
 
 </div>
 </div>

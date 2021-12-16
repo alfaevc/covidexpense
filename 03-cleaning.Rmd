@@ -21,10 +21,6 @@ cpi1= googlesheets4::read_sheet('1fpEQ4wuuDlnfKokjKyRUrOcIwHUnIBmnBFubCUpnQ94',s
 chained = googlesheets4::read_sheet('1fpEQ4wuuDlnfKokjKyRUrOcIwHUnIBmnBFubCUpnQ94',sheet='chained')
 ```
 
-```{r, message=FALSE, warning=FALSE, echo=FALSE}
-head(cpi)
-```
-
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
 cpi$item_name <- chained$item_name[match(cpi$seriesID, chained$seriesid)]
@@ -81,12 +77,6 @@ Observe that covid data are daily based and cpi data are monthly based, we use `
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
 cdc = read_csv("data/United_States_COVID-19_Cases_and_Deaths_by_State_over_Time.csv")
-```
-
-
-
-```{r, message=FALSE, warning=FALSE, echo=FALSE}
-head(cdc)
 ```
 
 
@@ -169,10 +159,6 @@ write.csv(data_monthly,"data/data_monthly.csv", row.names = F, fileEncoding="UTF
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
 cdc.month = read.csv("data/cdcmonth.csv")
 cdc.month$date <- as.yearmon(cdc.month$date, "%Y-%m")
-```
-
-```{r}
-head(cpi)
 ```
 
 

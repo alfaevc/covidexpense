@@ -135,7 +135,13 @@
 <li class="chapter" data-level="3.2.1" data-path="data-transformation.html"><a href="data-transformation.html#united-states-covid-19-cases-and-deaths-by-state-overtime-1"><i class="fa fa-check"></i><b>3.2.1</b> United States COVID-19 Cases and Deaths by State overTime</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a></li>
+<li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="missing-values.html"><a href="missing-values.html#cpi-1"><i class="fa fa-check"></i><b>4.1</b> CPI</a></li>
+<li class="chapter" data-level="4.2" data-path="missing-values.html"><a href="missing-values.html#air-travel"><i class="fa fa-check"></i><b>4.2</b> Air Travel</a></li>
+<li class="chapter" data-level="4.3" data-path="missing-values.html"><a href="missing-values.html#oil-1"><i class="fa fa-check"></i><b>4.3</b> Oil</a></li>
+<li class="chapter" data-level="4.4" data-path="missing-values.html"><a href="missing-values.html#united-states-covid-19-cases-and-deaths-by-state-overtime-2"><i class="fa fa-check"></i><b>4.4</b> United States COVID-19 Cases and Deaths by State overTime:</a></li>
+</ul></li>
 <li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a>
 <ul>
 <li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#covid-development-in-u.s."><i class="fa fa-check"></i><b>5.1</b> Covid Development in U.S.</a>
@@ -195,7 +201,7 @@
 </div>
 <div id="bureau-of-transportation-statistics" class="section level2" number="2.2">
 <h2><span class="header-section-number">2.2</span> Bureau of Transportation Statistics</h2>
-<p>Monthly Transportation Statistics dataset is a collection of national statistical data on transportation. The Bureau of Transportation Statistics brings together the latest data from across the Federal government and transportation industry. Monthly Transportation Statistics contains over 50 time series from nearly two dozen data sources. Apart from the <code>Date</code> attribute in the character format, it has 134 numeric transportation attributes(e.g. Highway fatalities, highway vehicle miles traveled for all systems, etc.), where we are specifically interested in <code>U.S. Airline Traffic - Total - Seasonally Adjusted</code> that records the the total number of passengers travelling by air from Jan 1947 to Jul 2021 in a monthly basis(We need both international and domestic passengers since they both have potential contributions to covid cases). However, lots of the attributes including our target have lots of missing values, <code>U.S. Airline Traffic - Total - Seasonally Adjusted</code> has no record prior to Jan 2017 in particular, which is not a major problem since we are only interested in air travel records from recent years.</p>
+<p>Monthly Transportation Statistics dataset is a collection of national statistical data on transportation. The Bureau of Transportation Statistics combines the latest data from across the Federal government and transportation industry. Monthly Transportation Statistics contains over 50 time series from nearly two dozen data sources. Apart from the <code>Date</code> attribute in the character format, it has 134 numeric transportation attributes(e.g. Highway fatalities, highway vehicle miles traveled for all systems, etc.), where we are specifically interested in <code>U.S. Airline Traffic - Total - Seasonally Adjusted</code> that records the the total number of passengers travelling by air from Jan 1947 to Jul 2021 in a monthly basis(We need both international and domestic passengers since they both have potential contributions to covid cases). However, lots of the attributes including our target have lots of missing values, <code>U.S. Airline Traffic - Total - Seasonally Adjusted</code> has no record prior to Jan 2017 in particular, which is not a major problem since we are only interested in air travel records from recent years.</p>
 <p>The data can be directly downloaded from <a href="https://data.bts.gov/Research-and-Statistics/Monthly-Transportation-Statistics/crem-w557" class="uri">https://data.bts.gov/Research-and-Statistics/Monthly-Transportation-Statistics/crem-w557</a>.</p>
 </div>
 <div id="u.s.-field-production-of-crude-oil" class="section level2" number="2.3">

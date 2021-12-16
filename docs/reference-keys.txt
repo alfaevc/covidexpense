@@ -11,6 +11,10 @@ oil
 covid-data
 united-states-covid-19-cases-and-deaths-by-state-overtime-1
 missing-values
+cpi-1
+air-travel
+oil-1
+united-states-covid-19-cases-and-deaths-by-state-overtime-2
 results
 covid-development-in-u.s.
 cases-trend-line
